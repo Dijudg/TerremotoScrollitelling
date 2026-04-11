@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.eltelegrafo.com.ec/especiales/18-58-mas-alla-del-tiempo/sitemap.xml

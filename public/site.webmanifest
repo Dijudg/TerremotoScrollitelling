@@ -1,0 +1,17 @@
+{
+  "name": "18:58 | Mas alla del tiempo",
+  "short_name": "18:58",
+  "description": "Especial multimedia sobre el terremoto de Manabi a 10 anos del sismo del 16 de abril de 2016.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "/fav-et.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
