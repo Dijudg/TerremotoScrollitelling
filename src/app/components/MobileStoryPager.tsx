@@ -74,6 +74,10 @@ export function MobileStoryPager({
     return activeIndexRef.current > 0;
   };
 
+  const isBoundaryExit = (direction: number) =>
+    (direction < 0 && activeIndexRef.current === 0) ||
+    (direction > 0 && activeIndexRef.current === sections.length - 1);
+
   const navigate = (direction: number) => {
     if (!direction || !canNavigate(direction)) {
       return;
@@ -110,6 +114,23 @@ export function MobileStoryPager({
     section.scrollIntoView({ block: "start", behavior: "smooth" });
   };
 
+  const releasePager = (direction: number) => {
+    const section = sectionRef.current;
+    if (!section || !isBoundaryExit(direction)) {
+      return;
+    }
+
+    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+    const targetTop = direction > 0
+      ? sectionTop + section.offsetHeight
+      : sectionTop - window.innerHeight;
+
+    window.scrollTo({
+      top: Math.max(0, targetTop),
+      behavior: "smooth",
+    });
+  };
+
   const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
     const touch = event.touches[0];
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
@@ -129,6 +150,11 @@ export function MobileStoryPager({
       if (intent > 0) {
         settlePager();
       }
+      return;
+    }
+
+    if (isBoundaryExit(intent)) {
+      releasePager(intent);
       return;
     }
 
@@ -219,7 +245,7 @@ export function MobileStoryPager({
     <section
       ref={sectionRef}
       className={getClassName(
-        "relative h-[100svh] overflow-hidden overscroll-contain bg-black text-white opacity-0 transition-opacity duration-500 ease-out",
+        "relative h-[100svh] overflow-hidden bg-black text-white opacity-0 transition-opacity duration-500 ease-out",
         isSettled ? "opacity-100" : "opacity-0",
         className,
       )}
@@ -248,7 +274,7 @@ export function MobileStoryPager({
 
               <div
                 className={getClassName(
-                  "flex min-h-0 flex-1 items-center justify-center overflow-y-auto bg-black px-6 py-7",
+                  "flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-black px-6 py-7",
                   section.textContainerClassName,
                 )}
               >
