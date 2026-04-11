@@ -1,11 +1,23 @@
+# TerremotoScrollitelling
 
-  # La hora que cambio a Manabí
+Micrositio especial del terremoto de Ecuador 2016.
 
-  This is a code bundle for La hora que cambio a Manabí. The original project is available at https://www.figma.com/design/099R4YOfGnMzMjElVqEQip/La-hora-que-cambio-a-Manab%C3%AD.
+## Desarrollo
 
-  ## Running the code
+Instala dependencias:
 
-  Run `npm i` to install the dependencies.
+```bash
+npm i
+```
 
-  Run `npm run dev` to start the development server.
-  
+Levanta el entorno local:
+
+```bash
+npm run dev
+```
+
+Genera el build de produccion:
+
+```bash
+npm run build
+```
