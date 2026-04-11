@@ -7,6 +7,7 @@ export function Chronicle1Panorama() {
     <PanoramaStrip
       image={pickImage(chronicle1Images, 3)}
       alt="Vista panoramica de la cronica de Pablo Cordoba"
+      caption="Entre los escombros se acordaba claramente del sueño y se repetía: “la cueva… la cueva”."
     />
   );
 }

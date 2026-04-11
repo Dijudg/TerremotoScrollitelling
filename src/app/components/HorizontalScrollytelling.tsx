@@ -1,10 +1,12 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { MobileStoryPager } from "./MobileStoryPager";
 
 interface StorySection {
   title?: string;
   text: string;
   img: string;
+  mobileImg?: string;
   textContainerClassName?: string;
   contentClassName?: string;
   titleClassName?: string;
@@ -14,23 +16,165 @@ interface StorySection {
 
 interface HorizontalScrollytellingProps {
   sections: StorySection[];
+  enablePeriodicShake?: boolean;
+  imageOverlayClassName?: string;
+  mobileImageOverlayClassName?: string;
 }
 
-export function HorizontalScrollytelling({ sections }: HorizontalScrollytellingProps) {
+interface PeriodicShakeFrameProps {
+  children: ReactNode;
+  className?: string;
+  enabled: boolean;
+}
+
+const getClassName = (...classes: Array<string | undefined>) => classes.filter(Boolean).join(" ");
+
+function PeriodicShakeFrame({ children, className, enabled }: PeriodicShakeFrameProps) {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<number | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const [isShaking, setIsShaking] = useState(false);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+
+    if (!enabled || !frame) {
+      return;
+    }
+
+    const stopTimers = (resetState = true) => {
+      if (intervalRef.current !== null) {
+        window.clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+
+      if (resetState) {
+        setIsShaking(false);
+      }
+    };
+
+    const triggerShake = () => {
+      setIsShaking(false);
+      animationFrameRef.current = window.requestAnimationFrame(() => {
+        animationFrameRef.current = null;
+        setIsShaking(true);
+        timeoutRef.current = window.setTimeout(() => setIsShaking(false), 760);
+      });
+    };
+
+    const startTimer = () => {
+      if (intervalRef.current !== null) {
+        return;
+      }
+
+      intervalRef.current = window.setInterval(triggerShake, 20000);
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          startTimer();
+        } else {
+          stopTimers();
+        }
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(frame);
+
+    return () => {
+      observer.disconnect();
+      stopTimers(false);
+    };
+  }, [enabled]);
+
+  return (
+    <div ref={frameRef} className={getClassName(className, isShaking ? "story-quake-active" : undefined)}>
+      {children}
+    </div>
+  );
+}
+
+export function HorizontalScrollytelling({
+  sections,
+  enablePeriodicShake = false,
+  imageOverlayClassName = "bg-black/60",
+  mobileImageOverlayClassName = "bg-gradient-to-t from-black to-transparent",
+}: HorizontalScrollytellingProps) {
+  const renderText = (text: string) => {
+    if (text.includes("una linterna")) {
+      return (
+        <span
+          dangerouslySetInnerHTML={{
+            __html: text.replace("una linterna.", '<span class="text-yellow-400 font-semibold">una linterna.</span>'),
+          }}
+        />
+      );
+    }
+
+    if (text.includes("la cueva") && text.includes("\n")) {
+      return <span className="italic text-white">{text}</span>;
+    }
+
+    return text;
+  };
+
+  return (
+    <>
+      <PeriodicShakeFrame className="md:hidden" enabled={enablePeriodicShake}>
+        <MobileStoryPager
+          sections={sections}
+          renderText={renderText}
+          imageOverlayClassName={mobileImageOverlayClassName}
+        />
+      </PeriodicShakeFrame>
+      <DesktopHorizontalScrollytelling
+        sections={sections}
+        renderText={renderText}
+        enablePeriodicShake={enablePeriodicShake}
+        imageOverlayClassName={imageOverlayClassName}
+        mobileImageOverlayClassName={mobileImageOverlayClassName}
+      />
+    </>
+  );
+}
+
+function DesktopHorizontalScrollytelling({
+  sections,
+  renderText,
+  enablePeriodicShake = false,
+  imageOverlayClassName = "bg-black/60",
+}: HorizontalScrollytellingProps & {
+  renderText: (text: string) => ReactNode;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end end"],
   });
 
   // The horizontal translation
   // If we have N sections, we want to translate -(N - 1) * 100vw
   const x = useTransform(scrollYProgress, [0, 1], ["0%", `-${100 * ((sections.length - 1) / sections.length)}%`]);
-  const getClassName = (...classes: Array<string | undefined>) => classes.filter(Boolean).join(" ");
 
   return (
-    <section ref={containerRef} className="relative bg-black" style={{ height: `${sections.length * 100}vh` }}>
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center bg-black">
+    <section ref={containerRef} className="relative hidden bg-black md:block" style={{ height: `${sections.length * 100}vh` }}>
+      <PeriodicShakeFrame
+        className="sticky top-0 h-screen w-full overflow-hidden flex items-center bg-black"
+        enabled={enablePeriodicShake}
+      >
         <motion.div 
           className="flex h-full"
           style={{ 
@@ -47,9 +191,9 @@ export function HorizontalScrollytelling({ sections }: HorizontalScrollytellingP
                   alt="" 
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover opacity-100"
                 />
-                <div className="hidden md:block absolute inset-0 bg-black/60" />
+                <div className={getClassName("hidden md:block absolute inset-0", imageOverlayClassName)} />
                 <div className="md:hidden absolute inset-0 bg-gradient-to-t from-black to-transparent" />
               </div>
 
@@ -72,7 +216,7 @@ export function HorizontalScrollytelling({ sections }: HorizontalScrollytellingP
                   {section.title && (
                     <h3
                       className={getClassName(
-                        "text-balance whitespace-pre-line text-3xl md:text-5xl tracking-tight mb-6 leading-[1.4]",
+                        "text-balance whitespace-pre-line text-xl md:text-5xl tracking-tight mb-6 leading-[1.4]",
                         section.detachedTitleClassName ? "md:hidden" : undefined,
                         section.titleClassName,
                       )}
@@ -80,24 +224,15 @@ export function HorizontalScrollytelling({ sections }: HorizontalScrollytellingP
                       {section.title}
                     </h3>
                   )}
-                  <p className={getClassName("text-balance text-lg md:text-2xl lg:text-3xl leading-relaxed text-gray-200 font-light", section.paragraphClassName)}>
-                    {/* Add yellow highlight to specific word in specific paragraph, or just render it */}
-                    {section.text.includes("una linterna") ? (
-                      <span dangerouslySetInnerHTML={{ 
-                        __html: section.text.replace("una linterna.", '<span class="text-yellow-400 font-semibold">una linterna.</span>') 
-                      }} />
-                    ) : section.text.includes("'la cueva… la cueva'") ? (
-                      <span className="italic text-white">{section.text}</span>
-                    ) : (
-                      section.text
-                    )}
+                  <p className={getClassName("text-balance text-sm md:text-base lg:text-xl leading-none text-gray-200 font-light", section.paragraphClassName)}>
+                    {renderText(section.text)}
                   </p>
                 </div>
               </div>
             </div>
           ))}
         </motion.div>
-      </div>
+      </PeriodicShakeFrame>
     </section>
   );
 }

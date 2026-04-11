@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { SectionReveal } from "./SectionReveal";
+import { MobileStoryPager } from "./MobileStoryPager";
 import { chronicle3Images } from "../content/chronicle3Media";
 import { featuredPortraits } from "../content/siteMedia";
 import { pickImage } from "../content/mediaUtils";
@@ -127,7 +128,11 @@ export function DosTarquisSection() {
 
       <VerticalSection items={introPanels} />
 
-      <div ref={containerRef} style={{ height: `${horizontalPanels.length * 100}vh` }}>
+      <div className="md:hidden">
+        <MobileStoryPager sections={horizontalPanels} />
+      </div>
+
+      <div ref={containerRef} className="hidden md:block" style={{ height: `${horizontalPanels.length * 100}vh` }}>
         <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden bg-black">
           <motion.div className="flex h-full" style={{ width: `${horizontalPanels.length * 100}%`, x }}>
             {horizontalPanels.map((panel, index) => (

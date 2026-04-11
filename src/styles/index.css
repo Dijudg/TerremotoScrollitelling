@@ -72,6 +72,46 @@ html {
   }
 }
 
+@keyframes story-quake {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  10% {
+    transform: translate3d(-5px, 3px, 0) rotate(-0.25deg);
+  }
+  20% {
+    transform: translate3d(6px, -2px, 0) rotate(0.2deg);
+  }
+  32% {
+    transform: translate3d(-7px, -1px, 0) rotate(-0.18deg);
+  }
+  44% {
+    transform: translate3d(5px, 4px, 0) rotate(0.22deg);
+  }
+  56% {
+    transform: translate3d(-4px, -3px, 0) rotate(-0.14deg);
+  }
+  68% {
+    transform: translate3d(3px, 2px, 0) rotate(0.1deg);
+  }
+  82% {
+    transform: translate3d(-2px, 1px, 0) rotate(-0.06deg);
+  }
+}
+
+.story-quake-active {
+  animation: story-quake 760ms ease-in-out;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-quake-active {
+    animation: none;
+  }
+}
+
 @media (max-width: 767px) {
   .hero-clock {
     animation: hero-quake 0.35s infinite alternate;
