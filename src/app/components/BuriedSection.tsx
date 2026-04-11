@@ -139,51 +139,45 @@ Respiraba, aunque el aire se tornaba cada vez más denso por la gruesa capa de p
               </div>
             </div>
 
-            <div className="relative -mx-6  flex min-h-[300px] items-center justify-center overflow-visible md:order-1 md:mx-0 md:-mt-16 md:min-h-[460px]">
-              <motion.figure
-                className="relative left-1/2 w-[102vw] max-w-none -translate-x-1/2 md:left-auto md:mx-auto md:w-full md:max-w-[60rem] md:translate-x-0"
-                onMouseEnter={handleMouseMove}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                style={{
-                  y: buriedImageY,
-                  scale: buriedImageScale,
-                  rotate: buriedImageRotate,
-                }}
-              >
-                {!isMobile && (
-                  <>
-                    <motion.div
-                      className="absolute inset-0 rounded-full bg-[#d72638]/35 blur-[70px]"
-                      animate={{ opacity: [0.35, 0.85, 0.35], scale: [0.86, 1.18, 0.86] }}
-                      transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                    <motion.div
-                      className="absolute inset-x-6 bottom-0 h-24 rounded-full bg-black/90 blur-2xl"
-                      animate={{ scaleX: [0.75, 1.15, 0.75], opacity: [0.55, 0.95, 0.55] }}
-                      transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                  </>
-                )}
-                <img
-                  src={buriedAliveImage}
-                  alt="Representacion de Pablo sepultado vivo"
-                  loading="lazy"
-                  decoding="async"
-                  className="relative z-10 w-full md:drop-shadow-[0_38px_60px_rgba(0,0,0,0.95)]"
-                />
-                {isMobile ? (
-                  <div className="pointer-events-none absolute left-[48%] top-[42%] z-20 h-24 w-24 -translate-x-1/2 -translate-y-1/2 animate-pulse rounded-full bg-yellow-100/35" />
-                ) : (
+            {!isMobile && (
+              <div className="relative -mx-6 hidden min-h-[300px] items-center justify-center overflow-visible md:order-1 md:mx-0 md:-mt-16 md:flex md:min-h-[460px]">
+                <motion.figure
+                  className="relative left-1/2 w-[102vw] max-w-none -translate-x-1/2 md:left-auto md:mx-auto md:w-full md:max-w-[60rem] md:translate-x-0"
+                  onMouseEnter={handleMouseMove}
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  style={{
+                    y: buriedImageY,
+                    scale: buriedImageScale,
+                    rotate: buriedImageRotate,
+                  }}
+                >
+                  <motion.div
+                    className="absolute inset-0 rounded-full bg-[#d72638]/35 blur-[70px]"
+                    animate={{ opacity: [0.35, 0.85, 0.35], scale: [0.86, 1.18, 0.86] }}
+                    transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <motion.div
+                    className="absolute inset-x-6 bottom-0 h-24 rounded-full bg-black/90 blur-2xl"
+                    animate={{ scaleX: [0.75, 1.15, 0.75], opacity: [0.55, 0.95, 0.55] }}
+                    transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <img
+                    src={buriedAliveImage}
+                    alt="Representacion de Pablo sepultado vivo"
+                    loading="lazy"
+                    decoding="async"
+                    className="relative z-10 w-full drop-shadow-[0_38px_60px_rgba(0,0,0,0.95)]"
+                  />
                   <motion.div
                     className="pointer-events-none absolute z-20 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_rgba(255,255,220,0.82)_0%,_rgba(255,220,140,0.32)_30%,_rgba(255,255,255,0)_68%)] blur-sm mix-blend-screen md:h-72 md:w-72"
                     style={{ left: pointerLightLeft, top: pointerLightTop }}
                     animate={{ opacity: [0.45, 1, 0.45] }}
                     transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
                   />
-                )}
-              </motion.figure>
-            </div>
+                </motion.figure>
+              </div>
+            )}
           </div>
         </SectionReveal>
       </motion.div>

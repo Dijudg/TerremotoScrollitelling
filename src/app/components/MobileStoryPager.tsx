@@ -21,6 +21,7 @@ interface MobileStoryPagerProps {
 const SWIPE_THRESHOLD = 44;
 const TOUCH_MOVE_THRESHOLD = 10;
 const NAVIGATION_LOCK_MS = 520;
+const SNAP_LOCK_MS = 420;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
@@ -48,14 +49,22 @@ export function MobileStoryPager({
   imageOverlayClassName = "bg-gradient-to-t from-black via-black/10 to-transparent",
 }: MobileStoryPagerProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const activeIndexRef = useRef(0);
+  const isSettledRef = useRef(false);
   const lastNavigationRef = useRef(0);
+  const lastSnapRef = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isSettled, setIsSettled] = useState(false);
 
   useEffect(() => {
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
+
+  useEffect(() => {
+    isSettledRef.current = isSettled;
+  }, [isSettled]);
 
   const canNavigate = (direction: number) => {
     if (direction > 0) {
@@ -81,6 +90,26 @@ export function MobileStoryPager({
     setActiveIndex(nextIndex);
   };
 
+  const settlePager = () => {
+    const section = sectionRef.current;
+    if (!section) {
+      return;
+    }
+
+    const now = window.performance.now();
+    if (now - lastSnapRef.current < SNAP_LOCK_MS) {
+      return;
+    }
+
+    lastSnapRef.current = now;
+    activeIndexRef.current = 0;
+    setActiveIndex(0);
+    isSettledRef.current = true;
+    setIsSettled(true);
+
+    section.scrollIntoView({ block: "start", behavior: "smooth" });
+  };
+
   const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
     const touch = event.touches[0];
     touchStartRef.current = { x: touch.clientX, y: touch.clientY };
@@ -96,6 +125,13 @@ export function MobileStoryPager({
     }
 
     const intent = getGestureIntent(touch.clientX - start.x, touch.clientY - start.y, SWIPE_THRESHOLD);
+    if (!isSettled) {
+      if (intent > 0) {
+        settlePager();
+      }
+      return;
+    }
+
     navigate(intent);
   };
 
@@ -103,6 +139,14 @@ export function MobileStoryPager({
     const intent = Math.abs(event.deltaX) > Math.abs(event.deltaY)
       ? event.deltaX > 0 ? 1 : -1
       : event.deltaY > 0 ? 1 : -1;
+
+    if (!isSettled) {
+      if (intent > 0) {
+        event.preventDefault();
+        settlePager();
+      }
+      return;
+    }
 
     if (!canNavigate(intent)) {
       return;
@@ -127,7 +171,7 @@ export function MobileStoryPager({
       }
 
       const intent = getGestureIntent(touch.clientX - start.x, touch.clientY - start.y, TOUCH_MOVE_THRESHOLD);
-      if (canNavigate(intent)) {
+      if ((!isSettled && intent > 0) || (isSettled && canNavigate(intent))) {
         event.preventDefault();
       }
     };
@@ -137,10 +181,49 @@ export function MobileStoryPager({
     return () => {
       viewport.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [sections.length]);
+  }, [isSettled, sections.length]);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.58 && !isSettledRef.current) {
+          if (activeIndexRef.current === 0) {
+            settlePager();
+          } else {
+            isSettledRef.current = true;
+            setIsSettled(true);
+          }
+        }
+
+        if (!entry.isIntersecting) {
+          isSettledRef.current = false;
+          setIsSettled(false);
+        }
+      },
+      { threshold: [0, 0.58, 0.86] },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
-    <section className={getClassName("relative h-[100svh] overflow-hidden bg-black text-white", className)}>
+    <section
+      ref={sectionRef}
+      className={getClassName(
+        "relative h-[100svh] overflow-hidden overscroll-contain bg-black text-white opacity-0 transition-opacity duration-500 ease-out",
+        isSettled ? "opacity-100" : "opacity-0",
+        className,
+      )}
+    >
       <div
         ref={viewportRef}
         className="h-full w-full overflow-hidden"
