@@ -3,7 +3,7 @@ import earthquakeVideoDesktop from "../../assets/img/Cronica1/Video1-terremoto-d
 import earthquakeVideoMobile from "../../assets/img/Cronica1/Video1-terremoto-movil.mp4";
 import pabloAudio from "../../assets/hermanovictima.wav?url";
 import javierAudio from "../../assets/img/Cronica2/audio1.mp3.mpeg?url";
-import earthquakePoster from "../../assets/img/Cronica1/cnne-279707-topshot-ecuador-quake.webp";
+import earthquakePoster from "../../assets/img/Cronica1/MilagritoA1.jpg";
 import pabloPortrait from "../../assets/img/Cronica1/PabloCordoba-portoviejo-milagritos.jpeg";
 import javierPortrait from "../../assets/img/Cronica2/JavierPincay.jpeg";
 import johnPortrait from "../../assets/img/Cronica3/JohnVera-Historia2-manta.jpeg";

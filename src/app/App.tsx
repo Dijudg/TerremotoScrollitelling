@@ -104,7 +104,7 @@ export default function App() {
         <BuriedSection />
       </DeferredSection>
 
-      <DeferredSection minHeight="70vh">
+      <DeferredSection minHeight="200svh">
         <Chronicle1Panorama />
       </DeferredSection>
 
@@ -124,7 +124,7 @@ export default function App() {
         />
       </DeferredSection>
 
-      <DeferredSection minHeight="900vh">
+      <DeferredSection minHeight="1100vh">
         <JavierSection />
       </DeferredSection>
 
@@ -136,7 +136,7 @@ export default function App() {
         <RebuildSection />
       </DeferredSection>
 
-      <DeferredSection minHeight="900vh">
+      <DeferredSection minHeight="1300vh">
         <DosTarquisSection />
       </DeferredSection>
 

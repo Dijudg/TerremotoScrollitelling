@@ -149,8 +149,7 @@ export function EarthquakeSection({
         >
           <SectionReveal>
             <h2
-              className="mb-8 inline-block text-7xl font-bold tracking-tighter md:text-9xl"
-              style={{ fontFamily: '"Finger Paint", cursive' }}
+              className="font-heading mb-8 inline-block text-7xl font-bold tracking-normal md:text-9xl"
             >
               <span className="text-[#d72638] drop-shadow-[0_0_28px_rgba(215,38,56,0.55)]">18:58</span>
             </h2>

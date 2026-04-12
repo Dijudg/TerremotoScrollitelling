@@ -224,7 +224,7 @@ function DesktopHorizontalScrollytelling({
                       {section.title}
                     </h3>
                   )}
-                  <p className={getClassName("text-balance text-sm md:text-base lg:text-xl leading-none text-gray-200 font-light", section.paragraphClassName)}>
+                  <p className={getClassName("text-balance text-base  lg:text-xl  text-gray-200 font-light", section.paragraphClassName)}>
                     {renderText(section.text)}
                   </p>
                 </div>

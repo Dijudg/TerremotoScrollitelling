@@ -1,4 +1,5 @@
-import { motion } from "motion/react";
+import { ScrollStepRevealPanel } from "./ScrollStepRevealPanel";
+import enterradov from "../../assets/img/Cronica1/horizontal/enterradovivo.png";
 
 interface PanoramaStripProps {
   image: string;
@@ -6,29 +7,17 @@ interface PanoramaStripProps {
   caption?: string;
 }
 
-export function PanoramaStrip({ image, alt, caption }: PanoramaStripProps) {
+export function PanoramaStrip({  alt, caption }: PanoramaStripProps) {
   return (
-    <section className="relative w-full overflow-hidden bg-black">
-      <motion.div
-        className="relative h-[260px] w-full md:h-[320px]"
-        initial={{ opacity: 0.6, scale: 1.06 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.1, ease: "easeOut" }}
-        viewport={{ once: true, amount: 0.35 }}
-      >
-        <img src={image} alt={alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/25 to-black/65" />
-        {caption && (
-          <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
-            <p
-              className="max-w-4xl text-balance text-2xl leading-[1.25] tracking-normal text-white md:text-4xl"
-              style={{ textShadow: "0 3px 22px rgba(0, 0, 0, 0.95)" }}
-            >
-              {caption}
-            </p>
-          </div>
-        )}
-      </motion.div>
-    </section>
+    <ScrollStepRevealPanel image={enterradov} alt={alt} contentClassName="text-center">
+      {caption && (
+        <p
+          className="max-w-4xl text-balance text-2xl leading-[1.25] tracking-normal text-white md:text-4xl"
+          style={{ textShadow: "0 3px 22px rgba(0, 0, 0, 0.95)" }}
+        >
+          {caption}
+        </p>
+      )}
+    </ScrollStepRevealPanel>
   );
 }

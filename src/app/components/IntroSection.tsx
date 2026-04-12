@@ -44,7 +44,7 @@ export function IntroSection() {
 
       <div className="container relative z-10 mx-auto max-w-4xl items-center justify-center px-6 py-32 md:-mt-[100vh] md:ml-24 md:pt-40">
         <SectionReveal>
-          <h2 className="mb-16 inline-block rotate-1 transform text-center text-xl leading-none tracking-tight md:text-5xl lg:text-4xl" style={{ fontFamily: '"Finger Paint", cursive' }}>
+          <h2 className="font-heading mb-16 inline-block rotate-1 transform text-center text-xl leading-none tracking-normal md:text-5xl lg:text-4xl">
             <LayeredHeadline
               lines={[
                 "Tres dias bajo escombros:",

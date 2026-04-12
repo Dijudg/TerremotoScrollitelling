@@ -52,10 +52,7 @@ export function FantasmaMarketSection() {
               className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-start p-8 pb-5"
               style={{ opacity: centerTitleOpacity }}
             >
-              <h2
-                className="max-w-4xl text-left text-3xl leading-[1.35] text-white md:text-5xl lg:text-6xl"
-                style={{ fontFamily: '"Finger Paint", cursive' }}
-              >
+              <h2 className="font-heading max-w-4xl text-left text-3xl leading-[1.35] text-white md:text-5xl lg:text-6xl">
                 "El mercado es un fantasma" de lo que fue...
               </h2>
             </motion.div>
@@ -66,7 +63,7 @@ export function FantasmaMarketSection() {
             style={{ opacity: leftTitleOpacity }}
           >
             <div className="-rotate-90 transform">
-              <h3 className="whitespace-nowrap text-4xl font-bold leading-[1.4] text-black lg:text-5xl" style={{ fontFamily: '"Finger Paint", cursive' }}>
+              <h3 className="font-heading whitespace-nowrap text-4xl font-bold leading-[1.4] text-black lg:text-5xl">
                 "Nuevo Tarqui" no despega
               </h3>
             </div>
@@ -91,14 +88,14 @@ export function FantasmaMarketSection() {
             <img src={featuredPortraits.laura} alt="Laura Peralta en Nuevo Tarqui" loading="lazy" decoding="async" className="h-full w-full object-cover" />
             <div className="absolute inset-0 bg-black/55" />
             <div className="absolute inset-x-0 bottom-0 p-6 pb-5">
-              <h2 className="text-left text-2xl leading-[1.35] text-white" style={{ fontFamily: '"Finger Paint", cursive' }}>
+              <h2 className="font-heading text-left text-2xl leading-[1.35] text-white">
                 "El mercado es un fantasma" de lo que fue...
               </h2>
             </div>
           </div>
 
           <div className="space-y-12 bg-white px-6 py-16">
-            <h3 className="text-2xl font-bold leading-[1.5] text-black" style={{ fontFamily: '"Finger Paint", cursive' }}>
+            <h3 className="font-heading text-2xl font-bold leading-[1.5] text-black">
               "Nuevo Tarqui" no despega
             </h3>
 

@@ -40,8 +40,7 @@ export function RebuildSection() {
       <motion.div className="container mx-auto relative z-10 max-w-4xl px-6" style={{ opacity }}>
         <SectionReveal>
           <h2
-            className="mb-16 inline-block text-5xl leading-[1.6] tracking-tight md:text-6xl"
-            style={{ fontFamily: '"Finger Paint", cursive' }}
+            className="font-heading mb-16 inline-block text-5xl leading-[1.6] tracking-normal md:text-6xl"
           >
             <span className="rounded-2xl bg-[#E5E7EB] px-6 py-2 text-black box-decoration-clone">"Refundar" Portoviejo</span>
           </h2>

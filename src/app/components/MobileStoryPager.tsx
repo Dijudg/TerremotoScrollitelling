@@ -1,4 +1,4 @@
-import { type ReactNode, type TouchEvent, type WheelEvent, useEffect, useRef, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 interface MobileStoryPagerSection {
   title?: string;
@@ -18,10 +18,11 @@ interface MobileStoryPagerProps {
   imageOverlayClassName?: string;
 }
 
-const SWIPE_THRESHOLD = 44;
+const SWIPE_THRESHOLD = 58;
 const TOUCH_MOVE_THRESHOLD = 10;
-const NAVIGATION_LOCK_MS = 520;
+const NAVIGATION_LOCK_MS = 780;
 const SNAP_LOCK_MS = 420;
+const SLIDE_TRANSITION_MS = 760;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
@@ -52,33 +53,44 @@ export function MobileStoryPager({
   const sectionRef = useRef<HTMLElement>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
   const activeIndexRef = useRef(0);
-  const isSettledRef = useRef(false);
+  const isLockedRef = useRef(false);
+  const isReleasingRef = useRef(false);
+  const isRestoringScrollRef = useRef(false);
+  const lockedScrollYRef = useRef(0);
+  const lastScrollYRef = useRef(0);
   const lastNavigationRef = useRef(0);
   const lastSnapRef = useRef(0);
+  const releaseTimerRef = useRef<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isSettled, setIsSettled] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
-  useEffect(() => {
-    activeIndexRef.current = activeIndex;
-  }, [activeIndex]);
+  const setActiveSlide = useCallback(
+    (index: number) => {
+      const nextIndex = clamp(index, 0, sections.length - 1);
+      activeIndexRef.current = nextIndex;
+      setActiveIndex(nextIndex);
+    },
+    [sections.length],
+  );
 
-  useEffect(() => {
-    isSettledRef.current = isSettled;
-  }, [isSettled]);
-
-  const canNavigate = (direction: number) => {
+  const canNavigate = useCallback((direction: number) => {
     if (direction > 0) {
       return activeIndexRef.current < sections.length - 1;
     }
 
     return activeIndexRef.current > 0;
-  };
+  }, [sections.length]);
 
-  const isBoundaryExit = (direction: number) =>
-    (direction < 0 && activeIndexRef.current === 0) ||
-    (direction > 0 && activeIndexRef.current === sections.length - 1);
+  const isBoundaryExit = useCallback(
+    (direction: number) =>
+      (direction < 0 && activeIndexRef.current === 0) ||
+      (direction > 0 && activeIndexRef.current === sections.length - 1),
+    [sections.length],
+  );
 
-  const navigate = (direction: number) => {
+  const navigate = useCallback((direction: number) => {
     if (!direction || !canNavigate(direction)) {
       return;
     }
@@ -90,11 +102,29 @@ export function MobileStoryPager({
 
     const nextIndex = clamp(activeIndexRef.current + direction, 0, sections.length - 1);
     lastNavigationRef.current = now;
-    activeIndexRef.current = nextIndex;
-    setActiveIndex(nextIndex);
-  };
+    setActiveSlide(nextIndex);
+  }, [canNavigate, sections.length, setActiveSlide]);
 
-  const settlePager = () => {
+  const scrollToPosition = useCallback((top: number, behavior: ScrollBehavior = "auto") => {
+    isRestoringScrollRef.current = true;
+    window.scrollTo({ top, behavior });
+    lastScrollYRef.current = top;
+
+    window.requestAnimationFrame(() => {
+      if (behavior === "auto") {
+        lastScrollYRef.current = window.scrollY;
+        isRestoringScrollRef.current = false;
+        return;
+      }
+
+      window.setTimeout(() => {
+        lastScrollYRef.current = window.scrollY;
+        isRestoringScrollRef.current = false;
+      }, 720);
+    });
+  }, []);
+
+  const lockPager = useCallback((startIndex: number) => {
     const section = sectionRef.current;
     if (!section) {
       return;
@@ -105,19 +135,25 @@ export function MobileStoryPager({
       return;
     }
 
+    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
     lastSnapRef.current = now;
-    activeIndexRef.current = 0;
-    setActiveIndex(0);
-    isSettledRef.current = true;
-    setIsSettled(true);
+    lockedScrollYRef.current = sectionTop;
+    isLockedRef.current = true;
+    setIsLocked(true);
+    setActiveSlide(startIndex);
+    setDragOffset(0);
+    setIsDragging(false);
+    scrollToPosition(sectionTop);
+  }, [scrollToPosition, setActiveSlide]);
 
-    section.scrollIntoView({ block: "start", behavior: "smooth" });
-  };
-
-  const releasePager = (direction: number) => {
+  const releasePager = useCallback((direction: number) => {
     const section = sectionRef.current;
     if (!section || !isBoundaryExit(direction)) {
       return;
+    }
+
+    if (releaseTimerRef.current !== null) {
+      window.clearTimeout(releaseTimerRef.current);
     }
 
     const sectionTop = section.getBoundingClientRect().top + window.scrollY;
@@ -125,70 +161,122 @@ export function MobileStoryPager({
       ? sectionTop + section.offsetHeight
       : sectionTop - window.innerHeight;
 
-    window.scrollTo({
-      top: Math.max(0, targetTop),
-      behavior: "smooth",
-    });
-  };
+    isLockedRef.current = false;
+    setIsLocked(false);
+    setDragOffset(0);
+    setIsDragging(false);
+    isReleasingRef.current = true;
+    scrollToPosition(Math.max(0, targetTop), "smooth");
 
-  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
-    const touch = event.touches[0];
-    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
-  };
+    releaseTimerRef.current = window.setTimeout(() => {
+      isReleasingRef.current = false;
+      releaseTimerRef.current = null;
+    }, 760);
+  }, [isBoundaryExit, scrollToPosition]);
 
-  const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
-    const start = touchStartRef.current;
-    const touch = event.changedTouches[0];
-    touchStartRef.current = null;
-
-    if (!start || !touch) {
-      return;
-    }
-
-    const intent = getGestureIntent(touch.clientX - start.x, touch.clientY - start.y, SWIPE_THRESHOLD);
-    if (!isSettled) {
-      if (intent > 0) {
-        settlePager();
+  const handleIntent = useCallback(
+    (intent: number) => {
+      if (!intent) {
+        return;
       }
-      return;
-    }
 
-    if (isBoundaryExit(intent)) {
-      releasePager(intent);
-      return;
-    }
-
-    navigate(intent);
-  };
-
-  const handleWheel = (event: WheelEvent<HTMLDivElement>) => {
-    const intent = Math.abs(event.deltaX) > Math.abs(event.deltaY)
-      ? event.deltaX > 0 ? 1 : -1
-      : event.deltaY > 0 ? 1 : -1;
-
-    if (!isSettled) {
-      if (intent > 0) {
-        event.preventDefault();
-        settlePager();
+      if (!isLockedRef.current) {
+        if (intent > 0) {
+          lockPager(0);
+        }
+        return;
       }
-      return;
-    }
 
-    if (!canNavigate(intent)) {
-      return;
-    }
+      if (isBoundaryExit(intent)) {
+        releasePager(intent);
+        return;
+      }
 
-    event.preventDefault();
-    navigate(intent);
-  };
+      setDragOffset(0);
+      setIsDragging(false);
+      navigate(intent);
+    },
+    [isBoundaryExit, lockPager, navigate, releasePager],
+  );
 
   useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport) {
-      return;
-    }
+    lastScrollYRef.current = window.scrollY;
+
+    const shouldUseMobileLock = () => !window.matchMedia("(min-width: 768px)").matches;
+
+    const handleScroll = () => {
+      const section = sectionRef.current;
+      if (!section || !shouldUseMobileLock()) {
+        return;
+      }
+
+      if (isRestoringScrollRef.current) {
+        return;
+      }
+
+      const currentScrollY = window.scrollY;
+
+      if (isLockedRef.current) {
+        if (Math.abs(currentScrollY - lockedScrollYRef.current) > 1) {
+          scrollToPosition(lockedScrollYRef.current);
+        }
+        return;
+      }
+
+      const previousScrollY = lastScrollYRef.current;
+      const direction = currentScrollY > previousScrollY ? 1 : currentScrollY < previousScrollY ? -1 : 0;
+      lastScrollYRef.current = currentScrollY;
+
+      if (isReleasingRef.current) {
+        return;
+      }
+
+      const rect = section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const enteredFromPrevious = direction > 0 && rect.top <= 0 && rect.bottom > 0;
+      const enteredFromNext = direction < 0 && rect.bottom >= viewportHeight && rect.top < viewportHeight;
+      const alreadyAligned = direction === 0 && Math.abs(rect.top) <= 1 && rect.bottom > viewportHeight * 0.8;
+
+      if (enteredFromPrevious || alreadyAligned) {
+        lockPager(0);
+        return;
+      }
+
+      if (enteredFromNext) {
+        lockPager(sections.length - 1);
+      }
+    };
+
+    const handleWheel = (event: globalThis.WheelEvent) => {
+      if (!isLockedRef.current || !shouldUseMobileLock()) {
+        return;
+      }
+
+      event.preventDefault();
+      const intent = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ? event.deltaX > 0 ? 1 : -1
+        : event.deltaY > 0 ? 1 : -1;
+
+      handleIntent(intent);
+    };
+
+    const handleTouchStart = (event: globalThis.TouchEvent) => {
+      if (!isLockedRef.current || !shouldUseMobileLock()) {
+        return;
+      }
+
+      const touch = event.touches[0];
+      touchStartRef.current = touch ? { x: touch.clientX, y: touch.clientY } : null;
+      setDragOffset(0);
+      setIsDragging(false);
+    };
 
     const handleTouchMove = (event: globalThis.TouchEvent) => {
+      if (!isLockedRef.current || !shouldUseMobileLock()) {
+        return;
+      }
+
+      event.preventDefault();
       const start = touchStartRef.current;
       const touch = event.touches[0];
 
@@ -196,79 +284,89 @@ export function MobileStoryPager({
         return;
       }
 
-      const intent = getGestureIntent(touch.clientX - start.x, touch.clientY - start.y, TOUCH_MOVE_THRESHOLD);
-      if ((!isSettled && intent > 0) || (isSettled && canNavigate(intent))) {
-        event.preventDefault();
+      const deltaX = touch.clientX - start.x;
+      const deltaY = touch.clientY - start.y;
+      const intent = getGestureIntent(deltaX, deltaY, TOUCH_MOVE_THRESHOLD);
+      const rawOffset = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
+      const maxOffset = window.innerWidth * 0.34;
+
+      setIsDragging(true);
+      setDragOffset(clamp(rawOffset, -maxOffset, maxOffset));
+
+      if (isBoundaryExit(intent)) {
+        setDragOffset(clamp(rawOffset, -maxOffset * 0.42, maxOffset * 0.42));
       }
     };
 
-    viewport.addEventListener("touchmove", handleTouchMove, { passive: false });
+    const handleTouchEnd = (event: globalThis.TouchEvent) => {
+      if (!isLockedRef.current || !shouldUseMobileLock()) {
+        touchStartRef.current = null;
+        return;
+      }
+
+      const start = touchStartRef.current;
+      const touch = event.changedTouches[0];
+      touchStartRef.current = null;
+      setDragOffset(0);
+      setIsDragging(false);
+
+      if (!start || !touch) {
+        return;
+      }
+
+      const intent = getGestureIntent(touch.clientX - start.x, touch.clientY - start.y, SWIPE_THRESHOLD);
+      handleIntent(intent);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd, { passive: false });
 
     return () => {
-      viewport.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+
+      if (releaseTimerRef.current !== null) {
+        window.clearTimeout(releaseTimerRef.current);
+      }
     };
-  }, [isSettled, sections.length]);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.58 && !isSettledRef.current) {
-          if (activeIndexRef.current === 0) {
-            settlePager();
-          } else {
-            isSettledRef.current = true;
-            setIsSettled(true);
-          }
-        }
-
-        if (!entry.isIntersecting) {
-          isSettledRef.current = false;
-          setIsSettled(false);
-        }
-      },
-      { threshold: [0, 0.58, 0.86] },
-    );
-
-    observer.observe(section);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
+  }, [handleIntent, isBoundaryExit, lockPager, scrollToPosition, sections.length]);
 
   return (
     <section
       ref={sectionRef}
       className={getClassName(
         "relative h-[100svh] overflow-hidden bg-black text-white opacity-0 transition-opacity duration-500 ease-out",
-        isSettled ? "opacity-100" : "opacity-0",
+        isLocked ? "touch-none opacity-100" : "touch-pan-y opacity-0",
         className,
       )}
     >
       <div
         ref={viewportRef}
         className="h-full w-full overflow-hidden"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onWheel={handleWheel}
       >
         <div
-          className="flex h-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          className={getClassName(
+            "flex h-full ease-[cubic-bezier(0.22,1,0.36,1)]",
+            isDragging ? "transition-none" : "transition-transform",
+          )}
           style={{
-            transform: `translate3d(-${activeIndex * 100}vw, 0, 0)`,
+            transform: `translate3d(calc(-${activeIndex * 100}vw + ${dragOffset}px), 0, 0)`,
+            transitionDuration: `${SLIDE_TRANSITION_MS}ms`,
             width: `${sections.length * 100}%`,
             willChange: "transform",
           }}
         >
           {sections.map((section, index) => (
             <article key={index} className="relative flex h-full w-screen shrink-0 flex-col">
-              <div className="relative h-[44svh] w-full">
-                <img src={section.mobileImg ?? section.img} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover opacity-100" />
+              <div className="relative aspect-square w-full shrink-0 bg-black">
+                <img src={section.mobileImg ?? section.img} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain opacity-100" />
                 <div className={getClassName("absolute inset-0", imageOverlayClassName)} />
               </div>
 

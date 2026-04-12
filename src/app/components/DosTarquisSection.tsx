@@ -1,7 +1,6 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
 import { SectionReveal } from "./SectionReveal";
-import { MobileStoryPager } from "./MobileStoryPager";
+import { HorizontalScrollytelling } from "./HorizontalScrollytelling";
+import { ScrollStepRevealPanel } from "./ScrollStepRevealPanel";
 import { chronicle3Images } from "../content/chronicle3Media";
 import { featuredPortraits } from "../content/siteMedia";
 import { pickImage } from "../content/mediaUtils";
@@ -101,19 +100,6 @@ function VerticalSection({ items }: { items: StoryPanel[] }) {
 }
 
 export function DosTarquisSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  const x = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ["0%", `-${100 * ((horizontalPanels.length - 1) / horizontalPanels.length)}%`],
-  );
-
   const collageImages = [pickImage(chronicle3Images, 11), pickImage(chronicle3Images, 12), pickImage(chronicle3Images, 13), pickImage(chronicle3Images, 14)];
 
   return (
@@ -128,45 +114,20 @@ export function DosTarquisSection() {
 
       <VerticalSection items={introPanels} />
 
-      <div className="md:hidden">
-        <MobileStoryPager sections={horizontalPanels} />
-      </div>
+      <HorizontalScrollytelling sections={horizontalPanels} />
 
-      <div ref={containerRef} className="hidden md:block" style={{ height: `${horizontalPanels.length * 100}vh` }}>
-        <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden bg-black">
-          <motion.div className="flex h-full" style={{ width: `${horizontalPanels.length * 100}%`, x }}>
-            {horizontalPanels.map((panel, index) => (
-              <div key={index} className="relative flex h-full w-screen shrink-0 flex-col md:block">
-                <div className="relative h-1/2 w-full md:absolute md:inset-0 md:h-full">
-                  <img src={panel.img} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
-                  <div className="absolute inset-0 hidden bg-black/60 md:block" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent md:hidden" />
-                </div>
-
-                <div className="flex h-1/2 w-full items-center justify-center overflow-y-auto bg-black p-6 md:absolute md:inset-0 md:h-full md:bg-transparent md:p-12 lg:p-24">
-                  <div className="my-auto w-full max-w-4xl space-y-4 md:space-y-6">
-                    {panel.title && <h3 className="mb-4 text-2xl leading-[1.3] tracking-tight md:text-4xl lg:text-5xl">{panel.title}</h3>}
-                    <p className="text-base leading-relaxed text-gray-200 md:text-xl lg:text-2xl xl:text-3xl">{panel.text}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </motion.div>
+      <ScrollStepRevealPanel image={featuredPortraits.betty} alt="Betty Cedeno" contentClassName="text-left">
+        <div className="max-w-3xl space-y-8">
+          <h3 className="text-3xl leading-[1.4] text-white md:text-4xl">La tristeza sigue viva</h3>
+          {sadnessParagraphs.map((paragraph) => (
+            <p key={paragraph} className="text-lg leading-relaxed text-gray-200 md:text-xl">
+              {paragraph}
+            </p>
+          ))}
         </div>
-      </div>
+      </ScrollStepRevealPanel>
 
       <div className="container mx-auto max-w-5xl px-6 py-24">
-        <SectionReveal>
-          <div className="max-w-3xl space-y-8">
-            <h3 className="text-3xl leading-[1.4] text-white md:text-4xl">La tristeza sigue viva</h3>
-            {sadnessParagraphs.map((paragraph) => (
-              <p key={paragraph} className="text-lg leading-relaxed text-gray-200 md:text-xl">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        </SectionReveal>
-
         <SectionReveal>
           <div className="mt-20 grid gap-4 md:grid-cols-[1.1fr_0.9fr] md:grid-rows-[220px_220px]">
             <div className="overflow-hidden rounded-[2rem] md:row-span-2">

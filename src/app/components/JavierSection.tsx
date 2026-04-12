@@ -5,6 +5,7 @@ import { GalleryButton } from "./GalleryButton";
 import { HorizontalScrollytelling } from "./HorizontalScrollytelling";
 import { LayeredHeadline } from "./LayeredHeadline";
 import { AudioStoryPlayer } from "./AudioStoryPlayer";
+import { ScrollStepRevealPanel } from "./ScrollStepRevealPanel";
 import { chronicle2Images } from "../content/chronicle2Media";
 import { featuredPortraits, siteAudio } from "../content/siteMedia";
 import { buildGallery, pickImage } from "../content/mediaUtils";
@@ -101,8 +102,7 @@ export function JavierSection() {
 
         <SectionReveal>
           <h2
-            className="mb-16 inline-block text-5xl leading-[1.6] tracking-tight md:text-6xl"
-            style={{ fontFamily: '"Finger Paint", cursive' }}
+            className="font-heading mb-16 inline-block text-5xl leading-[1.6] tracking-normal md:text-6xl"
           >
             <LayeredHeadline
               lines={[
@@ -116,21 +116,19 @@ export function JavierSection() {
 
       <HorizontalScrollytelling sections={javierSections} />
 
-      <motion.div className="container mx-auto relative z-10 mt-20 max-w-4xl px-6" style={{ opacity }}>
-        <SectionReveal>
-          <div className="space-y-5">
-            {javierAudioPlayers.map((player) => (
-              <AudioStoryPlayer
-                key={player.label}
-                src={player.src}
-                image={player.image}
-                imageAlt={player.alt}
-                label={player.label}
-              />
-            ))}
-          </div>
-        </SectionReveal>
-      </motion.div>
+      <ScrollStepRevealPanel image={featuredPortraits.javier} alt="Javier Pincay" contentClassName="overflow-y-auto py-16">
+        <div className="w-full max-w-4xl space-y-5">
+          {javierAudioPlayers.map((player) => (
+            <AudioStoryPlayer
+              key={player.label}
+              src={player.src}
+              image={player.image}
+              imageAlt={player.alt}
+              label={player.label}
+            />
+          ))}
+        </div>
+      </ScrollStepRevealPanel>
 
       <motion.div className="container mx-auto relative z-10 mt-24 mb-16 flex max-w-4xl justify-center px-6">
         <GalleryButton images={javierGallery} label="Ver historia de Javier" />

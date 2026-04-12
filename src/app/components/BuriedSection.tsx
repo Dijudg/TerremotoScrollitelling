@@ -6,7 +6,7 @@ import { AmbientSound } from "./AmbientSound";
 import { useIsMobile } from "./ui/use-mobile";
 import { chronicle1HorizontalImages, chronicle1HorizontalMobileImages } from "../content/chronicle1Media";
 import { pickImage } from "../content/mediaUtils";
-import buriedAliveImage from "../../assets/img/Cronica1/enterradovivo.png";
+import buriedAliveImage from "../../assets/img/Cronica1/horizontal/enterradovivo.png";
 
 const storySections = [
   {
@@ -123,8 +123,7 @@ export function BuriedSection() {
           <div className="grid items-center gap-12 md:grid-cols-[2fr_3fr]">
             <div className="md:order-2">
               <h2
-                className="mb-12 inline-block text-2xl leading-[1.6] tracking-tight md:text-3xl"
-                style={{ fontFamily: '"Finger Paint", cursive' }}
+                className="font-heading mb-12 inline-block text-2xl leading-[1.6] tracking-normal md:text-3xl"
               >
                 <span className="rounded-2xl   py-2 text-white box-decoration-clone">Sepultado vivo
                 </span>

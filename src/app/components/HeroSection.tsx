@@ -417,13 +417,12 @@ export function HeroSection() {
         <div className="ml-auto flex w-full max-w-6xl flex-col items-center gap-12 text-center md:items-end md:text-right">
           <div className="flex flex-col items-center gap-4 md:items-end">
             <motion.span
-              className={`hero-clock leading-none font-bold tracking-[-0.08em] ${
+              className={`font-heading hero-clock leading-none font-bold tracking-normal ${
                 isCountingDown
                   ? "text-[3.4rem] md:text-[5.8rem] lg:text-[7.2rem]"
                   : "text-[5rem] md:text-[8rem] lg:text-[10rem]"
               }`}
               style={{
-                fontFamily: '"Finger Paint", cursive',
                 color: isShattered ? "#d72638" : "#ffffff",
                 textShadow: isShattered
                   ? "0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 0, 0, 0.5)"
@@ -455,8 +454,7 @@ export function HeroSection() {
 
           <div className="max-w-3xl space-y-5">
             <h1
-              className="text-3xl leading-[1.08] text-white md:text-5xl text-balance lg:text-8xl"
-              style={{ fontFamily: '"Finger Paint", cursive' }}
+              className="font-heading text-3xl leading-[1.08] text-white md:text-5xl text-balance lg:text-8xl"
             >
               Más alla del tiempo
             </h1>

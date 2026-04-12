@@ -44,8 +44,7 @@ export function EndOfWorldSection() {
             16 de abril de 2016
           </p>
           <h2
-            className="mb-16 inline-block text-5xl leading-[1.45] tracking-tight md:text-7xl"
-            style={{ fontFamily: '"Finger Paint", cursive' }}
+            className="font-heading mb-16 inline-block text-5xl leading-[1.45] tracking-normal md:text-7xl"
           >
             <span className="rounded-2xl bg-[#E5E7EB] px-6 py-2 text-black box-decoration-clone">
               El fin del mundo

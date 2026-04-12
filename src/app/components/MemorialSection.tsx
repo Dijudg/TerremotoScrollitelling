@@ -91,8 +91,7 @@ export function MemorialSection() {
         <div className="mx-auto max-w-3xl space-y-12">
           <SectionReveal>
             <h2
-              className="mb-8 inline-block text-4xl leading-[1.6] tracking-tight md:text-5xl lg:text-6xl"
-              style={{ fontFamily: '"Finger Paint", cursive' }}
+              className="font-heading mb-8 inline-block text-4xl leading-[1.6] tracking-normal md:text-5xl lg:text-6xl"
             >
               <LayeredHeadline
                 lines={[

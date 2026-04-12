@@ -189,3 +189,43 @@
       line-height: 1.5;
     }
   }
+
+  @layer components {
+    .font-heading {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    .Finger-font {
+      font-family: var(--font-heading);
+    }
+
+    .story-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-5xl);
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.45;
+      text-wrap: balance;
+    }
+
+    .story-subtitle {
+      font-family: var(--font-heading);
+      font-size: var(--text-3xl);
+      font-weight: 400;
+      letter-spacing: 0;
+      line-height: 1.4;
+      text-wrap: balance;
+    }
+
+    @media (min-width: 768px) {
+      .story-title {
+        font-size: var(--text-6xl);
+      }
+
+      .story-subtitle {
+        font-size: var(--text-4xl);
+      }
+    }
+  }

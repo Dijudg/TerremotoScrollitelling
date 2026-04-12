@@ -1,8 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { SectionReveal } from "./SectionReveal";
-import { chronicle1Images } from "../content/chronicle1Media";
-import { pickImage } from "../content/mediaUtils";
 
 export function HopeSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -11,70 +9,66 @@ export function HopeSection() {
     offset: ["start end", "end start"],
   });
 
-  const backgroundBrightness = useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.15, 0.25]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-  const hopeImage = pickImage(chronicle1Images, 4);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen py-32" style={{ position: "relative" }}>
-      <motion.div
-        className="absolute inset-0"
-        style={{
-          backgroundColor: `rgba(20, 20, 20, ${backgroundBrightness})`,
-          background: "linear-gradient(to bottom, #0a0a0a, #1a1a1a, #2a2a2a)",
-        }}
-      >
-        <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: `url('${hopeImage}')` }} />
-      </motion.div>
-
-      <motion.div className="container mx-auto relative z-10 max-w-4xl px-6" style={{ opacity }}>
+    <section ref={sectionRef} className="relative min-h-screen bg-black py-32">
+      <motion.div className="container mx-auto relative z-10 max-w-4xl px-6 " style={{ opacity }}>
         <SectionReveal>
           <h2
-            className="mb-16 inline-block text-5xl leading-[1.6] tracking-tight md:text-6xl"
-            style={{ fontFamily: '"Finger Paint", cursive' }}
+            className="font-heading mb-16 inline-block text-5xl leading-[1.6] tracking-normal md:text-6xl"
           >
-            <span className="rounded-2xl bg-[#E5E7EB] px-6 py-2 text-black box-decoration-clone">Lograrian salvarlo?</span>
+            <span className="rounded-2xl bg-[#E5E7EB] px-6 py-2 text-black box-decoration-clone">¿Lograrían salvarlo? </span>
           </h2>
 
           <div className="space-y-10 text-lg leading-relaxed text-gray-200 md:text-xl">
             <p>
-              La tarde del domingo 17 de abril, Pablo concilio el sueno. Cientos de pensamientos rondaban su cabeza y habia uno central: lograrian salvarlo?
-            </p>
+La tarde del domingo 17 de abril, Pablo concilió el sueño. Cientos de pensamientos rondaban su cabeza y había uno central: ¿Lograrían salvarlo?             </p>
 
             <p>
-              Asi amanecio el lunes 18 y este portovejense, de 63 anos, desperto sin energias y el destello de esperanza empezo a flaquear. Por primera vez, penso en la muerte.
-            </p>
+Así amaneció el lunes 18 y este portovejense, de 63 años -a quien se le conoce como ‘traga años’ porque parece más joven-, despertó sin energías y el destello de esperanza empezó a flaquear. La voz se le apagó y, por primera vez, pensó en la muerte.            </p>
           </div>
         </SectionReveal>
 
-        <motion.div
-          className="relative my-24 h-[60vh] overflow-hidden rounded-lg"
-          style={{ y: useTransform(scrollYProgress, [0.3, 0.7], [60, -60]) }}
-        >
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${hopeImage}')` }}>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <p className="text-6xl font-thin text-blue-300/60 md:text-8xl">esperanza</p>
-            </div>
-          </div>
-        </motion.div>
-
         <SectionReveal>
-          <div className="space-y-10 text-lg leading-relaxed text-gray-200 md:text-xl">
-            <h3 className="mb-8 text-3xl leading-[1.4] md:text-4xl">La llamada</h3>
+          <div className="space-y-10 text-lg pt-10 leading-relaxed text-gray-200 md:text-xl">
+
+            <p >
+             Cansado, tomó su celular y revisó los últimos números que estaban en la memoria del dispositivo. “Doña Verónica”, decía uno de ellos. Se trataba de una esmeraldeña a la que Pablo le estaba construyendo un anaquel. Días atrás y como el mueble era muy alto, le faltaron clavos y le llamó para que le comprara algunos.
+            </p>
+
+            <motion.div
+              className="text-xl text-white md:text-2xl"
+              initial={{ opacity: 0, y: 56, scale: 0.94 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, amount: 0.55 }}
+            >
+              Sin pensarlo dos veces, aplastó llamar y al otro lado de la línea una voz contestó:
+              <motion.div
+                className="mb-0 flex items-center justify-center gap-4"
+                animate={{
+                  scale: [1, 1.035, 1],
+                  textShadow: [
+                    "0 0 0 rgba(253, 224, 71, 0)",
+                    "0 0 26px rgba(253, 224, 71, 0.55)",
+                    "0 0 0 rgba(253, 224, 71, 0)",
+                  ],
+                }}
+                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <span className="text-9xl  text-yellow-300 pt-10 Finger-font" >“</span>
+                <span className="mt-4 block text-2xl italic font-bold text-balance text-center text-yellow-300 md:text-4xl Finger-font">
+                  Yo sabía que ese cuerpito no podía haber muerto
+                </span>
+                <span className="text-9xl  text-yellow-300 pt-10 Finger-font" >”</span>
+
+              </motion.div>
+              <span className="block w-full md:px-16 text-center text-lg font-light italic -mt-8"> , dijo la mujer entre risas. </span>
+
+            </motion.div>
 
             <p>
-              Cansado, tomo su celular y reviso los ultimos numeros que estaban en la memoria del dispositivo. Uno de ellos decia Dona Veronica.
-            </p>
-
-            <p className="text-xl text-white md:text-2xl">
-              Sin pensarlo dos veces, llamo y una voz contesto:
-              <span className="mt-4 block text-2xl italic text-green-400 md:text-3xl">
-                "Yo sabia que ese cuerpito no podia haber muerto"
-              </span>
-            </p>
-
-            <p className="text-green-300">
               Para Pablo, esa voz femenina lo trajo de vuelta. Veronica llamo de inmediato a los cuerpos de rescate y, en menos de 10 minutos, el telefono de Pablo volvio a sonar.
             </p>
           </div>
@@ -82,20 +76,17 @@ export function HopeSection() {
 
         <div className="mt-24">
           <SectionReveal>
-            <h3 className="mb-12 text-4xl leading-[1.4] tracking-tight md:text-5xl">Tres dias sepultado</h3>
+            <h3 className="mb-12 text-4xl leading-[1.4] tracking-tight md:text-5xl">Tres días sepultado  </h3>
 
             <div className="space-y-8 text-lg leading-relaxed text-gray-300 md:text-xl">
               <p>
-                Los cuerpos de rescate se dirigieron rapidamente hacia donde el estaba. Ya no era el hotel donde laboro durante 18 anos, sino un cumulo de escombros.
-              </p>
+Los cuerpos de rescate se dirigieron rápidamente hacia donde él estaba. Ya no era el hotel donde laboró durante 18 años. Solo quedaba un cúmulo de escombros de lo que había sido su sitio de trabajo o una residencia para acoger a los visitantes que iban a Portoviejo.               </p>
 
               <p className="text-white">
-                "Recibi una llamada del ECU. Les dije: soy Pablo Cordoba y estoy completamente sano, por favor, quiero que me rescaten", conto.
-              </p>
+“Recibí una llamada del ECU, era una voz de un colombiano. Les dije: soy Pablo Córdoba y estoy completamente sano, por favor, quiero que me rescaten”, contó. En su voz y pese a los años aún se siente la alegría y la esperanza que le provocó aquella llamada telefónica.               </p>
 
               <p>
-                Del otro lado, una voz colombiana le pregunto donde estaba y el dio la ubicacion exacta: a unos 30 metros de la entrada del hotel, entre las calles Pedro Gual y Olmedo.
-              </p>
+Del otro lado, una voz colombiana le preguntó dónde estaba y él les dio la ubicación exacta. “Estoy a unos 30 metros de la entrada del hotel, entre las calles Pedro Gual y Olmedo”.               </p>
             </div>
           </SectionReveal>
         </div>
