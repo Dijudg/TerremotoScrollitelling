@@ -5,17 +5,25 @@ import { X, ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
 interface GalleryImage {
   url: string;
   caption?: string;
+  credit?: string;
 }
 
 interface GalleryButtonProps {
   images: GalleryImage[];
   label?: string;
   theme?: 'light' | 'dark';
+  modalVariant?: 'default' | 'feature';
 }
 
-export function GalleryButton({ images, label = "Ver galería", theme = 'dark' }: GalleryButtonProps) {
+export function GalleryButton({
+  images,
+  label = "Ver galería",
+  theme = 'dark',
+  modalVariant = 'default',
+}: GalleryButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const isFeatureModal = modalVariant === 'feature';
 
   const openGallery = () => {
     setIsOpen(true);
@@ -51,7 +59,7 @@ export function GalleryButton({ images, label = "Ver galería", theme = 'dark' }
           group relative inline-flex items-center gap-3 px-6 py-3 
           border backdrop-blur-sm transition-all duration-300
           ${theme === 'dark' 
-            ? 'border-white/20 text-white/70 hover:text-white hover:border-white/50 hover:bg-white/5' 
+            ? 'border-white/30 text-white/70 hover:text-white rounded-lg hover:border-white/50 hover:bg-white/5' 
             : 'border-black/20 text-black/70 hover:text-black hover:border-black/50 hover:bg-black/5'
           }
         `}
@@ -105,13 +113,18 @@ export function GalleryButton({ images, label = "Ver galería", theme = 'dark' }
             </motion.div>
 
             {/* Main Gallery Container */}
-            <div 
-              className="h-full w-full flex items-center justify-center p-4 md:p-12"
-              onClick={(e) => e.stopPropagation()}
+            <div
+              className={`h-full w-full flex items-center justify-center ${
+                isFeatureModal ? 'px-3 py-14 md:px-8 md:py-10' : 'p-4 md:p-12'
+              }`}
             >
-              <div className="relative w-full h-full max-w-7xl max-h-[90vh] flex flex-col">
+              <div
+                className={`relative w-full h-full flex flex-col ${
+                  isFeatureModal ? 'max-w-[96vw] max-h-[96vh]' : 'max-w-7xl max-h-[90vh]'
+                }`}
+              >
                 {/* Image Container */}
-                <div className="relative flex-1 flex items-center justify-center overflow-hidden">
+                <div className="relative flex-1 min-h-0 flex items-center justify-center overflow-hidden">
                   <AnimatePresence mode="wait" custom={currentIndex}>
                     <motion.div
                       key={currentIndex}
@@ -127,24 +140,35 @@ export function GalleryButton({ images, label = "Ver galería", theme = 'dark' }
                         alt={images[currentIndex].caption || `Imagen ${currentIndex + 1}`}
                         loading="lazy"
                         decoding="async"
-                        className="max-w-full max-h-full object-contain"
+                        className={`max-w-full object-contain ${
+                          isFeatureModal ? 'max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-10rem)]' : 'max-h-full'
+                        }`}
+                        onClick={(e) => e.stopPropagation()}
                       />
                     </motion.div>
                   </AnimatePresence>
                 </div>
 
                 {/* Caption */}
-                {images[currentIndex].caption && (
+                {(images[currentIndex].caption || images[currentIndex].credit) && (
                   <motion.div
                     key={`caption-${currentIndex}`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="mt-6 text-center"
+                    className={isFeatureModal ? 'mt-3 text-center' : 'mt-6 text-center'}
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    <p className="text-white/80 text-sm md:text-base italic max-w-3xl mx-auto leading-relaxed">
-                      {images[currentIndex].caption}
-                    </p>
+                    {images[currentIndex].caption && (
+                      <p className="text-white/80 text-sm md:text-base italic max-w-3xl mx-auto leading-relaxed">
+                        {images[currentIndex].caption}
+                      </p>
+                    )}
+                    {images[currentIndex].credit && (
+                      <p className="mt-2 text-[11px] uppercase tracking-[0.24em] text-white/45">
+                        {images[currentIndex].credit}
+                      </p>
+                    )}
                   </motion.div>
                 )}
 
@@ -152,7 +176,10 @@ export function GalleryButton({ images, label = "Ver galería", theme = 'dark' }
                 {images.length > 1 && (
                   <>
                     <motion.button
-                      onClick={prevImage}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        prevImage();
+                      }}
                       aria-label="Imagen anterior"
                       className="absolute left-4 top-1/2 -translate-y-1/2 p-4 text-white/60 hover:text-white transition-colors"
                       whileHover={{ scale: 1.1, x: -5 }}
@@ -162,7 +189,10 @@ export function GalleryButton({ images, label = "Ver galería", theme = 'dark' }
                     </motion.button>
 
                     <motion.button
-                      onClick={nextImage}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        nextImage();
+                      }}
                       aria-label="Imagen siguiente"
                       className="absolute right-4 top-1/2 -translate-y-1/2 p-4 text-white/60 hover:text-white transition-colors"
                       whileHover={{ scale: 1.1, x: 5 }}
@@ -179,15 +209,24 @@ export function GalleryButton({ images, label = "Ver galería", theme = 'dark' }
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="mt-8 flex justify-center gap-2 flex-wrap max-w-full overflow-x-auto pb-2"
+                    className={`max-w-full overflow-x-auto overflow-y-hidden pb-2 ${
+                      isFeatureModal
+                        ? 'mt-4 flex flex-nowrap justify-start gap-1.5 px-1'
+                        : 'mt-8 flex flex-wrap justify-center gap-2'
+                    }`}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {images.map((image, index) => (
                       <motion.button
                         key={index}
-                        onClick={() => setCurrentIndex(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentIndex(index);
+                        }}
                         aria-label={`Abrir imagen ${index + 1}`}
                         className={`
-                          relative w-16 h-16 md:w-20 md:h-20 overflow-hidden transition-all
+                          relative shrink-0 overflow-hidden transition-all
+                          ${isFeatureModal ? 'h-10 w-14 md:h-12 md:w-16' : 'h-16 w-16 md:h-20 md:w-20'}
                           ${index === currentIndex 
                             ? 'ring-2 ring-white opacity-100' 
                             : 'opacity-40 hover:opacity-70'

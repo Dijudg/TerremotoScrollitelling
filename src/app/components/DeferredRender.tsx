@@ -2,12 +2,14 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 
 type DeferredRenderProps = {
   children: ReactNode;
+  id?: string;
   minHeight?: string;
   rootMargin?: string;
 };
 
 export function DeferredRender({
   children,
+  id,
   minHeight = "100vh",
   rootMargin = "1200px 0px",
 }: DeferredRenderProps) {
@@ -35,7 +37,7 @@ export function DeferredRender({
   }, [rootMargin, shouldRender]);
 
   return (
-    <div ref={containerRef} style={shouldRender ? undefined : { minHeight }}>
+    <div id={id} ref={containerRef} style={shouldRender ? undefined : { minHeight }}>
       {shouldRender ? children : null}
     </div>
   );

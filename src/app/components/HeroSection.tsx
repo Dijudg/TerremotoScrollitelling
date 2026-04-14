@@ -417,18 +417,18 @@ export function HeroSection() {
         <div className="ml-auto flex w-full max-w-6xl flex-col items-center gap-12 text-center md:items-end md:text-right">
           <div className="flex flex-col items-center gap-4 md:items-end">
             <motion.span
-              className={`font-heading hero-clock leading-none font-bold tracking-normal ${
+              className={`font-clock hero-clock leading-none tracking-normal ${
                 isCountingDown
                   ? "text-[3.4rem] md:text-[5.8rem] lg:text-[7.2rem]"
                   : "text-[5rem] md:text-[8rem] lg:text-[10rem]"
               }`}
               style={{
-                color: isShattered ? "#d72638" : "#ffffff",
+                color: isShattered ? "#d72638" : "#d72638",
                 textShadow: isShattered
-                  ? "0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 0, 0, 0.5)"
+                  ? "0 0 20px rgba(215, 38, 56, 0.55), 0 0 40px rgba(255, 0, 0, 0.5)"
                   : undefined,
                 filter: isShattered
-                  ? "drop-shadow(0 0 10px rgba(255, 255, 255, 0.8))"
+                  ? " drop-shadow-[0_0_28px_rgba(215,38,56,0.55)]"
                   : undefined,
               }}
               animate={

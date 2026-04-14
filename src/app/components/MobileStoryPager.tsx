@@ -42,6 +42,7 @@ const getGestureIntent = (deltaX: number, deltaY: number, threshold: number) => 
 };
 
 const getClassName = (...classes: Array<string | undefined>) => classes.filter(Boolean).join(" ");
+const splitParagraphs = (text: string) => text.split(/\n{2,}/).map((paragraph) => paragraph.trim()).filter(Boolean);
 
 export function MobileStoryPager({
   sections,
@@ -382,9 +383,14 @@ export function MobileStoryPager({
                       {section.title}
                     </h3>
                   )}
-                  <p className={getClassName("text-balance text-sm leading-none text-gray-200", section.paragraphClassName)}>
-                    {renderText ? renderText(section.text) : section.text}
-                  </p>
+                  {splitParagraphs(section.text).map((paragraph, paragraphIndex) => (
+                    <p
+                      key={`${index}-paragraph-${paragraphIndex}`}
+                      className={getClassName("text-balance text-sm leading-none text-gray-200", section.paragraphClassName)}
+                    >
+                      {renderText ? renderText(paragraph) : paragraph}
+                    </p>
+                  ))}
                 </div>
               </div>
             </article>

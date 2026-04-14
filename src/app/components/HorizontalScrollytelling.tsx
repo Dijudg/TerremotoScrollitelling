@@ -28,6 +28,7 @@ interface PeriodicShakeFrameProps {
 }
 
 const getClassName = (...classes: Array<string | undefined>) => classes.filter(Boolean).join(" ");
+const splitParagraphs = (text: string) => text.split(/\n{2,}/).map((paragraph) => paragraph.trim()).filter(Boolean);
 
 function PeriodicShakeFrame({ children, className, enabled }: PeriodicShakeFrameProps) {
   const frameRef = useRef<HTMLDivElement>(null);
@@ -224,9 +225,14 @@ function DesktopHorizontalScrollytelling({
                       {section.title}
                     </h3>
                   )}
-                  <p className={getClassName("text-balance text-base  lg:text-xl  text-gray-200 font-light", section.paragraphClassName)}>
-                    {renderText(section.text)}
-                  </p>
+                  {splitParagraphs(section.text).map((paragraph, paragraphIndex) => (
+                    <p
+                      key={`${index}-paragraph-${paragraphIndex}`}
+                      className={getClassName("text-balance text-base  lg:text-xl  text-gray-200 font-light", section.paragraphClassName)}
+                    >
+                      {renderText(paragraph)}
+                    </p>
+                  ))}
                 </div>
               </div>
             </div>

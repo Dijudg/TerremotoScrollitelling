@@ -1,6 +1,7 @@
 export type GalleryImage = {
   url: string;
   caption?: string;
+  credit?: string;
 };
 
 export const sortImages = (modules: Record<string, string>) =>

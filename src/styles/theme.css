@@ -121,6 +121,7 @@
     /* Fonts */
     --font-sans: "Afacad Flux", sans-serif;
     --font-heading: "Finger Paint", sans-serif;
+    --font-clock: "Digitron", var(--font-sans);
   }
   
   @layer base {
@@ -199,6 +200,12 @@
 
     .Finger-font {
       font-family: var(--font-heading);
+    }
+
+    .font-clock {
+      font-family: var(--font-clock);
+      font-weight: 400;
+      letter-spacing: 0;
     }
 
     .story-title {

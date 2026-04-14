@@ -5,10 +5,12 @@ import pabloAudio from "../../assets/hermanovictima.wav?url";
 import javierAudio from "../../assets/img/Cronica2/audio1.mp3.mpeg?url";
 import earthquakePoster from "../../assets/img/Cronica1/MilagritoA1.jpg";
 import pabloPortrait from "../../assets/img/Cronica1/PabloCordoba-portoviejo-milagritos.jpeg";
-import javierPortrait from "../../assets/img/Cronica2/JavierPincay.jpeg";
+import javierPortrait from "../../assets/img/Cronica1/milagritos3.jpeg";
 import johnPortrait from "../../assets/img/Cronica3/JohnVera-Historia2-manta.jpeg";
 import bettyPortrait from "../../assets/img/Cronica3/BettyCedeno-Historia1-manta.jpeg";
 import lauraPortrait from "../../assets/img/Cronica3/LauraPeralta-Historia3-manta.jpeg";
+import milagritosVideo from "../../assets/img/Cronica1/terremoto-testimonia-milagritos-ectv-movil.mp4";
+import milagritosPhoneVideo from "../../assets/img/Cronica1/terremoto-testimonia-milagritos-ectv-phone.mp4";
 
 export const featuredPortraits = {
   pablo: pabloPortrait,
@@ -45,7 +47,8 @@ export const siteVideos = {
   chronicle1LeadDesktop: earthquakeVideoDesktop,
   chronicle1LeadMobile: earthquakeVideoMobile,
   chronicle1Rescue: heroVideo,
-  chronicle2Lead: heroVideo,
+  chronicle2Lead: milagritosVideo,
+  chronicle2LeadMobile: milagritosPhoneVideo,
   chronicle3Lead: heroVideo,
 };
 
