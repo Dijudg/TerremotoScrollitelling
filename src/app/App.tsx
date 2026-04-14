@@ -5,6 +5,7 @@ import { StickyChronicleNav } from "./components/header/StickyChronicleNav";
 import { ScrollVideo } from "./components/ScrollVideo";
 import { FloatingShareButtons } from "./components/FloatingShareButtons";
 import { DeferredRender } from "./components/DeferredRender";
+import { SiteFooter } from "./components/footer/SiteFooter";
 import { featuredPortraits, sitePosters, siteVideos } from "./content/siteMedia";
 import {
   attachClickTracking,
@@ -25,6 +26,7 @@ const RebuildSection = lazy(() => import("./components/cronica2/RebuildSection")
 const DosTarquisSection = lazy(() => import("./components/cronica3/DosTarquisSection").then((module) => ({ default: module.DosTarquisSection })));
 const FantasmaMarketSection = lazy(() => import("./components/cronica3/FantasmaMarketSection").then((module) => ({ default: module.FantasmaMarketSection })));
 const MemorialSection = lazy(() => import("./components/cronica3/MemorialSection").then((module) => ({ default: module.MemorialSection })));
+const Cronica4Section = lazy(() => import("./components/cronica4/Cronica4Section").then((module) => ({ default: module.Cronica4Section })));
 const Chronicle1Panorama = lazy(() => import("./components/cronica1/Chronicle1Panorama").then((module) => ({ default: module.Chronicle1Panorama })));
 
 const deferredRootMargin = "1400px 0px";
@@ -153,8 +155,22 @@ export default function App() {
       </DeferredSection>
 
       <DeferredSection>
+        <ScrollVideo
+          src={siteVideos.chronicle4Lead}
+          poster={featuredPortraits.chronicle4}
+          analyticsLabel="cronica_4_video"
+        />
+      </DeferredSection>
+
+      <DeferredSection id="cronica-4" minHeight="1300vh">
+        <Cronica4Section />
+      </DeferredSection>
+
+      <DeferredSection>
         <MemorialSection />
       </DeferredSection>
+
+      <SiteFooter />
     </div>
   );
 }

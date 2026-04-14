@@ -5,7 +5,7 @@ import logoIcon from "../../../assets/fav-et.svg";
 import logoHorizontal from "../../../assets/Logo-et-horizontal-blanco.svg";
 import { chronicleMenu } from "../../content/siteMedia";
 
-const watchedSections = ["hero", "cronica-1", "cronica-2", "cronica-3"];
+const watchedSections = ["hero", "cronica-1", "cronica-2", "cronica-3", "cronica-4"];
 
 const scrollToSection = (id: string) => {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });

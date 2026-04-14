@@ -9,6 +9,8 @@ import javierPortrait from "../../assets/img/Cronica1/milagritos3.jpeg";
 import johnPortrait from "../../assets/img/Cronica3/JohnVera-Historia2-manta.jpeg";
 import bettyPortrait from "../../assets/img/Cronica3/BettyCedeno-Historia1-manta.jpeg";
 import lauraPortrait from "../../assets/img/Cronica3/LauraPeralta-Historia3-manta.jpeg";
+import chronicle4Portrait from "../../assets/img/Cronica4/IMG_1708.jpg";
+import chronicle4Video from "../../assets/img/Cronica4/terremoto-testimonia-milagritos-ectv-movil.mp4";
 import milagritosVideo from "../../assets/img/Cronica1/terremoto-testimonia-milagritos-ectv-movil.mp4";
 import milagritosPhoneVideo from "../../assets/img/Cronica1/terremoto-testimonia-milagritos-ectv-phone.mp4";
 
@@ -18,6 +20,7 @@ export const featuredPortraits = {
   betty: bettyPortrait,
   john: johnPortrait,
   laura: lauraPortrait,
+  chronicle4: chronicle4Portrait,
 };
 
 export const chronicleMenu = [
@@ -39,6 +42,12 @@ export const chronicleMenu = [
     title: "Dos Tarquis",
     image: featuredPortraits.betty,
   },
+  {
+    id: "cronica-4",
+    label: "Cr\u00f3nica 4",
+    title: "Cr\u00f3nica 4",
+    image: featuredPortraits.chronicle4,
+  },
 ];
 
 export const siteVideos = {
@@ -50,6 +59,7 @@ export const siteVideos = {
   chronicle2Lead: milagritosVideo,
   chronicle2LeadMobile: milagritosPhoneVideo,
   chronicle3Lead: heroVideo,
+  chronicle4Lead: chronicle4Video,
 };
 
 export const sitePosters = {

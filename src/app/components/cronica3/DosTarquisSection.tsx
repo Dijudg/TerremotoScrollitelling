@@ -1,14 +1,21 @@
 import { SectionReveal } from "../SectionReveal";
 import { HorizontalScrollytelling } from "../HorizontalScrollytelling";
 import { ScrollStepRevealPanel } from "../ScrollStepRevealPanel";
-import { chronicle3Images } from "../../content/chronicle3Media";
+import {
+  chronicle3HorizontalImages,
+  chronicle3HorizontalMobileImages,
+  chronicle3Images,
+} from "../../content/chronicle3Media";
 import { featuredPortraits } from "../../content/siteMedia";
 import { pickImage } from "../../content/mediaUtils";
+import dosTarquisLeadVideo from "../../../assets/img/Cronica3/terremoto-testimonia-milagritos-ectv-phone3.mp4";
+import dolorImage from "../../../assets/img/Cronica3/dolor.png";
 
 interface StoryPanel {
   title?: string;
   text: string;
   img: string;
+  mobileImg?: string;
 }
 
 const introPanels: StoryPanel[] = [
@@ -35,36 +42,44 @@ const horizontalPanels: StoryPanel[] = [
   {
     title: "Betty, el dolor de perder a su hija sigue latente",
     text: "Las lagrimas caen por su rostro en senal de que su dolor aun sigue vivo. Betty camina por la acera donde se alzaba el centro comercial Felipe Navarrete.",
-    img: featuredPortraits.betty,
+    img: pickImage(chronicle3HorizontalImages, 0),
+    mobileImg: pickImage(chronicle3HorizontalMobileImages, 0),
   },
   {
     text: "Cada abril, desde hace 10 anos, realiza un ritual en conmemoracion de los fallecidos en el terremoto, entre ellos su hija Maria Gabriela.",
-    img: pickImage(chronicle3Images, 4),
+    img: pickImage(chronicle3HorizontalImages, 1),
+    mobileImg: pickImage(chronicle3HorizontalMobileImages, 1),
   },
   {
     text: "En el primer piso del centro comercial funcionaba una papeleria llena durante marzo y abril por las compras de utiles escolares.",
-    img: pickImage(chronicle3Images, 5),
+    img: pickImage(chronicle3HorizontalImages, 2),
+    mobileImg: pickImage(chronicle3HorizontalMobileImages, 2),
   },
   {
     text: "Maria Gabriela llevaba apenas tres dias de labores cuando la tarde se partio en dos. Su madre queria pasar a verla, pero todo cambio.",
-    img: pickImage(chronicle3Images, 6),
+    img: pickImage(chronicle3HorizontalImages, 3),
+    mobileImg: pickImage(chronicle3HorizontalMobileImages, 3),
   },
   {
     text: "Minutos despues, un fuerte terremoto azoto la provincia de Manabi y devasto completamente Tarqui.",
-    img: pickImage(chronicle3Images, 7),
+    img: pickImage(chronicle3HorizontalImages, 4),
+    mobileImg: pickImage(chronicle3HorizontalMobileImages, 4),
   },
   {
     title: '"Me arranco la vida"',
     text: "Betty se pregunta que habria pasado si toda la familia hubiera ido a recoger a Maria Gabriela. Confiesa que no sentiria tanto dolor, pero tampoco estaria contando la historia.",
-    img: pickImage(chronicle3Images, 8),
+    img: pickImage(chronicle3HorizontalImages, 5),
+    mobileImg: pickImage(chronicle3HorizontalMobileImages, 5),
   },
   {
     text: "La esperanza siguio intacta hasta que recibio la llamada de su exmarido. Escucho que todo el edificio se habia caido y sintio que la tierra se abria bajo sus pies.",
-    img: pickImage(chronicle3Images, 9),
+    img: pickImage(chronicle3HorizontalImages, 6),
+    mobileImg: pickImage(chronicle3HorizontalMobileImages, 6),
   },
   {
     text: "Entro a la morgue improvisada y reconocio a su hija. Primero no quiso decirlo, pero finalmente el grito de una madre le confirmo la perdida.",
-    img: pickImage(chronicle3Images, 10),
+    img: pickImage(chronicle3HorizontalImages, 7),
+    mobileImg: pickImage(chronicle3HorizontalMobileImages, 7),
   },
 ];
 
@@ -81,18 +96,39 @@ const johnParagraphs = [
   '"Pero no le diga asi", repone John, a quien este nombre le disgusta porque no ha dado los resultados esperados.',
 ];
 
-function VerticalSection({ items }: { items: StoryPanel[] }) {
+function IntroTwoColumnSection() {
+  const [firstPanel, ...restPanels] = introPanels;
+
   return (
-    <div className="container mx-auto max-w-4xl space-y-8 px-6 py-24">
-      {items.map((panel, index) => (
-        <SectionReveal key={index}>
+    <div className="container mx-auto max-w-6xl px-6 py-24">
+      <SectionReveal>
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-stretch">
           <div className="space-y-8 text-lg leading-relaxed text-gray-200 md:text-xl">
-            {panel.title && <h2 className="mb-8 text-3xl text-white md:text-4xl">{panel.title}</h2>}
-            <p>{panel.text}</p>
-            
+            {firstPanel.title && <h2 className="mb-8 text-3xl text-white md:text-4xl">{firstPanel.title}</h2>}
+            <p>{firstPanel.text}</p>
+            {restPanels.map((panel) => (
+              <p key={panel.text}>{panel.text}</p>
+            ))}
+            <img
+              src={dolorImage}
+              alt="Dolor en Tarqui"
+              loading="lazy"
+              decoding="async"
+              className="w-full rounded-lg object-cover"
+            />
           </div>
-        </SectionReveal>
-      ))}
+
+          <div className="relative min-h-[420px] overflow-hidden rounded-[2rem] lg:h-full lg:min-h-0 lg:max-h-screen">
+            <video
+              src={dosTarquisLeadVideo}
+              className="h-full w-full object-cover lg:max-h-screen"
+              controls
+              playsInline
+              preload="metadata"
+            />
+          </div>
+        </div>
+      </SectionReveal>
     </div>
   );
 }
@@ -110,7 +146,7 @@ export function DosTarquisSection() {
         </div>
       </SectionReveal>
 
-      <VerticalSection items={introPanels} />
+      <IntroTwoColumnSection />
 
       <HorizontalScrollytelling sections={horizontalPanels} />
 
