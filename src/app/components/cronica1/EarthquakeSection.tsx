@@ -175,7 +175,6 @@ export function EarthquakeSection({
                 images={earthquake1858Gallery}
                 label="Ver impacto del terremoto"
                 theme="dark"
-                modalVariant="feature"
               />
             </div>
           </SectionReveal>
