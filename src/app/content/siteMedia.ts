@@ -48,6 +48,12 @@ export const chronicleMenu = [
     title: "Cr\u00f3nica 4",
     image: featuredPortraits.chronicle4,
   },
+  {
+    id: "nota-complemento-1",
+    label: "Nota complemento 1",
+    title: "Manab\u00ed, entre la necesidad y la corrupci\u00f3n",
+    image: featuredPortraits.chronicle4,
+  },
 ];
 
 export const siteVideos = {

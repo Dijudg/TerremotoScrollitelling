@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUp, Copy, MessageCircle, Share2 } from "lucide-react";
-import { motion } from "motion/react";
+import { ArrowUp, Menu, Share2, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import logoIcon from "../../../assets/fav-et.svg";
 import logoHorizontal from "../../../assets/Logo-et-horizontal-blanco.svg";
 import { chronicleMenu } from "../../content/siteMedia";
 
-const watchedSections = ["hero", "cronica-1", "cronica-2", "cronica-3", "cronica-4"];
+const watchedSections = ["hero", "cronica-1", "cronica-2", "cronica-3", "cronica-4", "nota-complemento-1"];
 
 const scrollToSection = (id: string) => {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -14,7 +14,7 @@ const scrollToSection = (id: string) => {
 export function StickyChronicleNav() {
   const [activeSection, setActiveSection] = useState("hero");
   const [showHeroButton, setShowHeroButton] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const shareData = useMemo(
     () => ({
@@ -38,20 +38,18 @@ export function StickyChronicleNav() {
     );
   };
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(shareData.url);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
+  const handleNavigate = (id: string) => {
+    scrollToSection(id);
+    setIsMobileMenuOpen(false);
   };
 
-  const handleWhatsApp = () => {
-    const message = `${shareData.title} ${shareData.url}`;
-    window.open(
-      `https://wa.me/?text=${encodeURIComponent(message)}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
-  };
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "auto";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     const observedSections = new Set<Element>();
@@ -107,7 +105,7 @@ export function StickyChronicleNav() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.2 }}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[2rem_minmax(0,1fr)_2rem] items-center gap-4 px-4 py-4 md:grid-cols-[13rem_minmax(0,1fr)_18rem] md:px-6">
+      <div className="mx-auto grid max-w-7xl grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-4 px-4 py-4 md:grid-cols-[13rem_minmax(0,1fr)_18rem] md:px-6">
         <div className="flex justify-start">
           <a
             href="https://www.eltelegrafo.com.ec"
@@ -121,7 +119,7 @@ export function StickyChronicleNav() {
           </a>
         </div>
 
-        <div className="hide-scrollbar overflow-x-auto">
+        <div className="hidden overflow-x-auto md:block">
           <div className="mx-auto flex min-w-max max-w-md items-center justify-between gap-6">
             {chronicleMenu.map((item) => {
               const isActive = activeSection === item.id;
@@ -130,7 +128,7 @@ export function StickyChronicleNav() {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => scrollToSection(item.id)}
+                  onClick={() => handleNavigate(item.id)}
                   className={`relative pb-1 text-[11px] uppercase tracking-[0.24em] transition ${
                     isActive
                       ? "text-white"
@@ -150,6 +148,10 @@ export function StickyChronicleNav() {
           </div>
         </div>
 
+        <div className="justify-self-center text-[10px] uppercase tracking-[0.24em] text-white/65 md:hidden">
+          18:58
+        </div>
+
         <div className="flex items-center justify-end gap-2">
           <div className="hidden items-center gap-2 md:flex">
             <button
@@ -160,23 +162,6 @@ export function StickyChronicleNav() {
             >
               <Share2 className="h-3.5 w-3.5" />
             </button>
-            <button
-              type="button"
-              onClick={handleWhatsApp}
-              aria-label="Compartir por WhatsApp"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 text-white/70 transition hover:border-white/50 hover:text-white"
-            >
-              <MessageCircle className="h-3.5 w-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={handleCopy}
-              aria-label="Copiar enlace"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 text-white/70 transition hover:border-white/50 hover:text-white"
-            >
-              <Copy className="h-3.5 w-3.5" />
-            </button>
-            {copied && <span className="text-[10px] uppercase tracking-[0.2em] text-white/75">Copiado</span>}
           </div>
 
           {showHeroButton ? (
@@ -191,8 +176,112 @@ export function StickyChronicleNav() {
           ) : (
             <div aria-hidden="true" className="h-4 w-4" />
           )}
+
+          <button
+            type="button"
+            aria-label={isMobileMenuOpen ? "Cerrar menu" : "Abrir menu"}
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen((isOpen) => !isOpen)}
+            className="relative z-[90] flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-black/30 text-white/85 backdrop-blur-md transition hover:border-white/50 hover:text-white md:hidden"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {isMobileMenuOpen ? (
+                <motion.span
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0, scale: 0.7 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: 90, opacity: 0, scale: 0.7 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <X className="h-4 w-4" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0, scale: 0.7 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: -90, opacity: 0, scale: 0.7 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu className="h-4 w-4" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
         </div>
       </div>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-[80] min-h-[100svh] overflow-y-auto bg-black/95 backdrop-blur-xl md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.24 }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <motion.div
+              className="relative flex min-h-[100svh] w-full flex-col px-5 pt-24 pb-8"
+              initial={{ y: -32, opacity: 0, scale: 0.96 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: -24, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="mb-7">
+                <p className="text-xs uppercase tracking-[0.28em] text-sky-300/80">Menú</p>
+                <p className="mt-3 text-4xl leading-none text-white">Crónicas y notas</p>
+                <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/55">
+                  Navega por las historias y la nota complementaria.
+                </p>
+              </div>
+
+              <div className="grid flex-1 gap-3">
+                {chronicleMenu.map((item, index) => {
+                  const isActive = activeSection === item.id;
+
+                  return (
+                    <motion.button
+                      key={item.id}
+                      type="button"
+                      onClick={() => handleNavigate(item.id)}
+                      className={`group grid w-full grid-cols-[5.5rem_minmax(0,1fr)] items-stretch gap-4 rounded-[1.4rem] border p-2.5 text-left transition ${
+                        isActive
+                          ? "border-sky-300/60 bg-sky-300/10 text-white"
+                          : "border-white/10 bg-white/[0.03] text-white/70 hover:border-white/25 hover:bg-white/[0.06] hover:text-white"
+                      }`}
+                      initial={{ y: 24, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: 16, opacity: 0 }}
+                      transition={{ duration: 0.25, delay: index * 0.04 }}
+                    >
+                      <span className="min-h-[5.5rem] overflow-hidden rounded-[1.1rem] bg-white/10">
+                        <img src={item.image} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                      </span>
+                      <span className="flex min-w-0 flex-col justify-center py-2 pr-1">
+                        <span className="block text-[11px] uppercase tracking-[0.22em] text-sky-200/70">
+                          {item.label}
+                        </span>
+                        <span className="mt-1 block text-lg leading-tight text-white">{item.title}</span>
+                      </span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleNativeShare}
+                className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-full border border-white/15 px-5 py-4 text-sm uppercase tracking-[0.18em] text-white/75 transition hover:border-white/35 hover:text-white"
+              >
+                <Share2 className="h-4 w-4" />
+                Compartir
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }

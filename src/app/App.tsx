@@ -158,7 +158,7 @@ export default function App() {
         <Cronica4Section />
       </DeferredSection>
 
-      <DeferredSection>
+      <DeferredSection id="nota-complemento-1">
         <MemorialSection />
       </DeferredSection>
 
