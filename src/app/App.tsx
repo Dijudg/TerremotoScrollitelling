@@ -148,14 +148,6 @@ export default function App() {
 
       <DeferredSection>
         <ScrollVideo
-          src={siteVideos.chronicle3Lead}
-          poster={featuredPortraits.betty}
-          analyticsLabel="cronica_3_video"
-        />
-      </DeferredSection>
-
-      <DeferredSection>
-        <ScrollVideo
           src={siteVideos.chronicle4Lead}
           poster={featuredPortraits.chronicle4}
           analyticsLabel="cronica_4_video"
