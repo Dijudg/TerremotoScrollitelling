@@ -7,6 +7,7 @@ interface StorySection {
   text: string;
   img: string;
   mobileImg?: string;
+  desktopMdImg?: string;
   textContainerClassName?: string;
   contentClassName?: string;
   titleClassName?: string;
@@ -187,13 +188,18 @@ function DesktopHorizontalScrollytelling({
             <div key={index} className="flex flex-col md:block h-full w-screen relative shrink-0">
               {/* Mobile: Top half image, Desktop: Full background */}
               <div className="h-1/2 md:h-full md:absolute md:inset-0 w-full relative">
-                <img 
-                  src={section.img} 
-                  alt="" 
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover opacity-100"
-                />
+                <picture className="block h-full w-full">
+                  {section.desktopMdImg && (
+                    <source media="(min-width: 768px) and (max-width: 1023px)" srcSet={section.desktopMdImg} />
+                  )}
+                  <img
+                    src={section.img}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover opacity-100"
+                  />
+                </picture>
                 <div className={getClassName("hidden md:block absolute inset-0", imageOverlayClassName)} />
                 <div className="md:hidden absolute inset-0 bg-gradient-to-t from-black to-transparent" />
               </div>

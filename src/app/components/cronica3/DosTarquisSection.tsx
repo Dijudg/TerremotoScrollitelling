@@ -4,6 +4,7 @@ import { ScrollStepRevealPanel } from "../ScrollStepRevealPanel";
 import { LayeredHeadline } from "../LayeredHeadline";
 import {
   chronicle3HorizontalImages,
+  chronicle3HorizontalMdImages,
   chronicle3HorizontalMobileImages,
   chronicle3Images,
 } from "../../content/chronicle3Media";
@@ -18,6 +19,12 @@ interface StoryPanel {
   text: string;
   img: string;
   mobileImg?: string;
+  desktopMdImg?: string;
+  textContainerClassName?: string;
+  contentClassName?: string;
+  titleClassName?: string;
+  paragraphClassName?: string;
+  detachedTitleClassName?: string;
 }
 
 const introPanels: StoryPanel[] = [
@@ -57,22 +64,35 @@ const horizontalPanels: StoryPanel[] = [
     text: "En el primer piso del centro comercial Felipe Navarrete funcionaba una reconocida papelería que se llenaba durante los meses de marzo y abril por las compras de los útiles escolares. El movimiento era intenso, por lo que se contrataba gente para solventar esas necesidades. ",
     img: pickImage(chronicle3HorizontalImages, 2),
     mobileImg: pickImage(chronicle3HorizontalMobileImages, 2),
+    textContainerClassName: "md:justify-start",
+    contentClassName: "md:w-1/2 md:max-w-none md:mr-auto",
   },
   {
     text: "María Gabriela entró a trabajar en este concurrido espacio. Llevaba apenas tres días de labores y su madre le prometió pasarla viendo. Ese día -relata Betty- su nuera también le pidió ayuda con su nieto y le dijo que llegaría antes de las 17:00. ",
     img: pickImage(chronicle3HorizontalImages, 3),
     mobileImg: pickImage(chronicle3HorizontalMobileImages, 3),
+    textContainerClassName: "md:items-stretch md:justify-center md:!px-24 md:!pt-0 md:!pb-16",
+    contentClassName: "md:max-w-2xl md:text-center md:mt-auto md:mb-0",
+    paragraphClassName: "md:text-center",
   },
   {
     text: "El plan era perfecto. Si su nuera llegaba -como lo dijo- antes de la hora señalada, alcanzaría a ir a la papelería para encontrarse con María Gabriela. No obstante, la nuera se demoró y llegó pasadas las 18:30. \n\n Minutos después, un fuerte terremoto azotó la provincia de Manabí y devastó completamente Tarqui. ",
     img: pickImage(chronicle3HorizontalImages, 4),
     mobileImg: pickImage(chronicle3HorizontalMobileImages, 4),
+    textContainerClassName: "md:justify-end",
+    contentClassName: "md:w-1/2 md:max-w-none md:ml-auto md:text-right",
+    paragraphClassName: "md:text-right",
   },
   {
-    title: '"Me arranco la vida"',
-    text: "¿Qué hubiera pasado si ella, sus nietos y su otra hija embarazada, habrían ido a recoger a María Gabriela?, reflexiona Betty. De pronto no estaría contando la historia, pero confiesa que “no sentiría tanto dolor”. ",
+    title: '"Me arranco\nla vida"',
+    text: "¿Qué hubiera pasado si ella, sus nietos y su otra hija embarazada,\nhabrían ido a recoger a María Gabriela?, reflexiona Betty.\nDe pronto no estaría contando la historia,\npero confiesa que “no sentiría tanto dolor”. ",
     img: pickImage(chronicle3HorizontalImages, 5),
     mobileImg: pickImage(chronicle3HorizontalMobileImages, 5),
+    detachedTitleClassName: "inset-0 right-auto w-1/2 !p-0 md:!flex items-center justify-center text-center",
+    textContainerClassName: "md:justify-end",
+    contentClassName: "md:w-1/2 md:max-w-none md:ml-auto md:text-right",
+    titleClassName: "md:!mb-0 md:text-center md:leading-tight",
+    paragraphClassName: "md:text-right md:whitespace-pre-line",
   },
   {
     text: "Minutos después del terremoto -retoma su relato- intentó comunicarse con su hija, pero no le contestó. Imaginaba que al ser una mujer astuta y deportista habría alcanzado a correr. ",
@@ -83,8 +103,14 @@ const horizontalPanels: StoryPanel[] = [
     text: "La esperanza seguía intacta hasta que recibió la llamada de su exmarido. “Todo el edificio se cayó”, escuchó al otro lado del teléfono. Por un momento se quedó sin aire, sintió que la tierra se abría y la tragaba. ",
     img: pickImage(chronicle3HorizontalImages, 7),
     mobileImg: pickImage(chronicle3HorizontalMobileImages, 7),
+    textContainerClassName: "md:justify-start",
+    contentClassName: "md:max-w-2xl md:mr-auto",
+    paragraphClassName: "md:text-left",
   },
-];
+].map((panel, index) => ({
+  ...panel,
+  desktopMdImg: pickImage(chronicle3HorizontalMdImages, index),
+}));
 
 const sadnessParagraphs = [
   "Esa misma sensación surgió cuando le dijeron que encontraron el cuerpo de una joven con similares características a las de su hija. ",
@@ -170,9 +196,14 @@ export function DosTarquisSection() {
 
       <IntroTwoColumnSection />
 
-      <HorizontalScrollytelling sections={horizontalPanels} />
+      <HorizontalScrollytelling sections={horizontalPanels} imageOverlayClassName="bg-transparent" />
 
-      <ScrollStepRevealPanel image={fondoSeccionImage} alt="Fondo de sección Cronica 3" contentClassName="text-left">
+      <ScrollStepRevealPanel
+        image={fondoSeccionImage}
+        alt="Fondo de sección Cronica 3"
+        overlayClassName="bg-transparent"
+        contentClassName="text-left"
+      >
         <div className="max-w-3xl space-y-8">
           
           {sadnessParagraphs.map((paragraph) => (

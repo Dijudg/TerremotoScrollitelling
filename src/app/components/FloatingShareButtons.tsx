@@ -46,7 +46,7 @@ export function FloatingShareButtons() {
   };
 
   return (
-    <div className="fixed right-4 bottom-4 z-50 flex flex-col items-center gap-2 md:right-6 md:bottom-6">
+    <div className="fixed right-4 bottom-4 z-50 flex flex-col items-center gap-2 md:hidden">
       {copied && (
         <motion.span
           initial={{ opacity: 0, y: 8 }}

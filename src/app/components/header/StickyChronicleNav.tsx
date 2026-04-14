@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { ArrowUp } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowUp, Copy, MessageCircle, Share2 } from "lucide-react";
 import { motion } from "motion/react";
 import logoIcon from "../../../assets/fav-et.svg";
 import logoHorizontal from "../../../assets/Logo-et-horizontal-blanco.svg";
@@ -14,6 +14,44 @@ const scrollToSection = (id: string) => {
 export function StickyChronicleNav() {
   const [activeSection, setActiveSection] = useState("hero");
   const [showHeroButton, setShowHeroButton] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const shareData = useMemo(
+    () => ({
+      url: window.location.href,
+      title: "18:58 | Mas alla del tiempo",
+      text: "Historias del terremoto de Manabi a 10 anos del 16 de abril de 2016.",
+    }),
+    [],
+  );
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      await navigator.share(shareData);
+      return;
+    }
+
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareData.url)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(shareData.url);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  };
+
+  const handleWhatsApp = () => {
+    const message = `${shareData.title} ${shareData.url}`;
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(message)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
 
   useEffect(() => {
     const observedSections = new Set<Element>();
@@ -69,7 +107,7 @@ export function StickyChronicleNav() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.2 }}
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[2rem_minmax(0,1fr)_2rem] items-center gap-4 px-4 py-4 md:grid-cols-[13rem_minmax(0,1fr)_13rem] md:px-6">
+      <div className="mx-auto grid max-w-7xl grid-cols-[2rem_minmax(0,1fr)_2rem] items-center gap-4 px-4 py-4 md:grid-cols-[13rem_minmax(0,1fr)_18rem] md:px-6">
         <div className="flex justify-start">
           <a
             href="https://www.eltelegrafo.com.ec"
@@ -112,13 +150,41 @@ export function StickyChronicleNav() {
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex items-center justify-end gap-2">
+          <div className="hidden items-center gap-2 md:flex">
+            <button
+              type="button"
+              onClick={handleNativeShare}
+              aria-label="Compartir"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 text-white/70 transition hover:border-white/50 hover:text-white"
+            >
+              <Share2 className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleWhatsApp}
+              aria-label="Compartir por WhatsApp"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 text-white/70 transition hover:border-white/50 hover:text-white"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleCopy}
+              aria-label="Copiar enlace"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 text-white/70 transition hover:border-white/50 hover:text-white"
+            >
+              <Copy className="h-3.5 w-3.5" />
+            </button>
+            {copied && <span className="text-[10px] uppercase tracking-[0.2em] text-white/75">Copiado</span>}
+          </div>
+
           {showHeroButton ? (
             <button
               type="button"
               aria-label="Volver a la portada"
               onClick={() => scrollToSection("hero")}
-              className="text-white/55 transition hover:text-white/90"
+              className="rounded-full border border-sky-300/70 bg-sky-400/20 p-1.5 text-sky-200 shadow-[0_0_16px_rgba(56,189,248,0.45)] transition hover:bg-sky-300/30 hover:text-sky-100"
             >
               <ArrowUp className="h-4 w-4" strokeWidth={1.8} />
             </button>
