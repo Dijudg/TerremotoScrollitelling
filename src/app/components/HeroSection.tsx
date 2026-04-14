@@ -456,11 +456,11 @@ export function HeroSection() {
             <h1
               className="font-heading text-3xl leading-[1.08] text-white md:text-5xl text-balance lg:text-8xl"
             >
-              Más alla del tiempo
+              Más allá del tiempo
             </h1>
 
             <p className="max-w-2xl text-sm leading-relaxed text-balance text-white/72 md:ml-auto md:text-2xl">
-              Crónicas sobre la memoria, la perdida y la reconstruccion de Manabí a 10 años del terremoto del 16 de abril de 2016.
+              Crónicas sobre la memoria, la pérdida y la reconstrucción de Manabí a 10 años del terremoto del 16 de abril de 2016.
             </p>
           </div>
         </div>

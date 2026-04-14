@@ -141,7 +141,7 @@ export function DosTarquisSection() {
       <SectionReveal>
         <div className="pt-32 pb-8 text-center">
           <div className="mb-8 inline-block h-px w-32 bg-gradient-to-r from-transparent via-white to-transparent" />
-          <p className="text-sm uppercase tracking-widest text-gray-400">Cronica 3</p>
+          <p className="text-sm uppercase tracking-widest text-gray-400">Crónica 3</p>
           <div className="mt-8 inline-block h-px w-32 bg-gradient-to-r from-transparent via-white to-transparent" />
         </div>
       </SectionReveal>
