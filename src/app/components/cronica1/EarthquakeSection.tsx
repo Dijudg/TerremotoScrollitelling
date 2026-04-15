@@ -5,20 +5,16 @@ import { GalleryButton } from "../GalleryButton";
 import { AmbientSound } from "../AmbientSound";
 import { earthquake1858Gallery } from "../../content/earthquake1858Gallery";
 import { bindVideoTracking } from "../../../../analytics";
+import earthquakeVideoDesktop from "../../../assets/img/Cronica1/Video1-terremoto-desktop.mp4";
+import earthquakeVideoMobile from "../../../assets/img/Cronica1/Video1-terremoto-movil.mp4";
 import earthquakeFallbackImage from "../../../assets/img/cnne-279707-topshot-ecuador-quake.webp";
 
 type EarthquakeSectionProps = {
-  videoSrc?: string;
-  desktopVideoSrc?: string;
-  mobileVideoSrc?: string;
   poster?: string;
   analyticsLabel?: string;
 };
 
 export function EarthquakeSection({
-  videoSrc,
-  desktopVideoSrc,
-  mobileVideoSrc,
   poster,
   analyticsLabel = "cronica_1_video_earthquake",
 }: EarthquakeSectionProps) {
@@ -36,7 +32,8 @@ export function EarthquakeSection({
   const opacity = useTransform(scrollYProgress, [0, 0.22, 0.78, 1], [0, 1, 1, 0]);
   const videoScale = useTransform(scrollYProgress, [0, 1], [1.08, 1]);
   const videoOpacity = useTransform(scrollYProgress, [0, 0.18, 0.85, 1], [0, 1, 1, 0.35]);
-  const resolvedDesktopVideoSrc = desktopVideoSrc ?? videoSrc;
+  const resolvedDesktopVideoSrc = earthquakeVideoDesktop;
+  const resolvedMobileVideoSrc = earthquakeVideoMobile;
 
   useEffect(() => {
     const element = sectionRef.current;
@@ -63,7 +60,7 @@ export function EarthquakeSection({
     video.muted = true;
     video.load();
     video.play().catch(() => {});
-  }, [mobileVideoSrc, resolvedDesktopVideoSrc, shouldLoadVideo]);
+  }, [resolvedDesktopVideoSrc, resolvedMobileVideoSrc, shouldLoadVideo]);
 
   useEffect(() => {
     if (!shouldLoadVideo || !videoRef.current) return;
@@ -115,7 +112,7 @@ export function EarthquakeSection({
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          {(resolvedDesktopVideoSrc || mobileVideoSrc) && !videoFailed ? (
+          {!videoFailed && (
             <video
               ref={videoRef}
               className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
@@ -130,18 +127,18 @@ export function EarthquakeSection({
               loop
               preload="none"
             >
-              {shouldLoadVideo && mobileVideoSrc && (
-                <source src={mobileVideoSrc} type="video/mp4" media="(max-width: 767px)" />
+              {shouldLoadVideo && resolvedMobileVideoSrc && (
+                <source src={resolvedMobileVideoSrc} type="video/mp4" media="(max-width: 767px)" />
               )}
               {shouldLoadVideo && resolvedDesktopVideoSrc && (
                 <source src={resolvedDesktopVideoSrc} type="video/mp4" media="(min-width: 768px)" />
               )}
-              {shouldLoadVideo && !resolvedDesktopVideoSrc && mobileVideoSrc && (
-                <source src={mobileVideoSrc} type="video/mp4" />
+              {shouldLoadVideo && !resolvedDesktopVideoSrc && resolvedMobileVideoSrc && (
+                <source src={resolvedMobileVideoSrc} type="video/mp4" />
               )}
               Tu navegador no soporta el elemento de video.
             </video>
-          ) : null}
+          )}
         </motion.div>
 
         <div className="absolute inset-0 bg-black/55" />
@@ -160,11 +157,11 @@ export function EarthquakeSection({
             </h2>
 
             <p className="mb-16 text-2xl font-light text-white md:text-4xl Finger-font">
-              La hora que cambio Manabí
+              La hora que cambió Manabí
             </p>
 
             <div className="mx-auto max-w-3xl space-y-6 text-xl leading-relaxed text-gray-200 md:text-2xl ">
-              <p >Un sismo de magnitud 7.8 sacudio la costa ecuatoriana.</p>
+              <p >Un sismo de magnitud 7.8 sacudió la costa ecuatoriana.</p>
               <p className="my-12 text-3xl font-light text-white md:text-5xl">
                 Todo se derrumbo en segundos.
               </p>

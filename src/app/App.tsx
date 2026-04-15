@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useScroll } from "motion/react";
 import { HeroSection } from "./components/HeroSection";
 import { StickyChronicleNav } from "./components/header/StickyChronicleNav";
@@ -7,7 +7,13 @@ import { FloatingShareButtons } from "./components/FloatingShareButtons";
 import { DeferredRender } from "./components/DeferredRender";
 import { ReviveAdBlock } from "./components/ReviveAdBlock";
 import { SiteFooter } from "./components/footer/SiteFooter";
-import { featuredPortraits, sitePosters, siteVideos } from "./content/siteMedia";
+import { featuredPortraits, sitePosters } from "./content/siteMedia";
+import {
+  fetchRemoteVideoManifest,
+  getActiveChronicleVideo,
+  resolveVideoSource,
+  type RemoteVideoManifest,
+} from "./content/videoManifest";
 import {
   attachClickTracking,
   attachScrollTracking,
@@ -50,6 +56,8 @@ function DeferredSection({
 
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [remoteVideoManifest, setRemoteVideoManifest] = useState<RemoteVideoManifest | null>(null);
+  const [remoteManifestChecked, setRemoteManifestChecked] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -63,13 +71,41 @@ export default function App() {
     const detachClickTracking = attachClickTracking();
     const detachScrollTracking = attachScrollTracking();
     const detachTimeOnPageTracking = attachTimeOnPageTracking();
+    const controller = new AbortController();
+
+    fetchRemoteVideoManifest(controller.signal)
+      .then((manifest) => {
+        setRemoteVideoManifest(manifest);
+        setRemoteManifestChecked(true);
+      })
+      .catch((error) => {
+        console.warn("No se pudo cargar el manifiesto remoto de videos, se usarán los archivos locales.", error);
+        setRemoteManifestChecked(true);
+      });
 
     return () => {
+      controller.abort();
       detachClickTracking();
       detachScrollTracking();
       detachTimeOnPageTracking();
     };
   }, []);
+
+  const remoteChronicle2 = getActiveChronicleVideo(remoteVideoManifest, "cronica2");
+  const remoteChronicle3 = getActiveChronicleVideo(remoteVideoManifest, "cronica3");
+  const remoteChronicle4 = getActiveChronicleVideo(remoteVideoManifest, "cronica4");
+
+  const chronicle2LeadDesktopSource = resolveVideoSource(remoteChronicle2?.desktop);
+  const chronicle2LeadMobileSource = resolveVideoSource(remoteChronicle2?.mobile);
+
+  const chronicle3LeadDesktopSource = resolveVideoSource(remoteChronicle3?.desktop);
+  const chronicle3LeadMobileSource = resolveVideoSource(remoteChronicle3?.mobile);
+
+  const chronicle4LeadDesktopSource = resolveVideoSource(remoteChronicle4?.desktop);
+  const chronicle4LeadMobileSource = resolveVideoSource(remoteChronicle4?.mobile);
+  const hasChronicle2Video = remoteManifestChecked && Boolean(chronicle2LeadDesktopSource?.url || chronicle2LeadMobileSource?.url);
+  const hasChronicle3Video = remoteManifestChecked && Boolean(chronicle3LeadDesktopSource?.url || chronicle3LeadMobileSource?.url);
+  const hasChronicle4Video = remoteManifestChecked && Boolean(chronicle4LeadDesktopSource?.url || chronicle4LeadMobileSource?.url);
 
   return (
     <div
@@ -93,8 +129,6 @@ export default function App() {
 
       <DeferredSection>
         <EarthquakeSection
-          desktopVideoSrc={siteVideos.chronicle1LeadDesktop}
-          mobileVideoSrc={siteVideos.chronicle1LeadMobile}
           poster={sitePosters.earthquake}
           analyticsLabel="cronica_1_video_earthquake"
         />
@@ -122,16 +156,18 @@ export default function App() {
 
       <ReviveAdBlock />
 
-      <DeferredSection>
-        <ScrollVideo
-          src={siteVideos.chronicle2Lead}
-          mobileSrc={siteVideos.chronicle2LeadMobile}
-          poster={featuredPortraits.javier}
-          analyticsLabel="cronica_2_video"
-          preload="metadata"
-          showControls
-        />
-      </DeferredSection>
+      {hasChronicle2Video && (
+        <DeferredSection>
+          <ScrollVideo
+            desktopSource={chronicle2LeadDesktopSource}
+            mobileSource={chronicle2LeadMobileSource}
+            poster={featuredPortraits.javier}
+            analyticsLabel="cronica_2_video"
+            preload="metadata"
+            showControls
+          />
+        </DeferredSection>
+      )}
 
       <DeferredSection id="cronica-2" minHeight="1100vh">
         <JavierSection />
@@ -153,16 +189,24 @@ export default function App() {
 
       <ReviveAdBlock />
 
-      <DeferredSection>
-        <ScrollVideo
-          src={siteVideos.chronicle4Lead}
-          poster={featuredPortraits.chronicle4}
-          analyticsLabel="cronica_4_video"
-        />
-      </DeferredSection>
+      {hasChronicle3Video && (
+        <DeferredSection>
+          <ScrollVideo
+            desktopSource={chronicle3LeadDesktopSource}
+            mobileSource={chronicle3LeadMobileSource}
+            poster={featuredPortraits.chronicle4}
+            analyticsLabel="cronica_4_video"
+            showControls={chronicle3LeadDesktopSource?.kind !== "video" || chronicle3LeadMobileSource?.kind !== "video"}
+          />
+        </DeferredSection>
+      )}
 
       <DeferredSection id="cronica-4" minHeight="1300vh">
-        <Cronica4Section />
+        <Cronica4Section
+          leadDesktopVideoSource={chronicle4LeadDesktopSource}
+          leadMobileVideoSource={chronicle4LeadMobileSource}
+          hideLeadVideo={!hasChronicle4Video}
+        />
       </DeferredSection>
 
       <ReviveAdBlock />

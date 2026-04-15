@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { SectionReveal } from "../SectionReveal";
 import { HorizontalScrollytelling } from "../HorizontalScrollytelling";
 import { GalleryButton } from "../GalleryButton";
@@ -9,14 +10,16 @@ import {
   chronicle4LuisImages,
   chronicle4RicardoImages,
 } from "../../content/chronicle4Media";
-import { siteVideos } from "../../content/siteMedia";
 import { pickImage } from "../../content/mediaUtils";
+import type { ResolvedVideoSource } from "../../content/videoManifest";
+import { RemoteVideoEmbed } from "../RemoteVideoEmbed";
 
 interface StoryPanel {
   title?: string;
   titleLines?: string[];
   text: string;
   img: string;
+  caption?: string;
   mobileImg?: string;
 }
 
@@ -25,6 +28,7 @@ const introPanels: StoryPanel[] = [
     title: "Los rescatistas “quebrados”",
     text: "Cuando recuerdan sus anécdotas durante y después del terremoto, sus miradas se pierden, como si el tiempo hiciera una pausa.",
     img: pickImage(chronicle4RicardoImages, 0),
+    caption: "Ricardo Castro, Bombero Pedernales.",
   },
   {
     text: "Y es que es difícil olvidar aquellos gritos que imploraban ayuda; aquellos edificios virados como si jugaran con la gravedad; y aquel olor a muerte que asfixiaba.",
@@ -162,19 +166,73 @@ function TextGroup({ paragraphs, className = "" }: { paragraphs: string[]; class
   );
 }
 
-function MediaCard({ src, alt, className = "", imageClassName = "" }: { src: string; alt: string; className?: string; imageClassName?: string }) {
+function MediaCard({
+  src,
+  alt,
+  caption,
+  className = "",
+  imageClassName = "",
+}: {
+  src: string;
+  alt: string;
+  caption?: string;
+  className?: string;
+  imageClassName?: string;
+}) {
   return (
-    <div className={`overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl shadow-black/40 ${className}`}>
-      <img src={src} alt={alt} loading="lazy" decoding="async" className={`h-full w-full object-cover ${imageClassName}`} />
-    </div>
+    <figure className={className}>
+      <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl shadow-black/40">
+        <img src={src} alt={alt} loading="lazy" decoding="async" className={`h-full w-full object-cover ${imageClassName}`} />
+      </div>
+      {caption && (
+        <figcaption className="mt-3 border-l border-white/20 pl-4 text-xs leading-relaxed text-white/55 md:text-sm">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
   );
 }
 
-function VideoFeature({ poster }: { poster: string }) {
+function VideoFeature({
+  poster,
+  desktopSource,
+  mobileSource,
+}: {
+  poster: string;
+  desktopSource?: ResolvedVideoSource | null;
+  mobileSource?: ResolvedVideoSource | null;
+}) {
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const updateViewport = () => setIsMobileViewport(mediaQuery.matches);
+
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
+
+  const source = isMobileViewport ? mobileSource : desktopSource;
+
+  if (source?.kind !== "video" && source?.embedUrl) {
+    return (
+      <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl shadow-black/40">
+        <RemoteVideoEmbed
+          source={source}
+          title="Video de la cronica 4"
+          className="aspect-video w-full bg-black object-cover"
+          autoPlay
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-2xl shadow-black/40">
       <video
-        src={siteVideos.chronicle4Lead}
+        src={source?.kind === "video" ? source.url : undefined}
         poster={poster}
         controls
         playsInline
@@ -202,7 +260,8 @@ function VerticalSection({ items }: { items: StoryPanel[] }) {
             </div>
             <MediaCard
               src={panel.img}
-              alt={panel.title || "Crónica 4"}
+              alt={panel.caption || panel.title || "Crónica 4"}
+              caption={panel.caption}
               className={`${index > 0 ? "hidden lg:block" : ""} min-h-[280px] lg:min-h-[420px]`}
             />
           </div>
@@ -212,7 +271,15 @@ function VerticalSection({ items }: { items: StoryPanel[] }) {
   );
 }
 
-function LuisSection() {
+function LuisSection({
+  leadDesktopVideoSource,
+  leadMobileVideoSource,
+  hideLeadVideo = false,
+}: {
+  leadDesktopVideoSource?: ResolvedVideoSource | null;
+  leadMobileVideoSource?: ResolvedVideoSource | null;
+  hideLeadVideo?: boolean;
+}) {
   const heroImage = pickImage(chronicle4LuisImages, 0);
   const supportImages = [pickImage(chronicle4LuisImages, 1), pickImage(chronicle4LuisImages, 2), pickImage(chronicle4LuisImages, 3)];
   const wideImage = pickImage(chronicle4LuisImages, 4);
@@ -245,11 +312,17 @@ function LuisSection() {
           </div>
         </SectionReveal>
 
-        <SectionReveal>
-          <div className="mt-16">
-            <VideoFeature poster={heroImage} />
-          </div>
-        </SectionReveal>
+        {!hideLeadVideo && (
+          <SectionReveal>
+            <div className="mt-16">
+              <VideoFeature
+                poster={heroImage}
+                desktopSource={leadDesktopVideoSource}
+                mobileSource={leadMobileVideoSource}
+              />
+            </div>
+          </SectionReveal>
+        )}
 
         <SectionReveal>
           <div className="-mx-6 mt-16 flex snap-x gap-5 overflow-x-auto px-6 pb-4 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0">
@@ -367,7 +440,15 @@ function BryanSection() {
   );
 }
 
-export function Cronica4Section() {
+export function Cronica4Section({
+  leadDesktopVideoSource,
+  leadMobileVideoSource,
+  hideLeadVideo = false,
+}: {
+  leadDesktopVideoSource?: ResolvedVideoSource | null;
+  leadMobileVideoSource?: ResolvedVideoSource | null;
+  hideLeadVideo?: boolean;
+} = {}) {
   return (
     <section className="relative bg-black text-white">
       <SectionReveal>
@@ -381,7 +462,11 @@ export function Cronica4Section() {
       <VerticalSection items={introPanels} />
      
       <HorizontalScrollytelling sections={horizontalPanels} />
-      <LuisSection />
+      <LuisSection
+        leadDesktopVideoSource={leadDesktopVideoSource}
+        leadMobileVideoSource={leadMobileVideoSource}
+        hideLeadVideo={hideLeadVideo}
+      />
       <BryanSection />
     </section>
   );

@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { bindVideoTracking } from '../../../analytics';
+import type { ResolvedVideoSource } from '../content/videoManifest';
+import { RemoteVideoEmbed } from './RemoteVideoEmbed';
 
 interface ScrollVideoProps {
   src?: string;
   mobileSrc?: string;
+  desktopSource?: ResolvedVideoSource | null;
+  mobileSource?: ResolvedVideoSource | null;
   poster?: string;
   youtubeId?: string;
+  embedUrl?: string;
   analyticsLabel?: string;
   preload?: 'none' | 'metadata' | 'auto';
   showControls?: boolean;
@@ -16,8 +21,11 @@ interface ScrollVideoProps {
 export function ScrollVideo({
   src,
   mobileSrc,
+  desktopSource,
+  mobileSource,
   poster,
   youtubeId,
+  embedUrl,
   analyticsLabel = 'scroll_video',
   preload = 'none',
   showControls = false,
@@ -25,7 +33,6 @@ export function ScrollVideo({
 }: ScrollVideoProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
   const isPlayingInternal = useRef(false);
   const hasPlayedInternal = useRef(false);
   const lockTimeoutRef = useRef<number | null>(null);
@@ -37,6 +44,21 @@ export function ScrollVideo({
   const [shouldLoadMedia, setShouldLoadMedia] = useState(false);
   const [showPlayPrompt, setShowPlayPrompt] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+
+  const resolvedDesktopSource = desktopSource ?? (src ? { kind: 'video' as const, url: src } : null);
+  const resolvedMobileSource = mobileSource ?? (mobileSrc ? { kind: 'video' as const, url: mobileSrc } : null);
+
+  const activeSource = isMobileViewport
+    ? resolvedMobileSource
+    : resolvedDesktopSource;
+  const desktopSourceKey = resolvedDesktopSource ? `${resolvedDesktopSource.kind}:${resolvedDesktopSource.url}` : "";
+  const mobileSourceKey = resolvedMobileSource ? `${resolvedMobileSource.kind}:${resolvedMobileSource.url}` : "";
+  const activeSourceKey = activeSource ? `${activeSource.kind}:${activeSource.url}` : "";
+
+  const usesIframeMedia = Boolean(
+    (activeSource && activeSource.kind !== 'video') || youtubeId || embedUrl,
+  );
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -45,6 +67,19 @@ export function ScrollVideo({
 
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.9, 1, 1, 0.95]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+
+    const updateViewport = () => {
+      setIsMobileViewport(mediaQuery.matches);
+    };
+
+    updateViewport();
+    mediaQuery.addEventListener('change', updateViewport);
+
+    return () => mediaQuery.removeEventListener('change', updateViewport);
+  }, []);
 
   const clearScrollLockTimers = useCallback(() => {
     if (lockTimeoutRef.current) {
@@ -111,8 +146,7 @@ export function ScrollVideo({
     setShouldLoadMedia(true);
     setShowPlayPrompt(false);
 
-    if (youtubeId) {
-      iframeRef.current?.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+    if (usesIframeMedia) {
       markPlaying();
       return;
     }
@@ -122,7 +156,7 @@ export function ScrollVideo({
         playHtmlVideo(videoRef.current);
       }
     }, 0);
-  }, [markPlaying, playHtmlVideo, youtubeId]);
+  }, [activeSource?.kind, markPlaying, playHtmlVideo, usesIframeMedia]);
 
   useEffect(() => {
     return () => clearScrollLockTimers();
@@ -137,7 +171,7 @@ export function ScrollVideo({
     setShowPlayPrompt(false);
     setIsVideoReady(false);
     clearScrollLockTimers();
-  }, [clearScrollLockTimers, mobileSrc, src, youtubeId]);
+  }, [clearScrollLockTimers, activeSourceKey, desktopSourceKey, embedUrl, mobileSourceKey, mobileSrc, src, youtubeId]);
 
   useEffect(() => {
     const element = sectionRef.current;
@@ -155,17 +189,17 @@ export function ScrollVideo({
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [shouldLoadMedia]);
+  }, [shouldLoadMedia, usesIframeMedia]);
 
   useEffect(() => {
-    if (youtubeId || !shouldLoadMedia || !videoRef.current) return;
+    if (usesIframeMedia || !shouldLoadMedia || !videoRef.current) return;
 
     setIsVideoReady(false);
     videoRef.current.load();
-  }, [mobileSrc, shouldLoadMedia, src, youtubeId]);
+  }, [activeSourceKey, mobileSrc, shouldLoadMedia, src, usesIframeMedia]);
 
   useEffect(() => {
-    if (!shouldLoadMedia || isVideoReady || isPlaying) return;
+    if (usesIframeMedia || !shouldLoadMedia || isVideoReady || isPlaying) return;
 
     const promptTimer = window.setTimeout(() => {
       if (!isPlayingInternal.current) {
@@ -174,7 +208,7 @@ export function ScrollVideo({
     }, playPromptDelayMs);
 
     return () => window.clearTimeout(promptTimer);
-  }, [isPlaying, isVideoReady, playPromptDelayMs, shouldLoadMedia]);
+  }, [isPlaying, isVideoReady, playPromptDelayMs, shouldLoadMedia, usesIframeMedia]);
 
   useEffect(() => {
     if (!isScrollLocked) return;
@@ -230,19 +264,14 @@ export function ScrollVideo({
   useEffect(() => {
     if (!shouldLoadMedia) return;
 
-    if (youtubeId) {
-      const iframe = iframeRef.current;
-      if (!iframe) return;
-
+    if (usesIframeMedia) {
       const unsubscribe = scrollYProgress.on('change', (latest) => {
         const inView = latest > 0.3 && latest < 0.7;
         const outOfView = latest < 0.1 || latest > 0.9;
 
         if (inView && !isPlayingInternal.current) {
-          iframe.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
           markPlaying();
         } else if (outOfView && isPlayingInternal.current) {
-          iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
           markPaused();
         }
       });
@@ -271,7 +300,7 @@ export function ScrollVideo({
         video.pause();
       }
     };
-  }, [markPaused, markPlaying, playHtmlVideo, scrollYProgress, shouldLoadMedia, youtubeId]);
+  }, [activeSource?.kind, markPaused, markPlaying, playHtmlVideo, scrollYProgress, shouldLoadMedia, usesIframeMedia]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -286,14 +315,18 @@ export function ScrollVideo({
   }, [markPaused]);
 
   useEffect(() => {
-    if (youtubeId || !shouldLoadMedia || !videoRef.current) return;
+    if (usesIframeMedia || !shouldLoadMedia || !videoRef.current) return;
 
     return bindVideoTracking(videoRef.current, {
       videoId: analyticsLabel,
       videoName: analyticsLabel.replace(/_/g, ' '),
       placement: 'scrollytelling',
     });
-  }, [analyticsLabel, shouldLoadMedia, youtubeId]);
+  }, [analyticsLabel, shouldLoadMedia, usesIframeMedia, youtubeId]);
+
+  if (!activeSource && !youtubeId && !embedUrl) {
+    return null;
+  }
 
   return (
     <section
@@ -306,19 +339,14 @@ export function ScrollVideo({
         style={{ opacity, scale }}
       >
         <div className="relative h-full w-full overflow-hidden">
-          {youtubeId ? (
-            <iframe
-              ref={iframeRef}
+          {usesIframeMedia ? (
+            <RemoteVideoEmbed
+              source={activeSource}
+              title={analyticsLabel}
               className="h-full w-full object-cover"
-              loading="lazy"
-              src={
-                shouldLoadMedia
-                  ? `https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&autoplay=0&mute=0&controls=${showControls ? 1 : 0}&rel=0&showinfo=0&modestbranding=1`
-                  : undefined
-              }
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
+              active={shouldLoadMedia}
+              autoPlay
+              showControls={showControls}
             />
           ) : (
             <video
