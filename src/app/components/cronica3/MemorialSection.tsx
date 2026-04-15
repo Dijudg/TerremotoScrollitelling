@@ -133,30 +133,7 @@ function ProjectBars() {
   const visibleProjects = priorityProjects.slice(0, 4);
   const hiddenProjects = priorityProjects.slice(4);
 
-  return (
-    <div className="rounded-lg border border-black/15 bg-white p-5 shadow-sm md:p-8">
-      <h4 className="mb-6 text-sm font-bold uppercase tracking-[0.18em] text-black/60">Obras priorizadas con recursos encontrados</h4>
-      <div className="space-y-5">
-        {visibleProjects.map((project) => (
-          <ProjectBarItem key={project.name} project={project} maxAmount={maxAmount} />
-        ))}
-      </div>
-
-      {hiddenProjects.length > 0 && (
-        <details className="group mt-6 rounded-lg border border-black/10 bg-black/[0.025]">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-left text-xs font-bold uppercase tracking-[0.14em] text-black/60 transition-colors hover:text-black [&::-webkit-details-marker]:hidden">
-            <span>Ver más obras priorizadas</span>
-            <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-300 group-open:rotate-180" />
-          </summary>
-          <div className="space-y-5 border-t border-black/10 px-4 py-5">
-            {hiddenProjects.map((project) => (
-              <ProjectBarItem key={project.name} project={project} maxAmount={maxAmount} compact />
-            ))}
-          </div>
-        </details>
-      )}
-    </div>
-  );
+  
 }
 
 function ProjectBarItem({
@@ -196,7 +173,7 @@ function FlourishEmbed() {
         src="https://public.flourish.studio/visualisation/28525005/embed"
         title="Infografía reconstrucción de Manabí"
         loading="lazy"
-        className="h-[680px] w-full"
+        className="h-[680px] p-2 w-full bg-black"
         allowFullScreen
       />
     </div>
@@ -414,7 +391,7 @@ export function MemorialSection() {
       />
     </div>
     <p className="text-sm italic leading-relaxed text-black/60">
-      Construcción de Memorial - Pedernales.
+      Construcción del Malecón en Pedernales
     </p>
   </div>
           }
@@ -436,7 +413,7 @@ export function MemorialSection() {
               </Paragraph>
             </>
           }
-          visual={<ProjectBars />}
+          
         />
 
         <FeatureSplit
@@ -560,15 +537,17 @@ export function MemorialSection() {
         </SectionReveal>
       </div>
            <SectionReveal>
-          <div className="mx-auto mt-20 max-w-4xl border-t border-black/15 py-8">
-            <p className="text-xs uppercase tracking-[0.2em] text-black/45">
+          <div className="mx-auto mt-2 max-w-4xl border-t border-black/15 py-20">
+            <p className="text-lg uppercase tracking-[0.2em] text-black/45">
               Reportería
             </p>
             <p className="mt-2 text-lg text-black/80 md:text-xl">
               Valeria Heredia, diario El Telégrafo.
               
             </p>
-           <p>  Diseño y desarrollo: Diego Jurado.</p>
+           <p>  <strong>Diseño y desarrollo:</strong> Diego Jurado.</p>
+           
+           <p>    <strong>Con colaboración:</strong> Lautaro Andrade y José Luis Gualotuña</p>
           </div>
         </SectionReveal>
     </section>

@@ -26,11 +26,69 @@ export function RebuildSection() {
     return fileName;
   };
 
-  const reconstructionGallery = chronicle2ReconstructionImages.map((url) => ({
-    url,
-    caption: getImageDescription(url),
-    credit: `Crédito: ${getImageDescription(url)}`,
-  }));
+ const reconstructionGallery = [
+  {
+    url: chronicle2ReconstructionImages[0],
+    caption: "Calles Pedro Gual y Chile 2026",
+    credit: "Crédito: El Telégrafo",
+  },
+  {
+    url: chronicle2ReconstructionImages[1],
+    caption: "Superficie donde se encontraba el Hotel el Gato.",
+    credit: "Crédito: El Telégrafo",
+  },
+  {
+    url: chronicle2ReconstructionImages[2],
+    caption: "Vista aérea donde se levantava el edificio del IESS en Portoviejo.",
+    credit: "Crédito: El Telégrafo",
+  },
+  {
+    url: chronicle2ReconstructionImages[3],
+    caption: "Predio del antiguo edificio del IESS en Portoviejo.",
+    credit: "Crédito: El Telégrafo",
+  },
+  {
+   url: chronicle2ReconstructionImages[5],
+    caption: "Javier Pincay, alcalde de Portoviejo, muestra la obra donde se levantará la nueva Plaza San Gregorio.",
+    credit: "Crédito: El Telégrafo",
+  },
+   {
+   url: chronicle2ReconstructionImages[6],
+    caption: "Área donde se levanta la Plaza Memorial San Gregorio.",
+    credit: "Crédito: El Telégrafo",
+  },
+   {
+   url: chronicle2ReconstructionImages[7],
+    caption: "Predio abandonado del antiguo edificio del IESS en Portoviejo.",
+    credit: "Crédito: El Telégrafo",
+  },
+   {
+   url: chronicle2ReconstructionImages[8],
+    caption: "Lugar donde fallecieron Familiares de Javier Pincay, alcalde de Portoviejo.",
+    credit: "Crédito: El Telégrafo",
+  },
+   {
+   url: chronicle2ReconstructionImages[9],
+    caption: "Secuelas terremoto",
+    credit: "Crédito: El Telégrafo",
+  },
+   {
+   url: chronicle2ReconstructionImages[10],
+    caption: "Secuelas terremoto en las inmediaciones del antiguo Hotel el Gato.",
+    credit: "Crédito: El Telégrafo",
+  },
+   {
+   url: chronicle2ReconstructionImages[11],
+    caption: "Daño estructural en edificios debido al terremeoto.",
+    credit: "Crédito: El Telégrafo",
+  },
+   {
+   url: chronicle2ReconstructionImages[12],
+    caption: "Terreno donde se encontraba el Hotel el Gato.",
+    credit: "Crédito: El Telégrafo",
+  },
+   
+];
 
   return (
     <section

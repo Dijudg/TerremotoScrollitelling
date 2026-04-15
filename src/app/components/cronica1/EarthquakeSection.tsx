@@ -163,7 +163,7 @@ export function EarthquakeSection({
             <div className="mx-auto max-w-3xl space-y-6 text-xl leading-relaxed text-gray-200 md:text-2xl ">
               <p >Un sismo de magnitud 7.8 sacudió la costa ecuatoriana.</p>
               <p className="my-12 text-3xl font-light text-white md:text-5xl">
-                Todo se derrumbo en segundos.
+                Todo se derrumbó en segundos.
               </p>
             </div>
 

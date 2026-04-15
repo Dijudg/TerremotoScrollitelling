@@ -12,8 +12,8 @@ export const rescueGallery: GalleryImage[] = [
   },
   {
     url: milagritoA1Image,
-    caption: "Pablo Cordoba sobrevivio bajo los escombros y su historia quedo como un milagro para su familia.",
-    credit: "Crédito: archivo Cronica Milagritos",
+    caption: "Pablo Cordoba sobrevivió bajo los escombros y su historia quedó como un milagro para su familia.",
+    credit: "Crédito: archivo AFP",
   },
   {
     url: portoviejoAfpImage,

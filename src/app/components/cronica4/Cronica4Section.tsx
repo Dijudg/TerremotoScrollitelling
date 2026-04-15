@@ -283,9 +283,35 @@ function LuisSection({
   leadMobileVideoSource?: ResolvedVideoSource | null;
   hideLeadVideo?: boolean;
 }) {
-  const heroImage = pickImage(chronicle4LuisImages, 0);
-  const supportImages = [pickImage(chronicle4LuisImages, 1), pickImage(chronicle4LuisImages, 2), pickImage(chronicle4LuisImages, 3)];
-  const wideImage = pickImage(chronicle4LuisImages, 4);
+  const heroImage = {
+  src: pickImage(chronicle4LuisImages, 0),
+  alt: "Luis Zambrano en Pedernales",
+  
+};
+
+const supportImages = [
+  {
+    src: pickImage(chronicle4LuisImages, 1),
+    alt: "Una esquina del centro de Pedernales, epicentro del terremoto de 7,8 en la escala de Richter.",
+    caption: "Una esquina del centro de Pedernales, epicentro del terremoto de 7,8 en la escala de Richter. ",
+  },
+  {
+    src: pickImage(chronicle4LuisImages, 2),
+    alt: "Luis Zambrano, salvavidas pedernalino.",
+    caption: "Luis Zambrano, salvavidas pedernalino. ",
+  },
+  {
+    src: pickImage(chronicle4LuisImages, 3),
+    alt: "Vista de la iglesia central en Pedernales que también resultó afectada por el terremoto. ",
+    caption: "Vista de la iglesia central en Pedernales que también resultó afectada por el terremoto. ",
+  },
+];
+
+const wideImage = {
+  src: pickImage(chronicle4LuisImages, 4),
+  alt: "Luis Zambrano, salvavidas, ayudó a su comunidad tras el terremoto.",
+  caption: "Luis Zambrano, salvavidas, ayudó a su comunidad tras el terremoto.",
+};
 
   return (
     <section className="relative overflow-hidden bg-[#070b0f] py-24 text-white md:py-3">
@@ -310,8 +336,14 @@ function LuisSection({
                 className="max-w-xl text-xl"
               />
             </div>
-            <MediaCard src={heroImage} alt="Luis Zambrano en Pedernales" className="h-auto lg:h-[520px]" />
+<MediaCard
+  src={heroImage.src}
+  alt={heroImage.alt}
+  caption={heroImage.caption}
+  className="h-auto lg:h-[520px]"
+/>            
           </div>
+          
         </SectionReveal>
 
         <SectionReveal>
@@ -322,6 +354,7 @@ function LuisSection({
                 “Mami, si yo te he ofendido alguna vez... perdóname”.
               </p>
               <TextGroup paragraphs={luisOpeningParagraphs.slice(4, 6)} />
+              
             </div>
           </div>
         </SectionReveal>
@@ -330,7 +363,7 @@ function LuisSection({
           <SectionReveal>
             <div className="mt-16">
               <VideoFeature
-                poster={heroImage}
+                poster={heroImage.src}
                 desktopSource={leadDesktopVideoSource}
                 mobileSource={leadMobileVideoSource}
               />
@@ -342,21 +375,29 @@ function LuisSection({
 
         <SectionReveal>
           <div className="-mx-6 mt-16 flex snap-x gap-5 overflow-x-auto px-6 pb-4 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0">
-            {supportImages.map((image, index) => (
-              <MediaCard
-                key={image}
-                src={image}
-                alt={`Luis Zambrano contexto ${index + 1}`}
-                className="h-[300px] min-w-[78vw] snap-start md:min-w-0"
-              />
-            ))}
+  {supportImages.map((image, index) => (
+  <MediaCard
+    key={`${image.src}-${index}`}
+    src={image.src}
+    alt={image.alt}
+    caption={image.caption}
+    className="min-w-[78vw] snap-start md:min-w-0"
+    imageClassName="h-[300px]"
+  />
+))}
+         
           </div>
         </SectionReveal>
 
         <SectionReveal>
           <div className="mt-16 grid gap-10 lg:grid-cols-2 lg:items-start">
-            <MediaCard src={wideImage} alt="Contexto de rescate en Pedernales" className="h-[520px]" />
-            <TextGroup paragraphs={[...luisOpeningParagraphs.slice(6), ...revealParagraphs.slice(0, 2)]} />
+<MediaCard
+  src={wideImage.src}
+  alt={wideImage.alt}
+  caption={wideImage.caption}
+  className="h-[520px]"
+/>           
+ <TextGroup paragraphs={[...luisOpeningParagraphs.slice(6), ...revealParagraphs.slice(0, 2)]} />
           </div>
         </SectionReveal>
 
@@ -379,16 +420,52 @@ function LuisSection({
 }
 
 function BryanSection() {
-  const heroImage = pickImage(chronicle4BryanImages, 0);
-  const portraitImage = pickImage(chronicle4BryanImages, 1);
-  const collageImages = [pickImage(chronicle4BryanImages, 2), pickImage(chronicle4BryanImages, 3), pickImage(chronicle4BryanImages, 4), pickImage(chronicle4BryanImages, 5)];
+  const heroImage = {
+  src: pickImage(chronicle4BryanImages, 0),
+  alt: "Memorial de Pedernales",
+  
+};
 
+const portraitImage = {
+  src: pickImage(chronicle4BryanImages, 1),
+  alt: "Bryan en Pedernales",
+  caption: "Bryan Molina volvió a su pasión: el surf",
+};
+
+const collageImages = [
+  {
+    src: pickImage(chronicle4BryanImages, 2),
+    alt: "Bryan collage 1",
+    caption: "Bryan Molina señala los nombres de sus familiares muertos en Pedernales. ",
+  },
+  {
+    src: pickImage(chronicle4BryanImages, 3),
+    alt: "Bryan collage 2",
+    caption: "",
+  },
+  {
+    src: pickImage(chronicle4BryanImages, 4),
+    alt: "Bryan collage 3",
+    caption: " En el ingreso a Pedernales está el memorial en honor a las 672 víctimas mortales del terremoto.",
+  },
+  {
+    src: pickImage(chronicle4BryanImages, 5),
+    alt: "Bryan collage 4",
+   
+  },
+];
   return (
     <section className="relative bg-black py-24 text-white md:py-32">
       <div className="container mx-auto max-w-6xl px-6">
         <SectionReveal>
           <div className="relative min-h-[560px] overflow-hidden rounded-[2.5rem] border border-white/10">
-            <img src={heroImage} alt="Memorial de Pedernales" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+<img
+  src={heroImage.src}
+  alt={heroImage.alt}
+  loading="lazy"
+  decoding="async"
+  className="absolute inset-0 h-full w-full object-cover"
+/>
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/10" />
             <div className="absolute inset-x-0 bottom-0 p-8 md:p-12">
               <p className={eyebrowClassName}>Historia de Bryan</p>
@@ -420,13 +497,19 @@ function BryanSection() {
         <SectionReveal>
           <div className="mt-16 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <div className="space-y-6">
-              <MediaCard src={portraitImage} alt="Bryan en Pedernales" className="h-[520px]" />
-              <AudioStoryPlayer
-                src={bryanAudio}
-                image={portraitImage}
-                imageAlt="Bryan Molina en Pedernales"
-                label="audio de Bryan Molina"
-              />
+<MediaCard
+  src={portraitImage.src}
+  alt={portraitImage.alt}
+  caption={portraitImage.caption}
+  className="h-[520px]"
+/>
+
+             <AudioStoryPlayer
+  src={bryanAudio}
+  image={portraitImage.src}
+  imageAlt="Bryan Molina en Pedernales"
+  label="audio de Bryan Molina"
+/>
             </div>
             <div className="grid gap-8 md:grid-cols-2">
               <TextGroup paragraphs={closingParagraphs.slice(0, 4)} />
@@ -437,12 +520,34 @@ function BryanSection() {
 
         <SectionReveal>
           <div className="-mx-6 mt-16 flex snap-x gap-4 overflow-x-auto px-6 pb-4 md:mx-0 md:grid md:grid-cols-[1.15fr_0.85fr] md:grid-rows-[230px_230px] md:overflow-visible md:px-0 md:pb-0">
-            <MediaCard src={collageImages[0]} alt="Bryan collage 1" className="min-w-[78vw] snap-start md:row-span-2 md:min-w-0" />
-            <MediaCard src={collageImages[1]} alt="Bryan collage 2" className="min-w-[78vw] snap-start md:min-w-0" />
-            <div className="contents md:grid md:gap-4 md:grid-cols-2">
-              <MediaCard src={collageImages[2]} alt="Bryan collage 3" className="min-w-[78vw] snap-start md:min-w-0" />
-              <MediaCard src={collageImages[3]} alt="Bryan collage 4" className="min-w-[78vw] snap-start md:min-w-0" />
-            </div>
+            <MediaCard
+  src={collageImages[0].src}
+  alt={collageImages[0].alt}
+  caption={collageImages[0].caption}
+  className="min-w-[78vw] snap-start md:row-span-2 md:min-w-0"
+/>
+
+<MediaCard
+  src={collageImages[1].src}
+  alt={collageImages[1].alt}
+  caption={collageImages[1].caption}
+  className="min-w-[78vw] snap-start md:min-w-0"
+/>
+
+<div className="contents md:grid md:gap-4 md:grid-cols-2">
+  <MediaCard
+    src={collageImages[2].src}
+    alt={collageImages[2].alt}
+    caption={collageImages[2].caption}
+    className="min-w-[78vw] snap-start md:min-w-0"
+  />
+  <MediaCard
+    src={collageImages[3].src}
+    alt={collageImages[3].alt}
+    caption={collageImages[3].caption}
+    className="min-w-[78vw] snap-start md:min-w-0"
+  />
+</div>
           </div>
         </SectionReveal>
 

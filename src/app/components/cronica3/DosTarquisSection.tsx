@@ -157,8 +157,8 @@ function IntroTwoColumnSection() {
               <h2 className="font-heading mb-8 text-xl leading-[1.2] tracking-normal md:text-5xl lg:text-4xl">
                 <LayeredHeadline
                   lines={[
-                    "Dos Tarquis y",
-                    "el dolor aún retumba",
+                    "Dos Tarquis:",
+                    " el dolor sigue impregnado",
                   ]}
                 />
               </h2>
