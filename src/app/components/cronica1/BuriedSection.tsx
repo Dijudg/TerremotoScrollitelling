@@ -10,35 +10,35 @@ import buriedAliveImage from "../../../assets/img/Cronica1/horizontal/enterradov
 
 const storySections = [
   {
-    title: "La linterna",
-    text: "Acostado, trató de auscultarse y sentir su cuerpo: manos, piernas, espalda. Todo estaba bien, pero tenía sed. De repente sintió entre sus piernas algo cilíndrico. ¿Era una botella de agua, de esas que acomodó hace escasos minutos? Empezó a moverse, como pudo, deslizándose hábilmente hasta llegar al objeto anhelado. Pero cuando lo tuvo en sus manos supo que no era lo que buscaba. Era algo más: una linterna. ",
+   
+    text: "Acostado, trató de auscultarse y sentir su cuerpo: manos, piernas, espalda. Todo estaba bien, pero tenía sed. De repente sintió entre sus piernas algo cilíndrico. ¿Era una botella de agua, de esas que acomodó hace escasos minutos? Empezó a moverse, como pudo, deslizándose hábilmente hasta llegar al objeto anhelado. Pero cuando lo tuvo en sus manos supo que no era lo que buscaba. Era algo más: una linterna. \n\nNo calmó su sed, pero el aparato se convirtió en uno de los insumos más importantes para salvar su vida. ",
     img: pickImage(chronicle1HorizontalImages, 0),
     mobileImg: pickImage(chronicle1HorizontalMobileImages, 0),
-    textContainerClassName: " md:items-start md:justify-end md:text-right",
+    textContainerClassName: "md:text-lg md:items-start md:justify-end md:text-right",
     contentClassName: "md:my-0 md:max-w-[42rem]",
   },
   {
-    text: "De pronto, no calmaría su sed, pero se convirtió en uno de los insumos más importantes que salvó su vida. \n\n  Con dificultad, aún atrapado en los escombros pero con algo de luz, pudo divisar la devastación total. “El fin del mundo -parecía-, ya que había mucho polvo, escombros y gritos que estremecían”. También alcanzó a ver el celular que le regaló su hija cuando cumplió años. Tremendo regalo, pero estaba destruido. ",
+    text: " Con dificultad, aún atrapado entre la losa destruida, evidenció la devastación total. “El fin del mundo -parecía-, ya que había mucho polvo, desolación y gritos que estremecían”. También alcanzó a ver el celular que le regaló su hija cuando cumplió años. Estaba destruido.  ",
     img: pickImage(chronicle1HorizontalImages, 1),
     mobileImg: pickImage(chronicle1HorizontalMobileImages, 1),
     textContainerClassName: "md:items-end md:justify-start",
     contentClassName: "md:my-0 md:max-w-[42rem]",
   },
   {
-    text: "Como si se tratara de un rompecabezas, construyó nuevamente el dispositivo. Oprimió el botón de encendido y una luz tenue iluminó la cara de Pablo, quien sintió una ligera esperanza de salvarse. Marcó el número de su esposa, hijos y demás familiares y ninguno contestó. La red de celular estaba caída; al igual que el resto de servicios: luz, agua, internet. Nada servía. ",
+    text: "Como si se tratara de un rompecabezas, improvisó para arreglar el dispositivo. Oprimió el botón de encendido y una luz tenue iluminó la cara de Pablo, quien sintió una ligera esperanza de salvarse. Marcó el número de su esposa, hijos y demás familiares y ninguno contestó. La red de celular estaba caída; al igual que el resto de servicios: luz, agua, internet. Nada servía. ",
     img: pickImage(chronicle1HorizontalImages, 2),
     mobileImg: pickImage(chronicle1HorizontalMobileImages, 2),
     textContainerClassName: "md:items-start md:justify-center md:text-center",
     contentClassName: "md:my-0 md:max-w-[48rem]",
   },
   {
-    text: "\"Era el apocalipsis\", cuenta mientras modula su voz, la cual a veces tiembla entre tantos recuerdos. Siguió intentando, pero temía que la batería se acabara, por lo que apagó el teléfono para economizar energía. \n\nSu cuerpo seguía paralizado y la sed acariciaba con fuerza su garganta. La oprimía, pero no tenía opciones. Bueno, una: beber su orina. Trató de que el líquido que sale de su cuerpo fluya lentamente hacia su mano, la cual sintió por unos momentos aquella calidez; luego subió hacia sus labios e irrigó su boca con dirección hacia su garganta. Liberándola.  \"Eso calmó mis ansias y pude sobrevivir\".",
+    text: "\"Era el apocalipsis\", cuenta mientras modula su voz, la cual a veces tiembla entre tantos recuerdos. Siguió intentando durante varios minutos, pero temía que la batería se acabara, por lo que apagó el teléfono para ahorrar energía.  \n\nSu cuerpo seguía paralizado y la sed acariciaba con fuerza su garganta. La oprimía, pero no tenía opciones. Bueno, una: beber su propia orina. Trató de que el líquido que sale de su cuerpo fluya lentamente hacia su mano, la cual sintió por unos momentos aquella calidez; luego subió hacia sus labios e irrigó su boca con dirección hacia su garganta. Liberándola. \"Eso calmó mis ansias y pude sobrevivir\".",
     img: pickImage(chronicle1HorizontalImages, 3),
     mobileImg: pickImage(chronicle1HorizontalMobileImages, 3),
   },
   {
     title: "Un sueño o una premonición",
-    text: "Enterrado entre los escombros, escuchaba los  gritos de las personas que pedían ayuda. Él hacía lo mismo, pero nadie lo escuchaba. Un niño creyó oírlo, le avisó a un adulto, pero este no logró escucharlo y se fueron. Golpeaba con un fierro las paredes y lo ignoraban. \n\n Parecía que esos gruesos escombros del hotel de cinco pisos se convirtieron en aquella cueva que tanto miedo le causó ir meses antes del terremoto.  ",
+    text: "Enterrado entre los restos del hotel, escuchaba los  gritos de las personas que pedían ayuda. Él hacía lo mismo, pero nadie lo escuchaba. Un niño creyó oírlo, le avisó a un adulto, pero este no logró escucharlo y se fueron. Golpeaba con un fierro las paredes y lo ignoraban. \n\nParecía que esos gruesos escombros del hotel de cinco pisos se convirtieron en aquella cueva que tanto miedo le causó meses antes del terremoto.  ",
     img: pickImage(chronicle1HorizontalImages, 4),
     mobileImg: pickImage(chronicle1HorizontalMobileImages, 4),
     textContainerClassName: "md:items-start md:justify-end md:text-right",
@@ -46,19 +46,19 @@ const storySections = [
     titleClassName: "md:text-right",
   },
   {
-    text: "Mientras Pablo pisaba con cuidado el césped donde antes se situaba ‘El Gato’ este  recuerdo se interpuso. Nítido y claro. Un año antes del terremoto, un amigo de Pablo estudiaba Geografía y le gustaba ingresar a cuevas para buscar restos o analizar el suelo, por lo que le sugirió ingresar a la cueva de su finca. ",
+    text: "En el presente, Pablo pisa con cuidado el césped donde antes se situaba ‘El Gato’ y este recuerdo se le interpuso. Un año antes del terremoto, un amigo de Pablo estudiaba Geografía y le gustaba ingresar a cuevas para buscar restos o analizar el suelo, por lo que le sugirió entrar a la cueva de su finca. \n\n“Era una cueva grande y ya teníamos todo”, reconoció. En una mochila pusieron sogas y cabos que les ayudarían a no perderse dentro de la tierra. Lo único que faltaba era la fecha para irse de aventura. Nunca se concretó. \n\n Tras la conversación con su amigo, Pablo empezó a tener varios sueños a modo de profecía  en el que la cueva se le venía encima. Todo se desmoronaba y su cabeza quedaba aplastada por la tierra. ",
     img: pickImage(chronicle1HorizontalImages, 5),
     mobileImg: pickImage(chronicle1HorizontalMobileImages, 5),
   },
   {
-    text: "“Era una cueva grande y ya teníamos todo”, reconoció. En una mochila pusieron sogas y cabos que les ayudarían a no perderse dentro de la tierra. Lo único que faltaba era la fecha para irse de aventura. Nunca llegó. \n\n Tras la conversación con su amigo, Pablo empezó a tener varios sueños de que la cueva se le venía encima. Todo se desmoronaba y su cabeza quedaba aplastada por la tierra.",
+    text: "Tras la conversación con su amigo, Pablo empezó a tener varios sueños a modo de profecía  en el que la cueva se le venía encima. Todo se desmoronaba y su cabeza quedaba aplastada por la tierra.   ",
     img: pickImage(chronicle1HorizontalImages, 6),
     mobileImg: pickImage(chronicle1HorizontalMobileImages, 6),
     textContainerClassName: "md:items-center md:justify-start md:p-12",
     contentClassName: "md:my-0 md:max-w-[33vw]",
   },
   {
-    text: "Rápidamente le contó a su esposa el sueño y ella le respondió: “No digas eso. No seas molestoso”. Aquella imagen le marcó y decidió “hacerse el loco” con su amigo y no fue. ",
+    text: "Le contó a su esposa el sueño y ella le respondió: “No digas eso. No seas molestoso”. Aquella imagen le marcó. Por eso decidió “hacerse el loco” con su amigo y no fue a la aventura.  ",
     img: pickImage(chronicle1HorizontalImages, 7),
     mobileImg: pickImage(chronicle1HorizontalMobileImages, 7),
     textContainerClassName: "md:items-start md:justify-end md:pr-32 md:pt-32 md:text-right",
@@ -126,9 +126,12 @@ export function BuriedSection() {
 
               <div className="space-y-8 text-lg leading-relaxed text-gray-200 md:text-xl">
                 <p>
-A los 45 minutos del terremoto, Pablo abrió los ojos y no reconocía nada. Estaba debajo de uno de los muebles que lo protegía de los tres pisos que cayeron sobre él, pero estaba vivo. </p>
+A los 45 minutos del terremoto, Pablo abrió los ojos y no reconocía nada. Estaba debajo de uno de los muebles que lo protegía de los tres pisos que cayeron sobre él. Entre la oscuridad y los pedazos de paredes y vidrios exhaló por primera vez. Se encontraba con vida. 
+              </p>
                 <p>
-Respiraba, aunque el aire se tornaba cada vez más denso por la gruesa capa de polvo que se levantó tras el desmoronamiento de las edificaciones en Portoviejo. </p>
+Respiraba, aunque el aire se tornaba cada vez más denso por la gruesa capa de polvo que se levantó tras el desmoronamiento de la edificación portovejense. 
+                </p>
+                
               </div>
             </div>
 

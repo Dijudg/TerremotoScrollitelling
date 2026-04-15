@@ -5,6 +5,11 @@ import { buildEmbedUrl } from "../content/videoManifest";
 
 declare global {
   interface Window {
+    FB?: {
+      XFBML?: {
+        parse?: (element?: HTMLElement) => void;
+      };
+    };
     instgrm?: {
       Embeds?: {
         process?: () => void;
@@ -24,6 +29,51 @@ type RemoteVideoEmbedProps = {
 };
 
 let instagramScriptPromise: Promise<void> | null = null;
+let facebookScriptPromise: Promise<void> | null = null;
+
+function loadFacebookSdk() {
+  if (typeof window === "undefined") {
+    return Promise.resolve();
+  }
+
+  if (window.FB?.XFBML?.parse) {
+    return Promise.resolve();
+  }
+
+  if (facebookScriptPromise) {
+    return facebookScriptPromise;
+  }
+
+  facebookScriptPromise = new Promise((resolve, reject) => {
+    const existingRoot = document.getElementById("fb-root");
+    if (!existingRoot) {
+      const root = document.createElement("div");
+      root.id = "fb-root";
+      document.body.prepend(root);
+    }
+
+    const existingScript = document.getElementById("facebook-jssdk") as HTMLScriptElement | null;
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(), { once: true });
+      existingScript.addEventListener("error", () => reject(new Error("No se pudo cargar Facebook SDK")), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = "facebook-jssdk";
+    script.async = true;
+    script.defer = true;
+    script.crossOrigin = "anonymous";
+    script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v21.0";
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("No se pudo cargar Facebook SDK"));
+    document.body.appendChild(script);
+  }).finally(() => {
+    facebookScriptPromise = null;
+  });
+
+  return facebookScriptPromise;
+}
 
 function loadInstagramScript() {
   if (typeof window === "undefined") {
@@ -91,15 +141,23 @@ export function RemoteVideoEmbed({
   }, [autoPlay, showControls, source]);
 
   useEffect(() => {
-    if (!active || source?.kind !== "instagram") {
+    if (!active || (source?.kind !== "instagram" && source?.kind !== "facebook")) {
       return;
     }
 
     let cancelled = false;
 
-    loadInstagramScript()
+    const loader = source.kind === "facebook" ? loadFacebookSdk() : loadInstagramScript();
+
+    loader
       .then(() => {
-        if (!cancelled) {
+        if (cancelled) {
+          return;
+        }
+
+        if (source.kind === "facebook") {
+          window.FB?.XFBML?.parse?.();
+        } else {
           window.instgrm?.Embeds?.process?.();
         }
       })
@@ -114,6 +172,37 @@ export function RemoteVideoEmbed({
     return null;
   }
 
+  if (source.kind === "facebook") {
+    return (
+      <div
+        className={className}
+        style={{ width: "100%", ...style }}
+      >
+        <div
+          className="fb-video"
+          data-href={source.url}
+          data-width="auto"
+          data-show-text="false"
+          data-allowfullscreen="true"
+        >
+          <blockquote
+            className="fb-xfbml-parse-ignore"
+            style={{
+              margin: 0,
+              padding: 0,
+              width: "100%",
+              minHeight: "100%",
+            }}
+          >
+            <a href={source.url} target="_blank" rel="noreferrer">
+              Ver video en Facebook
+            </a>
+          </blockquote>
+        </div>
+      </div>
+    );
+  }
+
   if (source.kind === "instagram") {
     return (
       <blockquote
@@ -126,7 +215,9 @@ export function RemoteVideoEmbed({
           border: 0,
           margin: 0,
           padding: 0,
+          minHeight: "100%",
           width: "100%",
+          maxWidth: "100%",
           ...style,
         }}
       >
@@ -137,20 +228,14 @@ export function RemoteVideoEmbed({
     );
   }
 
-  const allow = source.kind === "youtube"
-    ? "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    : "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share";
-
-  const src = source.kind === "youtube"
-    ? `${embedUrl}${embedUrl.includes("?") ? "&" : "?"}enablejsapi=1&autoplay=${autoPlay ? 1 : 0}&mute=1&playsinline=1&controls=${showControls ? 1 : 0}&rel=0&modestbranding=1`
-    : embedUrl;
+  const allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
 
   return (
     <iframe
       className={className}
       style={style}
       loading="lazy"
-      src={active ? src : undefined}
+      src={active ? embedUrl : undefined}
       frameBorder="0"
       allow={allow}
       allowFullScreen

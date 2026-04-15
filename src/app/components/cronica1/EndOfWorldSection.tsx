@@ -44,7 +44,7 @@ export function EndOfWorldSection() {
             16 de abril de 2016
           </p>
           <h2
-            className="font-heading mb-16 inline-block text-5xl leading-[1.45] tracking-normal md:text-7xl"
+            className="font-heading mb-16 inline-block text-xl leading-[1.45] tracking-normal md:text-3xl lg:text-5xl"
           >
             <span className="rounded-2xl bg-[#E5E7EB] px-6 py-2 text-black box-decoration-clone">
               Sepultado vivo
@@ -53,11 +53,10 @@ export function EndOfWorldSection() {
 
           <div className="space-y-9 text-lg leading-relaxed text-gray-200 md:text-xl">
             <p>
-Pablo tenía razón al sentirse incómodo. A las 18:58, un fuerte terremoto azotó Manabí. El movimiento fue tan intenso que edificaciones como el hotel ‘El Gato’ se vinieron abajo con un estruendo. Las paredes y las columnas parecían construidas con arena; simplemente se desplomaron, dejando las losas apiladas al igual que una torre de ‘pancakes’.  </p>
-
+Pablo tenía razón al sentirse incómodo. A las 18:58, un fuerte terremoto azotó Manabí. El movimiento fue tan intenso que edificaciones como el hotel ‘El Gato’ se vinieron abajo con un estruendo. Las paredes y las columnas parecían construidas con arena; simplemente se desplomaron, dejando las losas apiladas al igual que una torre de ‘pancakes’. 
+</p>
             <p>
-Cientos de personas fallecieron entre los escombros. Según cifras oficiales del gobierno de ese entonces, <span className="font-bold text-yellow-400">672 personas perecieron</span>. De hecho, se convirtió en el más fuerte de los últimos 67 años desde el terremoto de Ambato en agosto de 1949. Y uno de los más mortales, solo superado por el de Colombia en 1999 en el que murieron más de 1.000 ciudadanos.       </p>
-
+Cientos de personas fallecieron entre los escombros. Según cifras oficiales del gobierno de ese entonces, <strong>672 personas perecieron</strong>  . De hecho, se convirtió en el más fuerte de los últimos 67 años desde el terremoto de Ambato en agosto de 1949. Y uno de los más mortales de América del Sur en los últimos 20 años, solo superado por el de Colombia en 1999 en el que murieron 1.185 personas. </p>
           </div>
         </SectionReveal>
       </div>

@@ -43,7 +43,7 @@ export function IntroSection() {
 
       <div className="container relative z-10 mx-auto max-w-4xl items-center justify-center px-6 py-32 md:-mt-[100vh] md:ml-24 md:pt-40">
         <SectionReveal>
-          <h2 className="font-heading mb-16 inline-block rotate-1 transform text-center text-xl leading-none tracking-normal md:text-5xl lg:text-4xl">
+          <h2 className="font-heading mb-16 inline-block rotate-1 transform text-center text-xl leading-none tracking-normal md:text-3xl lg:text-4xl">
             <LayeredHeadline
               lines={[
                 "Una montaña de escombros, ",
@@ -56,10 +56,10 @@ export function IntroSection() {
 
           <div className="space-y-8 text-lg leading-relaxed text-gray-300 md:text-xl">
             <p>
-Sus labios y sus manos aún tiemblan. Está algo nervioso, pero trata de despistar con su voz animada y obedeciendo un pedido que puede incomodar: entrar nuevamente al lugar donde quedó sepultado. En aquel sitio, todo es diferente; ya no estaban las camas ni los muebles del hotel de cinco pisos que cuidaba, tampoco estaban los escombros ni las losas que lo aplastaron. </p>
-
+Sus labios y sus manos aún tiemblan. Está nervioso, pero trata de despistar con su voz animada y obedeciendo un pedido que puede incomodar: entrar nuevamente al lugar donde quedó sepultado. En aquel sitio, todo es diferente; ya no estaban las camas ni los muebles del hotel de cinco pisos que cuidaba, tampoco estaban los escombros ni las losas que lo aplastaron.   </p>
             <p>
-Ahora solo queda un espacio… Un lote baldío con un césped verde parcialmente cercado por una reja negra; más un letrero gigante que dice ‘Se vende’ acompañado por un número de celular para los interesados en reconstruir la esquina de la Pedro Gual y Olmedo, en pleno centro de Portoviejo.    </p>
+Ahora solo queda un lote baldío con un césped verde parcialmente cercado por una reja negra más un letrero gigante que dice ‘Se vende’ acompañado por un número de celular para los interesados en reconstruir la esquina de la Pedro Gual y Olmedo, en pleno centro de Portoviejo. </p>
+          
           </div>
         </SectionReveal>
 
@@ -103,11 +103,9 @@ Ahora solo queda un espacio… Un lote baldío con un césped verde parcialmente
         <SectionReveal>
           <div className="space-y-8 text-lg leading-relaxed text-gray-300 md:text-xl">
             <p>
-Hace 10 años, en ese sitio se alzaba imponente el hotel ‘El Gato’ que tenía cinco pisos y 40 habitaciones. Allí llegaban todo tipo de personas a hospedarse, desde comerciantes, oficinistas de otras provincias y aspirantes a jugadores de fútbol. </p>
-          
+Hace 10 años, en ese sitio se alzaba imponente el hotel ‘El Gato’ que tenía cinco pisos y 40 habitaciones. Allí llegaban todo tipo de personas a hospedarse, desde comerciantes, oficinistas de otras provincias y aspirantes a jugadores de fútbol.           </p>
             <p>
-Pablo Córdoba los atendía con cordialidad y conocía las historias de varios huéspedes. Sabía, por ejemplo, que cinco jóvenes colombianos llegaron en abril de 2016 para probar suerte en un club de esta ciudad costera de Ecuador. También conocía que su jefe llegaba todas las tardes a fumar un cigarrillo con él, porque en su casa no le dejaban hacerlo. Fumaban, conversaban un rato y retornaba a su casa. Mientras él continuaba con la limpieza, ordenaba las habitaciones, llenaba la máquina de dulces; en fin actividades propias del encargado de un hotel.             </p>
-
+Pablo Córdoba los atendía con cordialidad y conocía las historias de varios huéspedes. Sabía, por ejemplo, que cinco jóvenes colombianos llegaron en abril de 2016 para probar suerte en un club de esta ciudad costera de Ecuador. También conocía que su jefe llegaba todas las tardes a fumar un cigarrillo con él, porque en su casa no le dejaban hacerlo. Fumaban, conversaban un rato y retornaba a su casa. Mientras él continuaba con la limpieza, ordenaba las habitaciones, llenaba la máquina de dulces; en fin actividades propias del encargado de un hotel. </p>
           </div>
 
 
@@ -138,11 +136,10 @@ Pablo Córdoba los atendía con cordialidad y conocía las historias de varios h
           <div className="space-y-8 text-lg leading-relaxed text-gray-300 md:text-xl text-balance">
           
             <p> 
-Pero, la tarde del sábado 16 de abril de 2016, el ambiente era “pesado”. Su jefe no llegó a la cita pactada casi como ritual. La comida que pidió a uno de sus vecinos tampoco arribó y una sensación extraña recorrió su cuerpo. ¿Una premonición? No sabía, pero algo retumbaba en el aire.             </p>
-
+La tarde del sábado 16 de abril de 2016, el ambiente era “pesado”. Su jefe no llegó a la cita pactada casi como ritual. La comida que pidió a uno de sus vecinos tampoco arribó y una sensación extraña recorrió su cuerpo. ¿Una premonición? No sabía, pero algo retumbaba en el aire. </p>
             <p>
-En el segundo piso del hotel -relata como si volviera a ese momento- había una sala de computadoras. “Un cyber”, dice. Subió hasta allá, acomodó la dispensa con snacks y bebidas, y siguió con su ronda normal que consistía en cerrar una puerta plegable. Lo hizo, pero el malestar todavía rondaba su mente.               </p>
-
+En el segundo piso del hotel -relata como si volviera a ese momento- había una sala de computadoras. “Un cyber”, dice. Subió hasta allá, acomodó la dispensa con snacks y bebidas, y siguió con su ronda normal que consistía en cerrar una puerta plegable. Lo hizo, pero el malestar todavía rondaba su mente. 
+</p>
           </div>
         </SectionReveal>
       </div>

@@ -36,6 +36,8 @@ const MemorialSection = lazy(() => import("./components/cronica3/MemorialSection
 const Cronica4Section = lazy(() => import("./components/cronica4/Cronica4Section").then((module) => ({ default: module.Cronica4Section })));
 const Chronicle1Panorama = lazy(() => import("./components/cronica1/Chronicle1Panorama").then((module) => ({ default: module.Chronicle1Panorama })));
 
+const chronicle2FallbackEmbedUrl = "https://www.youtube.com/embed/Yrx89yfG8eY?si=wuHiokKhre4i4Mhx";
+
 const deferredRootMargin = "1400px 0px";
 
 function DeferredSection({
@@ -103,7 +105,6 @@ export default function App() {
 
   const chronicle4LeadDesktopSource = resolveVideoSource(remoteChronicle4?.desktop);
   const chronicle4LeadMobileSource = resolveVideoSource(remoteChronicle4?.mobile);
-  const hasChronicle2Video = remoteManifestChecked && Boolean(chronicle2LeadDesktopSource?.url || chronicle2LeadMobileSource?.url);
   const hasChronicle3Video = remoteManifestChecked && Boolean(chronicle3LeadDesktopSource?.url || chronicle3LeadMobileSource?.url);
   const hasChronicle4Video = remoteManifestChecked && Boolean(chronicle4LeadDesktopSource?.url || chronicle4LeadMobileSource?.url);
 
@@ -156,18 +157,19 @@ export default function App() {
 
       <ReviveAdBlock />
 
-      {hasChronicle2Video && (
-        <DeferredSection>
-          <ScrollVideo
-            desktopSource={chronicle2LeadDesktopSource}
-            mobileSource={chronicle2LeadMobileSource}
-            poster={featuredPortraits.javier}
-            analyticsLabel="cronica_2_video"
-            preload="metadata"
-            showControls
-          />
-        </DeferredSection>
-      )}
+      <DeferredSection>
+        <ScrollVideo
+          desktopSource={chronicle2LeadDesktopSource}
+          mobileSource={chronicle2LeadMobileSource}
+          poster={featuredPortraits.javier}
+          analyticsLabel="cronica_2_video"
+          preload="metadata"
+          showControls
+          fallbackEmbedUrl={chronicle2FallbackEmbedUrl}
+          fallbackEmbedTitle="Video de respaldo de crónica 2"
+          preferFallbackIframe
+        />
+      </DeferredSection>
 
       <DeferredSection id="cronica-2" minHeight="1100vh">
         <JavierSection />

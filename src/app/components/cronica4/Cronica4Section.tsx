@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { SectionReveal } from "../SectionReveal";
 import { HorizontalScrollytelling } from "../HorizontalScrollytelling";
 import { GalleryButton } from "../GalleryButton";
+import { AudioStoryPlayer } from "../AudioStoryPlayer";
 import { LayeredHeadline } from "../LayeredHeadline";
 import {
   chronicle4BryanImages,
@@ -13,6 +14,8 @@ import {
 import { pickImage } from "../../content/mediaUtils";
 import type { ResolvedVideoSource } from "../../content/videoManifest";
 import { RemoteVideoEmbed } from "../RemoteVideoEmbed";
+import bryanAudio from "../../../assets/img/Cronica4/fotos-bryan/Bryan-molina.mpeg?url";
+import backgroundImage from "../../../assets/img/Cronica4/fotos-luis/fond-4.jpg";
 
 interface StoryPanel {
   title?: string;
@@ -25,8 +28,8 @@ interface StoryPanel {
 
 const introPanels: StoryPanel[] = [
   {
-    title: "Los rescatistas “quebrados”",
-    text: "Cuando recuerdan sus anécdotas durante y después del terremoto, sus miradas se pierden, como si el tiempo hiciera una pausa.",
+    title: "Los rescatistas “quebrados” ",
+    text: "Cuando recuerdan sus anécdotas durante y después del terremoto, sus miradas se pierden, como si el tiempo hiciera una pausa. ",
     img: pickImage(chronicle4RicardoImages, 0),
     caption: "Ricardo Castro, Bombero Pedernales.",
   },
@@ -35,40 +38,40 @@ const introPanels: StoryPanel[] = [
     img: pickImage(chronicle4RicardoImages, 1),
   },
   {
-    text: "Ricardo, Luis y Bryan sintieron como la tierra se resquebrajaba y destruía todo. Vivieron el horror y la pérdida de sus familiares y, pese al miedo, apoyaron a sus comunidades.",
+    text: "Ricardo, Luis y Bryan sintieron como la tierra se resquebrajaba y destruía todo. Vivieron el horror y la pérdida de sus familiares y, pese al miedo, apoyaron a sus comunidades. ",
     img: pickImage(chronicle4RicardoImages, 2),
   },
   {
-    title: "Ricardo: “Nos tomamos 15 minutos para no quebrarnos”",
+    title: "Ricardo: “Nos tomamos 15 minutos para no quebrarnos” ",
     titleLines: ["Ricardo: “Nos tomamos", "15 minutos para", "no quebrarnos”"],
-    text: "En medio de las tinieblas y de la desesperación, Ricardo Castro, bombero mantense, subió a una montaña de desperdicios -entre pedazos de paredes, vidrios y electrodomésticos aplastados- y divisó una pequeña niña, de aproximadamente un año. Estaba envuelta en una manta, sus ojos estaban cerrados y su rostro guardaba una gran tranquilidad. Parecía dormida, pero ya no respiraba.",
+    text: "En medio de las tinieblas y de la desesperación, Ricardo Castro, bombero mantense, subió a una montaña de desperdicios -entre pedazos de paredes, vidrios y electrodomésticos aplastados- y divisó una pequeña niña, de aproximadamente un año. Estaba envuelta en una manta, sus ojos estaban cerrados y su rostro guardaba una gran tranquilidad. Parecía dormida, pero ya no respiraba. ",
     img: pickImage(chronicle4RicardoImages, 3),
   },
 ];
 
 const horizontalPanels: StoryPanel[] = [
   {
-    text: "En ese momento, cientos de preguntas rondaban su cabeza. ¿Por qué, por qué y por qué? Sintió que sus piernas se volvían pesadas y al igual que aquellos seres inertes, se quebró y tuvo que parar.",
+    text: "En ese momento, cientos de preguntas rondaban su cabeza. ¿Por qué, por qué y por qué? Sintió que sus piernas se volvían pesadas y al igual que aquellos seres inertes, se quebró y tuvo que parar. ",
     img: pickImage(chronicle4HorizontalImages, 0),
     mobileImg: pickImage(chronicle4HorizontalMobileImages, 0),
   },
   {
-    text: "Él y su equipo se tomaron 15 minutos para respirar, reconocer la catástrofe y continuar su labor en uno de los sitios más afectados por el terremoto: las inmediaciones del centro comercial Felipe Navarrete, en Tarqui. “Era un caos”, señala con cierta tensión.",
+    text: "Él y su equipo se tomaron 15 minutos para respirar, reconocer la catástrofe y continuar su labor en uno de los sitios más afectados por el terremoto: las inmediaciones del centro comercial Felipe Navarrete, en Tarqui. “Era un caos”, señala con cierta tensión. ",
     img: pickImage(chronicle4HorizontalImages, 1),
     mobileImg: pickImage(chronicle4HorizontalMobileImages, 1),
   },
   {
-    text: "Se organizaron y siguieron con sus labores. En una casa rescataron tres niños, un adulto y una embarazada. Luego siguieron con las personas que estaban en los hoteles Astoria y Mayita. Salvaron a una adolescente de 17 años y a una mujer que fue trasladada a una casa de salud.",
+    text: "Se organizaron y siguieron con sus labores. En una casa rescataron tres niños, un adulto y una embarazada. Luego siguieron con las personas que estaban en los hoteles Astoria y Mayita. Salvaron a una adolescente de 17 años y a una mujer que fue trasladada a una casa de salud. ",
     img: pickImage(chronicle4HorizontalImages, 2),
     mobileImg: pickImage(chronicle4HorizontalMobileImages, 2),
   },
   {
-    text: "Las horas seguían su curso, pero la gente no tenía tanto tiempo. Cuando ocurren estos eventos naturales, una reacción inmediata es fundamental, reconoce.\n\nEl grupo de Ricardo avanzaba entre las ruinas hasta el sector Santa Marta, en donde técnicamente -dice el bombero de contextura fuerte y voz pausada- extrajeron a cuatro niños y un adulto mayor. Este último falleció por las múltiples fracturas horas más tarde.",
+    text: "Las horas seguían su curso, pero la gente no tenía tanto tiempo. Cuando ocurren estos eventos naturales, una reacción inmediata es fundamental, reconoce. \n\n El grupo de Ricardo avanzaba entre las ruinas hasta el sector Santa Marta, en donde técnicamente -dice el bombero de contextura fuerte y voz pausada- extrajeron a cuatro niños y un adulto mayor. Este último falleció por las múltiples fracturas horas más tarde. ",
     img: pickImage(chronicle4HorizontalImages, 3),
     mobileImg: pickImage(chronicle4HorizontalMobileImages, 3),
   },
   {
-    text: "Su labor era casi mecánica, pasaban las horas y pese al cansancio y a la falta de personal e insumos, el trabajo no paraba. La dinámica se extendió durante varios meses, pero las imágenes se impregnaron en su memoria.\n\n¿Cómo seguir adelante? Es la pregunta inevitable que le hacen a Ricardo, quien encontró la respuesta de inmediato. Apoyó la conformación del equipo USAR en el Cuerpo de Bomberos de Manta. Ellos se especializan en la búsqueda y rescate urbano de personas en estructuras colapsadas.\n\nSon un equipo especializado de 27 rescatistas que han seguido cursos de liberación de personas de estructuras caídas y con cuerdas, primeros auxilios avanzados, materiales peligrosos; todo con guías internacionales. Ellos se sumaron a los cuatro equipos ya existentes en Quito, Guayaquil, Portoviejo y Cuenca.",
+    text: "Su labor era casi mecánica, pasaban las horas y pese al cansancio y a la falta de personal e insumos, el trabajo no paraba. La dinámica se extendió durante varios meses, pero las imágenes se impregnaron en su memoria. \n\n¿Cómo seguir adelante? Es la pregunta inevitable que le hacen a Ricardo, quien encontró la respuesta de inmediato. Apoyó la conformación del equipo USAR en el Cuerpo de Bomberos de Manta. Ellos se especializan en la búsqueda y rescate urbano de personas en estructuras colapsadas. \n\nSon un equipo especializado de 27 rescatistas que han seguido cursos de liberación de personas de estructuras caídas y con cuerdas, primeros auxilios avanzados, materiales peligrosos; todo con guías internacionales. Ellos se sumaron a los cuatro equipos ya existentes en Quito, Guayaquil, Portoviejo y Cuenca. ",
     img: pickImage(chronicle4HorizontalImages, 4),
     mobileImg: pickImage(chronicle4HorizontalMobileImages, 4),
   },
@@ -76,25 +79,25 @@ const horizontalPanels: StoryPanel[] = [
 
 const luisOpeningParagraphs = [
   "El salvavidas Luis Zambrano estaba en sus horas libres cuando sintió el estruendo que devastó Pedernales, el epicentro del terremoto.",
-  "El joven, de memoria fotográfica, recuerda muchos detalles, frases e incluso el temblor que recorrió su cuerpo y el de su madre cuando quedaron atrapados en el segundo piso de su vivienda tras el terremoto.",
-  "Antes del movimiento sísmico, Luis estaba duchándose para ir a la iglesia. Su madre le ayudaba a planchar una camisa para que vaya “bien presentado”.",
-  "Casualmente, charlaban sobre cómo sobrevivir a un terremoto. Ella decía que podía resguardarse debajo de una mesa. Mientras que él le recomendaba buscar las columnas de la casa. “Mami, este es el lugar seguro”, le dijo convencido. Sin percatarse que el reloj marcó las 18:58, hora en la que la tierra se estremeció.",
+  "El joven, de memoria fotográfica, recuerda muchos detalles, frases e incluso el temblor que recorrió su cuerpo y el de su madre cuando quedaron atrapados en el segundo piso de su vivienda tras el terremoto.  ",
+  "Antes del movimiento sísmico, Luis estaba duchándose para ir a la iglesia. Su madre le ayudaba a planchar una camisa para que vaya “bien presentado”.  ",
+  "Casualmente, charlaban sobre cómo sobrevivir a un terremoto. Ella decía que podía resguardarse debajo de una mesa. Mientras que él le recomendaba buscar las columnas de la casa. “Mami, este es el lugar seguro”, le dijo convencido. Sin percatarse que el reloj marcó las 18:58, hora en la que la tierra se estremeció. ",
   "El movimiento fue similar a una ola de la playa manabita que los sacudía de arriba a abajo. La vibración duró incontables minutos; es como si la tierra quedara “resentida”. “Fue como un niño que fue castigado por su papá, porque el movimiento no paraba”.",
   "Mientras esto pasaba, Luis se descubrió abrazando a su madre; sintió la vibración de su cuerpo y los latidos agitados de su corazón. No sabía exactamente cómo llegó hacia dónde ella estaba. Solo repetía: “Mami, si yo te he ofendido alguna vez... perdóname”.",
-  "Lentamente, apartó sus brazos del cuerpo tembloroso de la mujer y le dijo que se desplazaría para buscar sus zapatos; también buscaría unos para ella.",
-  "A oscuras, trataba de buscar las paredes, tomó su teléfono y se dio cuenta que estaban en el suelo. También vio que el mueble en donde quería refugiarse su madre quedó aplastado.",
+  "Lentamente, apartó sus brazos del cuerpo tembloroso de la mujer y le dijo que se desplazaría para buscar sus zapatos; también buscaría unos para ella. ",
+  "A oscuras, trataba de buscar las paredes, tomó su teléfono y se dio cuenta que estaban en el suelo. También vio que el mueble en donde quería refugiarse su madre quedó aplastado. ",
 ];
 
 const revealParagraphs = [
-  "Impactado por la destrucción, Luis le entregó los zapatos, pero ella estaba muy nerviosa y no le hacía caso. Entonces tuvo que utilizar una voz más imponente: ¡Póngase los zapatos!",
+  "Impactado por la destrucción, Luis le entregó los zapatos, pero ella estaba muy nerviosa y no le hacía caso. Entonces tuvo que utilizar una voz más imponente: ¡Póngase los zapatos! ",
   "Luego buscó las escaleras para bajar a la primera planta. No se percató que la losa del piso dos aplastó una parte del uno y quedó inclinado. “Había muchos escombros y no podíamos bajar al piso uno para salir. Era el fin del mundo”, se repetía en su mente.",
   "Luis buscaba la manera para liberarse de los escombros. Lentamente se desplazó hacia un hueco que se abrió entre el muro de su casa y la de al lado. Con terror alcanzó a ver a su vecino sepultado por una de las paredes; solamente se le veía la cabeza y un hilo de sangre saliendo de sus orejas. Muy cerca estaba la esposa, quien lucía muy golpeada, pero despierta.",
-  "De repente escuchó la voz de su padre y hermanas, quienes estaban fuera de la vivienda. Luis contestó que estaban bien, pero que la vecina necesitaba ayuda. Su padre entró brevemente y la rescató. En cambio, el vecino no se movía; ya no estaba.",
-  "En ese momento, Luis tuvo una idea que le estremeció. Su madre y él solo tenían un camino para liberarse de su vivienda destruida: saltar sobre la pared que acabó con la vida de su vecino. Esto implicaría que al bajar aplastarían más el cuerpo inerte del hombre que durante años vivió junto a su familia.",
+  "De repente escuchó la voz de su padre y hermanas, quienes estaban fuera de la vivienda. Luis contestó que estaban bien, pero que la vecina necesitaba ayuda. Su padre entró brevemente y la rescató. En cambio, el vecino no se movía; ya no estaba. ",
+  "En ese momento, Luis tuvo una idea que le estremeció. Su madre y él solo tenían un camino para liberarse de su vivienda destruída: saltar sobre la pared que acabó con la vida de su vecino. Esto implicaría que al bajar aplastarían más el cuerpo inerte del hombre que durante años vivió junto a su familia. ",
   "Su madre no quería hacerlo, pero le dijo que el vecino estaba muerto y ellos no.",
   "El reencuentro con su padre y sus hermanas fue una bendición. Todos sobrevivieron. Su hermana sintió un pequeño dolor que recorría su cuerpo: el dedo pequeño de su pie no estaba. Él quiso ayudarle, pero la joven lo detuvo: “Ñañito, es un recuerdo del terremoto”.",
-  "Al día siguiente, Luis junto con otros salvavidas de la localidad se organizaron para recoger basura y escombros; también ayudaron a los refugiados en los albergues. Eso aplacó el miedo que permaneció durante varios días tras el terremoto.",
-  "La historia del salvavidas estremece. Duele, pero trata de mantener la calma. “Nos estamos recuperando”, dice con esperanza y con una leve sonrisa.",
+  "Al día siguiente, Luis junto con otros salvavidas de la localidad se organizaron para recoger basura y escombros; también ayudaron a los refugiados en los albergues. Eso aplacó el miedo que permaneció durante varios días tras el terremoto. ",
+  "La historia del salvavidas estremece. Duele, pero trata de mantener la calma. ”Nos estamos recuperando”, dice con esperanza y con una leve sonrisa.",
   "Se despide, toma su tabla de rescate de color naranja y sube al sitio de seguridad desde donde vigila la playa. Mira al horizonte y dice que mantiene su promesa de cuidar a los demás, así como lo hizo con su madre y su comunidad aquel día.",
 ];
 
@@ -285,18 +288,29 @@ function LuisSection({
   const wideImage = pickImage(chronicle4LuisImages, 4);
 
   return (
-    <section className="relative bg-[#070b0f] py-24 text-white md:py-32">
+    <section className="relative overflow-hidden bg-[#070b0f] py-24 text-white md:py-3">
       <div className="container mx-auto max-w-6xl px-6">
+        <div className="pointer-events-none absolute bottom-0 left-0 w-full z-0 hidden md:block">
+        <img
+          src={backgroundImage}
+          alt=""
+          aria-hidden="true"
+          className="w-full h-24 md:h-[900px] object-cover object-bottom opacity-80"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#070b0f]/90 via-[#070b0f]/55 to-[#070b0f]" />
+      </div>
+
         <SectionReveal>
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
               <p className={eyebrowClassName}>Historia de Luis</p>
               <StoryHeadline
-                lines={["Luis: “Mami, si te he", "ofendido,", "perdóname”"]}
+                lines={["Luis: “Mami, si te he", "ofendido, perdóname”"]}
                 className="max-w-xl text-xl"
               />
             </div>
-            <MediaCard src={heroImage} alt="Luis Zambrano en Pedernales" className="h-[360px] lg:h-[520px]" />
+            <MediaCard src={heroImage} alt="Luis Zambrano en Pedernales" className="h-auto lg:h-[520px]" />
           </div>
         </SectionReveal>
 
@@ -321,6 +335,8 @@ function LuisSection({
                 mobileSource={leadMobileVideoSource}
               />
             </div>
+
+            
           </SectionReveal>
         )}
 
@@ -350,7 +366,7 @@ function LuisSection({
             <div className="space-y-6 md:col-span-1">
               <TextGroup paragraphs={revealParagraphs.slice(4, 5)} />
               <p className={highlightedQuoteClassName}>
-                “Mira. Está expulsando sangre por los oídos (…) Tenemos que irnos”.
+                “Mira. Está expulsando sangre por los oídos (…) Tenemos que irnos”, le señaló mientras bajaban y enterraban más el cuerpo inerte del hombre. 
               </p>
               <TextGroup paragraphs={revealParagraphs.slice(5, 7)} />
             </div>
@@ -403,7 +419,15 @@ function BryanSection() {
 
         <SectionReveal>
           <div className="mt-16 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-            <MediaCard src={portraitImage} alt="Bryan en Pedernales" className="h-[520px]" />
+            <div className="space-y-6">
+              <MediaCard src={portraitImage} alt="Bryan en Pedernales" className="h-[520px]" />
+              <AudioStoryPlayer
+                src={bryanAudio}
+                image={portraitImage}
+                imageAlt="Bryan Molina en Pedernales"
+                label="audio de Bryan Molina"
+              />
+            </div>
             <div className="grid gap-8 md:grid-cols-2">
               <TextGroup paragraphs={closingParagraphs.slice(0, 4)} />
               <TextGroup paragraphs={closingParagraphs.slice(4, 8)} />

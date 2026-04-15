@@ -1,0 +1,47 @@
+{
+  "updatedAt": "2026-04-15T12:00:00-05:00",
+  "chronicles": {
+    "cronica1": [
+      {
+        "id": "cronica1-earthquake",
+        "title": "Crónica 1 - Earthquake",
+        "active": true,
+        "order": 1,
+        "desktop": {
+          "platform": "youtube",
+          "id": "Yrx89yfG8eY",
+          "url": "https://www.youtube.com/watch?v=Yrx89yfG8eY"
+        },
+        "mobile": {
+          "platform": "facebook",
+          "id": "888710437531389",
+          "variant": "reel",
+          "permalink": "https://www.facebook.com/reel/888710437531389",
+          "url": "https://www.facebook.com/reel/888710437531389"
+        }
+      }
+    ],
+    "cronica2": [
+      {
+        "id": "cronica2-scrollvideo",
+        "title": "Crónica 2 - ScrollVideo",
+        "active": true,
+        "order": 1,
+        "desktop": {
+          "platform": "youtube",
+          "id": "Yrx89yfG8eY",
+          "url": "https://www.youtube.com/watch?v=Yrx89yfG8eY"
+        },
+        "mobile": {
+          "platform": "facebook",
+          "id": "888710437531389",
+          "variant": "reel",
+          "permalink": "https://www.facebook.com/reel/888710437531389",
+          "url": "https://www.facebook.com/reel/888710437531389"
+        }
+      }
+    ],
+    "cronica3": [],
+    "cronica4": []
+  }
+}

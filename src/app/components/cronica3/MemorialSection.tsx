@@ -2,8 +2,7 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { Building2, ChevronDown, Construction, Droplets, Gavel, Landmark, Store, Waves } from "lucide-react";
 import { SectionReveal } from "../SectionReveal";
 import { GalleryButton } from "../GalleryButton";
-import { chronicle3Images } from "../../content/chronicle3Media";
-import { chronicle4Images } from "../../content/chronicle4Media";
+import { notacomImages } from "../../content/notacomMedia";
 import { buildGallery, pickImage } from "../../content/mediaUtils";
 
 const quoteClassName = "Finger-font text-left text-xl italic text-balance text-black";
@@ -44,7 +43,7 @@ const justiceTimeline = [
 ];
 
 const pedernalesGallery = buildGallery(
-  chronicle3Images,
+  notacomImages,
   [
     "Espacios urbanos que todavía cargan señales de la reconstrucción pendiente.",
     "Zonas comerciales y vías donde la recuperación convive con las cicatrices del terremoto.",
@@ -55,7 +54,7 @@ const pedernalesGallery = buildGallery(
 );
 
 const justiceGallery = buildGallery(
-  chronicle4Images,
+  notacomImages,
   [
     "Los rescatistas y sobrevivientes sostienen la otra cara de la historia: la memoria humana.",
     "Las comunidades afectadas reconstruyeron rutinas mientras esperaban respuestas institucionales.",
@@ -365,7 +364,7 @@ export function MemorialSection() {
         </SectionReveal>
 
         <SectionReveal>
-          <div className="mx-auto my-12 max-w-5xl bg-black/10 md:p-12">
+          <div className=" my-6 bg-black/10 p-4 rounded-lg shadow-sm md:p-12">
             <Paragraph>
               El dolor de los sobrevivientes, la <strong>heroicidad de los rescatistas</strong> y la <strong>resiliencia de la comunidad</strong> son una parte de la historia que marcó Ecuador en 2016. La otra, <em>más fría y menos poética</em>, es la de los recursos que nunca llegaron, las obras no priorizadas y la corrupción que se impuso sobre cientos de sepulcros, sobre las familias fracturadas y sobre las necesidades más básicas de quienes lo perdieron todo.
             </Paragraph>
@@ -404,13 +403,20 @@ export function MemorialSection() {
             </>
           }
           visual={
-            <ImageGalleryFeature
-              image={pickImage(chronicle3Images, 6)}
-              alt="Vista de Manabí durante la reconstrucción"
-              caption="Imagen referencial del sitio para acompañar el bloque sobre obras pendientes y recuperación urbana."
-              gallery={pedernalesGallery}
-              label="Ver imágenes de contexto"
-            />
+           <div className="space-y-4">
+    <div className="overflow-hidden rounded-lg border border-black/15">
+      <img
+        src={pickImage(notacomImages, 0)}
+        alt="Vista de Manabí durante la reconstrucción"
+        loading="lazy"
+        decoding="async"
+        className="h-[320px] w-full object-cover"
+      />
+    </div>
+    <p className="text-sm italic leading-relaxed text-black/60">
+      Construcción de Memorial - Pedernales.
+    </p>
+  </div>
           }
         />
 
@@ -494,20 +500,27 @@ export function MemorialSection() {
             </>
           }
           visual={
-            <ImageGalleryFeature
-              image={pickImage(chronicle4Images, 8)}
-              alt="Memoria y reconstrucción en Manabí"
-              caption="Imagen referencial del sitio para acompañar el eje judicial y de memoria pública."
-              gallery={justiceGallery}
-              label="Ver galería de memoria"
-            />
+           <div className="space-y-4">
+    <div className="overflow-hidden rounded-lg border border-black/15">
+      <img
+        src={pickImage(notacomImages, 6)}
+        alt="Vista de Manabí durante la reconstrucción"
+        loading="lazy"
+        decoding="async"
+        className="md:h-[520px] h-[250px] w-full object-cover"
+      />
+    </div>
+    <p className="text-sm italic leading-relaxed text-black/60">
+      Jorge Glass  condenado a 13 años de prisión por el caso Reconstrucción de Manabí.  Foto: AFP
+    </p>
+  </div>
           }
         />
 
         <SectionReveal>
           <figure className="relative left-1/2 my-16 h-[360px] w-screen -translate-x-1/2 overflow-hidden md:my-24 md:h-[520px]">
             <img
-              src={pickImage(chronicle4Images, 9)}
+              src={pickImage(notacomImages,4)}
               alt="Reconstrucción y memoria pública en Manabí"
               loading="lazy"
               decoding="async"
@@ -546,6 +559,18 @@ export function MemorialSection() {
           </div>
         </SectionReveal>
       </div>
+           <SectionReveal>
+          <div className="mx-auto mt-20 max-w-4xl border-t border-black/15 py-8">
+            <p className="text-xs uppercase tracking-[0.2em] text-black/45">
+              Reportería
+            </p>
+            <p className="mt-2 text-lg text-black/80 md:text-xl">
+              Valeria Heredia, diario El Telégrafo.
+              
+            </p>
+           <p>  Diseño y desarrollo: Diego Jurado.</p>
+          </div>
+        </SectionReveal>
     </section>
   );
 }

@@ -7,6 +7,20 @@ export const chronicle3Images = sortImages(
   }) as Record<string, string>,
 );
 
+export const chronicle3GalleryImages = sortImages(
+  import.meta.glob("../../assets/img/Cronica3/galeria/*.{jpg,jpeg,JPG,JPEG,png,PNG,webp,WEBP}", {
+    eager: true,
+    import: "default",
+  }) as Record<string, string>,
+);
+
+export const chronicle3MariaGabrielaImages = sortImages(
+  import.meta.glob("../../assets/img/Cronica3/fotos-maria-gabriela/*.{jpg,jpeg,JPG,JPEG,png,PNG,webp,WEBP}", {
+    eager: true,
+    import: "default",
+  }) as Record<string, string>,
+);
+
 export const chronicle3HorizontalImages = sortImages(
   import.meta.glob("../../assets/img/Cronica3/desktop/*.{jpg,jpeg,JPG,JPEG,png,PNG,webp,WEBP}", {
     eager: true,

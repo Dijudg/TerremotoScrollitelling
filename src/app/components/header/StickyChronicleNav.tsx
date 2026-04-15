@@ -240,31 +240,53 @@ export function StickyChronicleNav() {
               <div className="grid flex-1 gap-3">
                 {chronicleMenu.map((item, index) => {
                   const isActive = activeSection === item.id;
+                  const isNoteItem = item.id === "nota-complemento-1";
 
                   return (
                     <motion.button
                       key={item.id}
                       type="button"
                       onClick={() => handleNavigate(item.id)}
-                      className={`group grid w-full grid-cols-[5.5rem_minmax(0,1fr)] items-stretch gap-4 rounded-[1.4rem] border p-2.5 text-left transition ${
-                        isActive
-                          ? "border-sky-300/60 bg-sky-300/10 text-white"
-                          : "border-white/10 bg-white/[0.03] text-white/70 hover:border-white/25 hover:bg-white/[0.06] hover:text-white"
+                      className={`group w-full rounded-[1.4rem] border p-2.5 text-left transition ${
+                        isNoteItem
+                          ? "border-amber-300/50 bg-gradient-to-br from-amber-200/20 via-white/[0.06] to-rose-300/10 text-white shadow-[0_0_0_1px_rgba(252,211,77,0.18),0_18px_50px_rgba(0,0,0,0.35)]"
+                          : isActive
+                            ? "border-sky-300/60 bg-sky-300/10 text-white"
+                            : "border-white/10 bg-white/[0.03] text-white/70 hover:border-white/25 hover:bg-white/[0.06] hover:text-white"
                       }`}
                       initial={{ y: 24, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       exit={{ y: 16, opacity: 0 }}
                       transition={{ duration: 0.25, delay: index * 0.04 }}
                     >
-                      <span className="min-h-[5.5rem] overflow-hidden rounded-[1.1rem] bg-white/10">
-                        <img src={item.image} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
-                      </span>
-                      <span className="flex min-w-0 flex-col justify-center py-2 pr-1">
-                        <span className="block text-[11px] uppercase tracking-[0.22em] text-sky-200/70">
-                          {item.label}
+                      {isNoteItem ? (
+                        <span className="flex min-w-0 flex-col gap-3 p-3">
+                          <span className="inline-flex w-fit items-center rounded-full border border-amber-200/30 bg-amber-200/10 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-amber-100">
+                            Nota final
+                          </span>
+                          <span className="block text-[11px] uppercase tracking-[0.22em] text-amber-100/80">
+                            {item.label}
+                          </span>
+                          <span className="block text-2xl leading-tight text-white md:text-xl">
+                            {item.title}
+                          </span>
+                          <span className="block text-sm leading-relaxed text-white/70">
+                            Abre la lectura complementaria con otra voz y otro enfoque.
+                          </span>
                         </span>
-                        <span className="mt-1 block text-lg leading-tight text-white">{item.title}</span>
-                      </span>
+                      ) : (
+                        <span className="grid grid-cols-[5.5rem_minmax(0,1fr)] items-stretch gap-4">
+                          <span className="min-h-[5.5rem] overflow-hidden rounded-[1.1rem] bg-white/10">
+                            <img src={item.image} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                          </span>
+                          <span className="flex min-w-0 flex-col justify-center py-2 pr-1">
+                            <span className="block text-[11px] uppercase tracking-[0.22em] text-sky-200/70">
+                              {item.label}
+                            </span>
+                            <span className="mt-1 block text-lg leading-tight text-white">{item.title}</span>
+                          </span>
+                        </span>
+                      )}
                     </motion.button>
                   );
                 })}

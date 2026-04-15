@@ -4,7 +4,12 @@ export type RemoteVideoPlatform = "youtube" | "facebook" | "instagram" | "video"
 
 export interface RemoteVideoEndpoint {
   type?: string;
+  platform?: string;
   url?: string;
+  permalink?: string;
+  id?: string;
+  shortcode?: string;
+  variant?: "video" | "post" | "reel" | "tv";
 }
 
 export interface RemoteChronicleVideo {
@@ -39,6 +44,10 @@ function safeUrl(input: string) {
 
 function normalizeUrl(input: string) {
   return input.trim();
+}
+
+function getEndpointUrl(endpoint?: RemoteVideoEndpoint | null) {
+  return endpoint?.permalink?.trim() || endpoint?.url?.trim() || "";
 }
 
 export async function fetchRemoteVideoManifest(signal?: AbortSignal): Promise<RemoteVideoManifest | null> {
@@ -192,40 +201,74 @@ function inferPlatform(url: string): RemoteVideoPlatform {
 }
 
 export function resolveVideoSource(endpoint?: RemoteVideoEndpoint | null): ResolvedVideoSource | null {
-  const url = endpoint?.url ? normalizeUrl(endpoint.url) : "";
-  if (!url) {
-    return null;
-  }
-
-  const type = (endpoint?.type?.toLowerCase() as RemoteVideoPlatform | undefined) ?? inferPlatform(url);
+  const explicitPlatform = (endpoint?.platform ?? endpoint?.type)?.toLowerCase() as RemoteVideoPlatform | undefined;
+  const url = getEndpointUrl(endpoint);
+  const type = explicitPlatform ?? (url ? inferPlatform(url) : undefined);
 
   if (type === "youtube") {
+    const videoId = endpoint?.id?.trim() || extractYouTubeId(url);
+    if (!videoId) {
+      return null;
+    }
+
+    const canonicalUrl = endpoint?.url?.trim() || `https://www.youtube.com/watch?v=${videoId}`;
+
     return {
       kind: "youtube",
-      url,
-      youtubeId: extractYouTubeId(url) ?? undefined,
-      embedUrl: buildEmbedUrl("youtube", url, { autoPlay: true, controls: true }) ?? undefined,
+      url: canonicalUrl,
+      youtubeId: videoId,
+      embedUrl: buildEmbedUrl("youtube", canonicalUrl, { autoPlay: true, controls: true }) ?? undefined,
     };
   }
 
   if (type === "facebook") {
+    const canonicalUrl =
+      getEndpointUrl(endpoint) ||
+      (endpoint?.id?.trim()
+        ? endpoint?.variant === "reel"
+          ? `https://www.facebook.com/reel/${endpoint.id.trim()}`
+          : `https://www.facebook.com/watch/?v=${endpoint.id.trim()}`
+        : "");
+
+    if (!canonicalUrl) {
+      return null;
+    }
+
     return {
       kind: "facebook",
-      url,
-      embedUrl: buildEmbedUrl("facebook", url, { autoPlay: true, controls: true }) ?? undefined,
+      url: canonicalUrl,
+      embedUrl: buildEmbedUrl("facebook", canonicalUrl, { autoPlay: true, controls: true }) ?? undefined,
     };
   }
 
   if (type === "instagram") {
+    const shortcode =
+      endpoint?.shortcode?.trim() ||
+      endpoint?.id?.trim() ||
+      extractInstagramPath(url)?.shortcode;
+
+    if (!shortcode) {
+      return null;
+    }
+
+    const variant = endpoint?.variant ?? extractInstagramPath(url)?.kind ?? "reel";
+    const canonicalUrl =
+      getEndpointUrl(endpoint) ||
+      `https://www.instagram.com/${variant}/${shortcode}/`;
+
     return {
       kind: "instagram",
-      url,
-      embedUrl: buildEmbedUrl("instagram", url, { autoPlay: true, controls: true }) ?? undefined,
+      url: canonicalUrl,
+      embedUrl: buildEmbedUrl("instagram", canonicalUrl, { autoPlay: true, controls: true }) ?? undefined,
     };
   }
 
-  return {
-    kind: "video",
-    url,
-  };
+  if (url) {
+    return {
+      kind: "video",
+      url,
+    };
+  }
+
+  return null;
 }

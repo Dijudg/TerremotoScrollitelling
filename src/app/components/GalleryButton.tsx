@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
@@ -25,6 +25,7 @@ export function GalleryButton({
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
+  const thumbnailStripRef = useRef<HTMLDivElement>(null);
   const isFeatureModal = modalVariant === 'feature';
 
   useEffect(() => {
@@ -52,6 +53,19 @@ export function GalleryButton({
 
   const prevImage = () => {
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const scrollThumbnails = (direction: "back" | "forward") => {
+    const strip = thumbnailStripRef.current;
+    if (!strip) {
+      return;
+    }
+
+    const amount = Math.max(160, Math.round(strip.clientWidth * 0.8));
+    strip.scrollBy({
+      left: direction === "forward" ? amount : -amount,
+      behavior: "smooth",
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -184,43 +198,70 @@ export function GalleryButton({
               )}
 
               {images.length > 1 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className={`max-w-full overflow-x-auto overflow-y-hidden pb-2 ${
-                    isFeatureModal
-                      ? 'mt-4 flex flex-nowrap justify-start gap-1.5 px-1'
-                      : 'mt-8 flex flex-wrap justify-center gap-2'
-                  }`}
+                <div
+                  className={`relative max-w-full ${isFeatureModal ? 'mt-4 px-1' : 'mt-8 px-1'}`}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {images.map((image, index) => (
-                    <motion.button
-                      key={index}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCurrentIndex(index);
-                      }}
-                      aria-label={`Abrir imagen ${index + 1}`}
-                      className={`
-                        relative shrink-0 overflow-hidden transition-all
-                        ${isFeatureModal ? 'h-10 w-14 md:h-12 md:w-16' : 'h-16 w-16 md:h-20 md:w-20'}
-                        ${index === currentIndex ? 'ring-2 ring-white opacity-100' : 'opacity-40 hover:opacity-70'}
-                      `}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <img
-                        src={image.url}
-                        alt={`Thumbnail ${index + 1}`}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover"
-                      />
-                    </motion.button>
-                  ))}
-                </motion.div>
+                  <motion.button
+                    type="button"
+                    onClick={() => scrollThumbnails("back")}
+                    aria-label="Desplazar miniaturas hacia la izquierda"
+                    className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/80 p-2 text-white shadow-lg backdrop-blur transition hover:bg-black"
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.94 }}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </motion.button>
+
+                  <motion.div
+                    ref={thumbnailStripRef}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className={`
+                      max-w-full overflow-x-auto overflow-y-hidden pb-2
+                      [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
+                      ${isFeatureModal ? 'flex flex-nowrap justify-start gap-1.5 px-8' : 'flex flex-nowrap justify-start gap-2 px-8'}
+                    `}
+                  >
+                    {images.map((image, index) => (
+                      <motion.button
+                        key={index}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentIndex(index);
+                        }}
+                        aria-label={`Abrir imagen ${index + 1}`}
+                        className={`
+                          relative shrink-0 overflow-hidden transition-all
+                          ${isFeatureModal ? 'h-10 w-14 md:h-12 md:w-16' : 'h-16 w-16 md:h-20 md:w-20'}
+                          ${index === currentIndex ? 'ring-2 ring-white opacity-100' : 'opacity-40 hover:opacity-70'}
+                        `}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <img
+                          src={image.url}
+                          alt={`Thumbnail ${index + 1}`}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover"
+                        />
+                      </motion.button>
+                    ))}
+                  </motion.div>
+
+                  <motion.button
+                    type="button"
+                    onClick={() => scrollThumbnails("forward")}
+                    aria-label="Desplazar miniaturas hacia la derecha"
+                    className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/80 p-2 text-white shadow-lg backdrop-blur transition hover:bg-black"
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.94 }}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </motion.button>
+                </div>
               )}
             </div>
           </div>

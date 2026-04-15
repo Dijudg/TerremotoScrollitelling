@@ -2,16 +2,20 @@ import heroVideo from "../../assets/video-web_portada.mp4";
 import earthquakeVideoDesktop from "../../assets/img/Cronica1/Video1-terremoto-desktop.mp4";
 import earthquakeVideoMobile from "../../assets/img/Cronica1/Video1-terremoto-movil.mp4";
 import pabloAudio from "../../assets/hermanovictima.wav?url";
-import javierAudio from "../../assets/img/Cronica2/audio1.mp3.mpeg?url";
+import javierAudio from "../../assets/img/Cronica2/Javier-pincay.mp4";
 import earthquakePoster from "../../assets/img/Cronica1/MilagritoA1.jpg";
 import pabloPortrait from "../../assets/img/Cronica1/PabloCordoba-portoviejo-milagritos.jpeg";
 import javierPortrait from "../../assets/img/Cronica1/milagritos3.jpeg";
-import johnPortrait from "../../assets/img/Cronica3/JohnVera-Historia2-manta.jpeg";
-import bettyPortrait from "../../assets/img/Cronica3/BettyCedeno-Historia1-manta.jpeg";
+import johnPortrait from "../../assets/img/Cronica3/JohnVera-Historia2-manta.jpg";
+import bettyPortrait from "../../assets/img/Cronica3/BettyCedeno-Historia1-manta.jpg";
 import lauraPortrait from "../../assets/img/Cronica3/LauraPeralta-Historia3-manta.jpeg";
 import chronicle4Portrait from "../../assets/img/Cronica4/IMG_1708.jpg";
 import chronicle4Video from "../../assets/img/Cronica4/terremoto-testimonia-milagritos-ectv-phone3.mp4";
 import milagritosPhoneVideo from "../../assets/img/Cronica1/terremoto-testimonia-milagritos-ectv-phone.mp4";
+import cronica1MenuImage from "../../assets/img/Cronica1/zmenu.jpg";
+import cronica2MenuImage from "../../assets/img/Cronica2/zmenu.jpg";
+import cronica3MenuImage from "../../assets/img/Cronica3/zmenu.jpg";
+import cronica4MenuImage from "../../assets/img/Cronica4/zmenu.jpg";
 
 export const featuredPortraits = {
   pablo: pabloPortrait,
@@ -27,31 +31,31 @@ export const chronicleMenu = [
     id: "cronica-1",
     label: "Cr\u00f3nica 1",
     title: "Pablo y el hotel",
-    image: featuredPortraits.pablo,
+    image: cronica1MenuImage,
   },
   {
     id: "cronica-2",
     label: "Cr\u00f3nica 2",
     title: "Javier",
-    image: featuredPortraits.javier,
+    image: cronica2MenuImage,
   },
   {
     id: "cronica-3",
     label: "Cr\u00f3nica 3",
     title: "Dos Tarquis",
-    image: featuredPortraits.betty,
+    image: cronica3MenuImage,
   },
   {
     id: "cronica-4",
     label: "Cr\u00f3nica 4",
     title: "Cr\u00f3nica 4",
-    image: featuredPortraits.chronicle4,
+    image: cronica4MenuImage,
   },
   {
     id: "nota-complemento-1",
     label: "Nota complemento 1",
     title: "Manab\u00ed, entre la necesidad y la corrupci\u00f3n",
-    image: featuredPortraits.chronicle4,
+    image: cronica4MenuImage,
   },
 ];
 

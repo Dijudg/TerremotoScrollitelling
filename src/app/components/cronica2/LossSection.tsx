@@ -1,7 +1,10 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { SectionReveal } from '../SectionReveal';
+import { AudioStoryPlayer } from "../AudioStoryPlayer";
 import jeremyBackgroundImage from "../../../assets/img/Cronica2/fondo-jeremy.jpg";
+import Javieraudio from "../../../assets/img/Cronica2/Javier-pincay.mp4";
+import javierimg from "../../../assets/img/Cronica2/JavierPicay-avatar.jpg";
 
 export function LossSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -41,31 +44,42 @@ export function LossSection() {
 
             <div className="space-y-8 text-lg md:text-xl leading-relaxed text-gray-200">
               <p>
-                Pese a la pérdida de más de la mitad de sus seres queridos, Javier siguió su vida sin dudarlo. Es activo, conversón y nunca despinta una sonrisa de su rostro. Más bien se reconoce como una persona que no llora porque ya cumplió su proceso de duelo. 
+Pese a la pérdida de más de la mitad de sus seres queridos, Javier siguió su vida sin dudarlo. Es activo, conversón y nunca despinta una sonrisa de su rostro. Más bien se reconoce como una persona que no llora porque ya cumplió su proceso de duelo. 
               </p>
 
               <p className="text-yellow-200 text-xl text-bold italic   Finger-font">
-Su ley de vida se resume en “no llorar sino hacer pañuelos para los que sufren” igual o más de lo que él ha tenido que vivir.              </p>
-
+Su ley de vida se resume en “no llorar sino hacer pañuelos para los que sufren” igual o más de lo que él ha tenido que vivir.
+              </p>
               <p>
-No solo perdió a más de la mitad de su familia. En su cabeza se cruzan recuerdos vívidos de sus primeros años de vida. Cuenta cuando fue abanderado y no tenía zapatos para desfilar en el minuto cívico.              </p>
-
+No solo perdió a más de la mitad de su familia. En su cabeza se cruzan recuerdos vívidos de sus años de infancia. Cuenta cuando fue abanderado y no tenía zapatos para desfilar en el minuto cívico.
+              </p>
               <p>
-Luego recuerda que sobrevivió a 14 disparos que le propinaron años atrás durante un mitin político. Una de las balas “le dio un besito” al corazón y pasó de largo hasta destruir el bazo. “Nada grave”, dice con humor.              </p>
+Luego recuerda que sobrevivió a 14 disparos que le propinaron años atrás durante un mitin político. Una de las balas “le dio un besito” al corazón y pasó de largo hasta destruir el bazo. “Nada grave”, dice con humor.
+              </p>
 
+          
               <p className="text-white">
-                Pero, su voz pierde el volumen y se entrecorta cuando habla de su hijo mayor: Jeremy, de 22 años. En aquella época tenía 12 y prefirió no ir a la fiesta con su madre y hermanos. Se quedó con su padre en la casa y juntos sobrevivieron.
+Pero, su voz pierde el volumen y se entrecorta cuando habla de su hijo mayor: Jeremy, de 22 años. En aquella época tenía 12 y prefirió no ir a la fiesta con su madre y hermanos. Se quedó con su padre en la casa y juntos sobrevivieron.
               </p>
 
               <p>
-               La pérdida fue un golpe devastador. Javier tuvo que contener a su hijo y acompañarlo en el proceso de luto. No fue fácil -reconoce-, pero siempre le ha gustado el ‘coaching’ y piensa que eso ayudó a llegar con un mensaje de esperanza para su primogénito. .
+La pérdida fue un golpe devastador. Javier tuvo que contener a su hijo y acompañarlo durante el luto. No fue fácil -reconoce-, pero siempre le ha gustado el ‘coaching’ y piensa que eso ayudó a llegar con un mensaje de esperanza para su primogénito. 
               </p>
 
               <p className="text-yellow-200 text-xl text-bold italic Finger-font">
-Hoy ya es todo un hombre. Está en octavo año de Medicina y no tiene ‘mañas’ como tomar licor. “Lo saqué adelante yo solo. Es mi fuerza y mi motor”, dice con gran orgullo este padre portovejense.               </p>
+Hoy ya es todo un hombre. Está en octavo año de Medicina y no tiene ‘mañas’ como tomar licor. “Lo saqué adelante yo solo. Es mi fuerza y mi motor”, dice con gran orgullo este padre portovejense. 
+              </p>
             </div>
           </SectionReveal>
         </div>
+         <div className="pt-4">
+                        <AudioStoryPlayer
+                          src={Javieraudio}
+                          image={javierimg}
+                          imageAlt="Pablo Códoba, sobreviviente del terremoto"
+                          label="audio de rescate de Milagritos"
+                        />
+                      </div>
       </motion.div>
     </section>
   );

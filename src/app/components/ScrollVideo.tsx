@@ -9,6 +9,9 @@ interface ScrollVideoProps {
   mobileSrc?: string;
   desktopSource?: ResolvedVideoSource | null;
   mobileSource?: ResolvedVideoSource | null;
+  fallbackEmbedUrl?: string;
+  fallbackEmbedTitle?: string;
+  preferFallbackIframe?: boolean;
   poster?: string;
   youtubeId?: string;
   embedUrl?: string;
@@ -23,6 +26,9 @@ export function ScrollVideo({
   mobileSrc,
   desktopSource,
   mobileSource,
+  fallbackEmbedUrl,
+  fallbackEmbedTitle,
+  preferFallbackIframe = false,
   poster,
   youtubeId,
   embedUrl,
@@ -34,13 +40,8 @@ export function ScrollVideo({
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isPlayingInternal = useRef(false);
-  const hasPlayedInternal = useRef(false);
-  const lockTimeoutRef = useRef<number | null>(null);
-  const continueMessageTimeoutRef = useRef<number | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isScrollLocked, setIsScrollLocked] = useState(false);
-  const [showContinueMessage, setShowContinueMessage] = useState(false);
   const [shouldLoadMedia, setShouldLoadMedia] = useState(false);
   const [showPlayPrompt, setShowPlayPrompt] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
@@ -49,15 +50,13 @@ export function ScrollVideo({
   const resolvedDesktopSource = desktopSource ?? (src ? { kind: 'video' as const, url: src } : null);
   const resolvedMobileSource = mobileSource ?? (mobileSrc ? { kind: 'video' as const, url: mobileSrc } : null);
 
-  const activeSource = isMobileViewport
-    ? resolvedMobileSource
-    : resolvedDesktopSource;
-  const desktopSourceKey = resolvedDesktopSource ? `${resolvedDesktopSource.kind}:${resolvedDesktopSource.url}` : "";
-  const mobileSourceKey = resolvedMobileSource ? `${resolvedMobileSource.kind}:${resolvedMobileSource.url}` : "";
-  const activeSourceKey = activeSource ? `${activeSource.kind}:${activeSource.url}` : "";
+  const activeSource = isMobileViewport ? resolvedMobileSource : resolvedDesktopSource;
+  const desktopSourceKey = resolvedDesktopSource ? `${resolvedDesktopSource.kind}:${resolvedDesktopSource.url}` : '';
+  const mobileSourceKey = resolvedMobileSource ? `${resolvedMobileSource.kind}:${resolvedMobileSource.url}` : '';
+  const activeSourceKey = activeSource ? `${activeSource.kind}:${activeSource.url}` : '';
 
   const usesIframeMedia = Boolean(
-    (activeSource && activeSource.kind !== 'video') || youtubeId || embedUrl,
+    fallbackEmbedUrl || preferFallbackIframe || (activeSource && activeSource.kind !== 'video') || youtubeId || embedUrl,
   );
 
   const { scrollYProgress } = useScroll({
@@ -81,66 +80,39 @@ export function ScrollVideo({
     return () => mediaQuery.removeEventListener('change', updateViewport);
   }, []);
 
-  const clearScrollLockTimers = useCallback(() => {
-    if (lockTimeoutRef.current) {
-      window.clearTimeout(lockTimeoutRef.current);
-      lockTimeoutRef.current = null;
-    }
-
-    if (continueMessageTimeoutRef.current) {
-      window.clearTimeout(continueMessageTimeoutRef.current);
-      continueMessageTimeoutRef.current = null;
-    }
-  }, []);
-
-  const startScrollLock = useCallback(() => {
-    if (hasPlayedInternal.current) return;
-
-    hasPlayedInternal.current = true;
-    setIsScrollLocked(true);
-    clearScrollLockTimers();
-
-    lockTimeoutRef.current = window.setTimeout(() => {
-      setIsScrollLocked(false);
-      setShowContinueMessage(true);
-
-      continueMessageTimeoutRef.current = window.setTimeout(() => {
-        setShowContinueMessage(false);
-      }, 3000);
-    }, 5000);
-  }, [clearScrollLockTimers]);
-
   const markPlaying = useCallback(() => {
     isPlayingInternal.current = true;
     setIsPlaying(true);
     setShowPlayPrompt(false);
-    startScrollLock();
-  }, [startScrollLock]);
+  }, []);
 
   const markPaused = useCallback(() => {
     isPlayingInternal.current = false;
     setIsPlaying(false);
   }, []);
 
-  const playHtmlVideo = useCallback((video: HTMLVideoElement) => {
-    const playPromise = video.play();
+  const playHtmlVideo = useCallback(
+    (video: HTMLVideoElement) => {
+      const playPromise = video.play();
 
-    if (!playPromise) {
-      markPlaying();
-      return;
-    }
+      if (!playPromise) {
+        markPlaying();
+        return;
+      }
 
-    playPromise
-      .then(markPlaying)
-      .catch((err) => {
-        markPaused();
-        setShowPlayPrompt(true);
+      playPromise
+        .then(markPlaying)
+        .catch((err) => {
+          markPaused();
+          setShowPlayPrompt(true);
 
-        if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
-          console.error('Error reproduciendo video:', err);
-        }
-      });
-  }, [markPaused, markPlaying]);
+          if (err.name !== 'AbortError' && err.name !== 'NotAllowedError') {
+            console.error('Error reproduciendo video:', err);
+          }
+        });
+    },
+    [markPaused, markPlaying],
+  );
 
   const handleManualPlay = useCallback(() => {
     setShouldLoadMedia(true);
@@ -156,22 +128,14 @@ export function ScrollVideo({
         playHtmlVideo(videoRef.current);
       }
     }, 0);
-  }, [activeSource?.kind, markPlaying, playHtmlVideo, usesIframeMedia]);
-
-  useEffect(() => {
-    return () => clearScrollLockTimers();
-  }, [clearScrollLockTimers]);
+  }, [playHtmlVideo, usesIframeMedia, markPlaying]);
 
   useEffect(() => {
     isPlayingInternal.current = false;
-    hasPlayedInternal.current = false;
     setIsPlaying(false);
-    setIsScrollLocked(false);
-    setShowContinueMessage(false);
     setShowPlayPrompt(false);
     setIsVideoReady(false);
-    clearScrollLockTimers();
-  }, [clearScrollLockTimers, activeSourceKey, desktopSourceKey, embedUrl, mobileSourceKey, mobileSrc, src, youtubeId]);
+  }, [activeSourceKey, desktopSourceKey, embedUrl, fallbackEmbedUrl, mobileSourceKey, mobileSrc, preferFallbackIframe, src, youtubeId]);
 
   useEffect(() => {
     const element = sectionRef.current;
@@ -209,57 +173,6 @@ export function ScrollVideo({
 
     return () => window.clearTimeout(promptTimer);
   }, [isPlaying, isVideoReady, playPromptDelayMs, shouldLoadMedia, usesIframeMedia]);
-
-  useEffect(() => {
-    if (!isScrollLocked) return;
-
-    let targetScrollY = window.scrollY;
-    if (sectionRef.current) {
-      const rect = sectionRef.current.getBoundingClientRect();
-      targetScrollY = window.scrollY + rect.top - (window.innerHeight - rect.height) / 2;
-      window.scrollTo({ top: targetScrollY, behavior: 'instant' } as ScrollToOptions);
-    }
-
-    const preventDefault = (event: Event) => {
-      event.preventDefault();
-      event.returnValue = false;
-      return false;
-    };
-
-    const preventKeyScroll = (event: KeyboardEvent) => {
-      const keys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ', 'Tab'];
-      if (keys.includes(event.key)) {
-        event.preventDefault();
-        event.returnValue = false;
-        return false;
-      }
-    };
-
-    let isReverting = false;
-    const forceScrollPosition = () => {
-      if (!isReverting && Math.abs(window.scrollY - targetScrollY) > 2) {
-        isReverting = true;
-        window.scrollTo({ top: targetScrollY, behavior: 'instant' } as ScrollToOptions);
-        window.setTimeout(() => {
-          isReverting = false;
-        }, 0);
-      }
-    };
-
-    window.addEventListener('wheel', preventDefault, { passive: false });
-    window.addEventListener('touchmove', preventDefault, { passive: false });
-    window.addEventListener('keydown', preventKeyScroll, { passive: false });
-    window.addEventListener('DOMMouseScroll', preventDefault, { passive: false });
-    window.addEventListener('scroll', forceScrollPosition, { passive: false });
-
-    return () => {
-      window.removeEventListener('wheel', preventDefault);
-      window.removeEventListener('touchmove', preventDefault);
-      window.removeEventListener('keydown', preventKeyScroll);
-      window.removeEventListener('DOMMouseScroll', preventDefault);
-      window.removeEventListener('scroll', forceScrollPosition);
-    };
-  }, [isScrollLocked]);
 
   useEffect(() => {
     if (!shouldLoadMedia) return;
@@ -300,7 +213,7 @@ export function ScrollVideo({
         video.pause();
       }
     };
-  }, [activeSource?.kind, markPaused, markPlaying, playHtmlVideo, scrollYProgress, shouldLoadMedia, usesIframeMedia]);
+  }, [markPaused, markPlaying, playHtmlVideo, scrollYProgress, shouldLoadMedia, usesIframeMedia]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -324,7 +237,7 @@ export function ScrollVideo({
     });
   }, [analyticsLabel, shouldLoadMedia, usesIframeMedia, youtubeId]);
 
-  if (!activeSource && !youtubeId && !embedUrl) {
+  if (!activeSource && !youtubeId && !embedUrl && !fallbackEmbedUrl) {
     return null;
   }
 
@@ -340,14 +253,27 @@ export function ScrollVideo({
       >
         <div className="relative h-full w-full overflow-hidden">
           {usesIframeMedia ? (
-            <RemoteVideoEmbed
-              source={activeSource}
-              title={analyticsLabel}
-              className="h-full w-full object-cover"
-              active={shouldLoadMedia}
-              autoPlay
-              showControls={showControls}
-            />
+            preferFallbackIframe && fallbackEmbedUrl ? (
+              <iframe
+                className="h-full w-full object-cover"
+                src={shouldLoadMedia ? fallbackEmbedUrl : undefined}
+                title={fallbackEmbedTitle ?? analyticsLabel}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            ) : (
+              <RemoteVideoEmbed
+                source={activeSource}
+                title={analyticsLabel}
+                className="h-full w-full object-cover"
+                active={shouldLoadMedia}
+                autoPlay
+                showControls={showControls}
+              />
+            )
           ) : (
             <video
               ref={videoRef}
@@ -369,7 +295,7 @@ export function ScrollVideo({
                 <source src={mobileSrc} type="video/mp4" media="(max-width: 767px)" />
               )}
               {shouldLoadMedia && src && (
-                <source src={src} type="video/mp4" media={mobileSrc ? "(min-width: 768px)" : undefined} />
+                <source src={src} type="video/mp4" media={mobileSrc ? '(min-width: 768px)' : undefined} />
               )}
               Tu navegador no soporta el elemento de video.
             </video>
@@ -407,27 +333,6 @@ export function ScrollVideo({
               <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full bg-red-600 px-3 py-1 text-xs text-white">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
                 REPRODUCIENDO
-              </div>
-            </motion.div>
-          )}
-
-          {showContinueMessage && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="pointer-events-none absolute inset-0 flex items-end justify-center pb-12"
-            >
-              <div className="flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-white backdrop-blur-md">
-                <motion.div
-                  animate={{ y: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                  </svg>
-                </motion.div>
-                <span className="text-sm font-medium">Continua explorando</span>
               </div>
             </motion.div>
           )}
