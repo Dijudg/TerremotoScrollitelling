@@ -5,6 +5,7 @@ import { StickyChronicleNav } from "./components/header/StickyChronicleNav";
 import { ScrollVideo } from "./components/ScrollVideo";
 import { FloatingShareButtons } from "./components/FloatingShareButtons";
 import { DeferredRender } from "./components/DeferredRender";
+import { ReviveAdBlock } from "./components/ReviveAdBlock";
 import { SiteFooter } from "./components/footer/SiteFooter";
 import { featuredPortraits, sitePosters, siteVideos } from "./content/siteMedia";
 import {
@@ -119,6 +120,8 @@ export default function App() {
         <RescueSection />
       </DeferredSection>
 
+      <ReviveAdBlock />
+
       <DeferredSection>
         <ScrollVideo
           src={siteVideos.chronicle2Lead}
@@ -138,6 +141,8 @@ export default function App() {
         <RebuildSection />
       </DeferredSection>
 
+      <ReviveAdBlock />
+
       <DeferredSection id="cronica-3" minHeight="1300vh">
         <DosTarquisSection />
       </DeferredSection>
@@ -145,6 +150,8 @@ export default function App() {
       <DeferredSection>
         <FantasmaMarketSection />
       </DeferredSection>
+
+      <ReviveAdBlock />
 
       <DeferredSection>
         <ScrollVideo
@@ -157,6 +164,8 @@ export default function App() {
       <DeferredSection id="cronica-4" minHeight="1300vh">
         <Cronica4Section />
       </DeferredSection>
+
+      <ReviveAdBlock />
 
       <DeferredSection id="nota-complemento-1">
         <MemorialSection />

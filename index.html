@@ -87,6 +87,19 @@
   </head>
 
   <body>
+    <p>
+      <script type="text/javascript">// <![CDATA[
+      console.log(window.innerWidth);
+      if (window.innerWidth < 600) {
+          var ox_u = 'https://adserver.eltelegrafo.com.ec/www/delivery/al.php?zoneid=25&layerstyle=simple&align=center&valign=top&padding=2&closetime=10&padding=2&shifth=0&shiftv=50&closebutton=t&nobg=t&noborder=t';
+      } else {
+             var ox_u = 'https://adserver.eltelegrafo.com.ec/www/delivery/al.php?zoneid=6&layerstyle=simple&align=center&valign=top&padding=2&closetime=10&padding=2&shifth=0&shiftv=50&closebutton=t&nobg=t&noborder=t'
+      }
+      if (document.context) ox_u += '&context=' + escape(document.context);
+      document.write("<scr"+"ipt type='text/javascript' src='" + ox_u + "'></scr"+"ipt>");
+      // ]]></script>
+    </p>
+    <div style="position: absolute; left: -7520px;"><a href="https://ommjal.org/" title="казино Vavada">Вавада казино</a> — быстрый доступ, популярные слоты и выгодные бонусы.</div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -3,12 +3,14 @@ import { HorizontalScrollytelling } from "../HorizontalScrollytelling";
 import { GalleryButton } from "../GalleryButton";
 import { LayeredHeadline } from "../LayeredHeadline";
 import {
+  chronicle4BryanImages,
   chronicle4HorizontalImages,
   chronicle4HorizontalMobileImages,
-  chronicle4Images,
+  chronicle4LuisImages,
+  chronicle4RicardoImages,
 } from "../../content/chronicle4Media";
 import { siteVideos } from "../../content/siteMedia";
-import { buildGallery, pickImage } from "../../content/mediaUtils";
+import { pickImage } from "../../content/mediaUtils";
 
 interface StoryPanel {
   title?: string;
@@ -22,21 +24,21 @@ const introPanels: StoryPanel[] = [
   {
     title: "Los rescatistas “quebrados”",
     text: "Cuando recuerdan sus anécdotas durante y después del terremoto, sus miradas se pierden, como si el tiempo hiciera una pausa.",
-    img: pickImage(chronicle4Images, 0),
+    img: pickImage(chronicle4RicardoImages, 0),
   },
   {
     text: "Y es que es difícil olvidar aquellos gritos que imploraban ayuda; aquellos edificios virados como si jugaran con la gravedad; y aquel olor a muerte que asfixiaba.",
-    img: pickImage(chronicle4Images, 1),
+    img: pickImage(chronicle4RicardoImages, 1),
   },
   {
     text: "Ricardo, Luis y Bryan sintieron como la tierra se resquebrajaba y destruía todo. Vivieron el horror y la pérdida de sus familiares y, pese al miedo, apoyaron a sus comunidades.",
-    img: pickImage(chronicle4Images, 2),
+    img: pickImage(chronicle4RicardoImages, 2),
   },
   {
     title: "Ricardo: “Nos tomamos 15 minutos para no quebrarnos”",
     titleLines: ["Ricardo: “Nos tomamos", "15 minutos para", "no quebrarnos”"],
     text: "En medio de las tinieblas y de la desesperación, Ricardo Castro, bombero mantense, subió a una montaña de desperdicios -entre pedazos de paredes, vidrios y electrodomésticos aplastados- y divisó una pequeña niña, de aproximadamente un año. Estaba envuelta en una manta, sus ojos estaban cerrados y su rostro guardaba una gran tranquilidad. Parecía dormida, pero ya no respiraba.",
-    img: pickImage(chronicle4Images, 3),
+    img: pickImage(chronicle4RicardoImages, 3),
   },
 ];
 
@@ -109,27 +111,9 @@ const closingParagraphs = [
   "10 años después, las desfiguradas calles cubiertas por paredes y vidrios rotos ya no están; tampoco se escuchan los gritos aterradores ni el llanto de quienes perdieron a los suyos o lo suyo; y el olor finalmente se disipó. Pero el recuerdo sigue en las palabras, en las miradas y en las acciones. Nada se ha borrado y es un recordatorio de lo que se hizo y de lo que está en deuda…",
 ];
 
-const luisGallery = buildGallery(
-  chronicle4Images,
-  [
-    "Pedernales sostiene en sus playas y calles las memorias de quienes auxiliaron a otros.",
-    "Luis volvió a la rutina de salvavidas con la promesa de cuidar a los demás.",
-    "La historia familiar se cruza con el oficio de rescate y vigilancia en la costa.",
-    "La reconstrucción emocional también ocurre en los lugares donde se volvió a trabajar.",
-  ],
-  14,
-);
-
-const bryanGallery = buildGallery(
-  chronicle4Images,
-  [
-    "El memorial de Pedernales guarda nombres que siguen presentes en la memoria de sus familias.",
-    "Bryan reconstruyó responsabilidades antes de volver a surcar las olas.",
-    "La ciudad cambió, pero las ausencias siguen marcando sus espacios públicos.",
-    "El recuerdo se mantiene en las miradas, en el oficio y en los lugares recuperados.",
-  ],
-  22,
-);
+const ricardoGallery = chronicle4RicardoImages.map((url) => ({ url }));
+const luisGallery = chronicle4LuisImages.map((url) => ({ url }));
+const bryanGallery = chronicle4BryanImages.map((url) => ({ url }));
 
 const paragraphClassName = "text-lg leading-relaxed text-gray-200 md:text-xl";
 const eyebrowClassName = "mb-5 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300/80";
@@ -229,9 +213,9 @@ function VerticalSection({ items }: { items: StoryPanel[] }) {
 }
 
 function LuisSection() {
-  const heroImage = pickImage(chronicle4Images, 15);
-  const supportImages = [pickImage(chronicle4Images, 16), pickImage(chronicle4Images, 17), pickImage(chronicle4Images, 18)];
-  const wideImage = pickImage(chronicle4Images, 19);
+  const heroImage = pickImage(chronicle4LuisImages, 0);
+  const supportImages = [pickImage(chronicle4LuisImages, 1), pickImage(chronicle4LuisImages, 2), pickImage(chronicle4LuisImages, 3)];
+  const wideImage = pickImage(chronicle4LuisImages, 4);
 
   return (
     <section className="relative bg-[#070b0f] py-24 text-white md:py-32">
@@ -297,10 +281,7 @@ function LuisSection() {
               </p>
               <TextGroup paragraphs={revealParagraphs.slice(5, 7)} />
             </div>
-            <div className="space-y-6 md:col-span-1">
-              <TextGroup paragraphs={revealParagraphs.slice(7)} />
-              <GalleryButton images={luisGallery} label="Ver fotos de Luis" modalVariant="feature" />
-            </div>
+           
           </div>
         </SectionReveal>
       </div>
@@ -309,9 +290,9 @@ function LuisSection() {
 }
 
 function BryanSection() {
-  const heroImage = pickImage(chronicle4Images, 24);
-  const portraitImage = pickImage(chronicle4Images, 25);
-  const collageImages = [pickImage(chronicle4Images, 26), pickImage(chronicle4Images, 27), pickImage(chronicle4Images, 28), pickImage(chronicle4Images, 29)];
+  const heroImage = pickImage(chronicle4BryanImages, 0);
+  const portraitImage = pickImage(chronicle4BryanImages, 1);
+  const collageImages = [pickImage(chronicle4BryanImages, 2), pickImage(chronicle4BryanImages, 3), pickImage(chronicle4BryanImages, 4), pickImage(chronicle4BryanImages, 5)];
 
   return (
     <section className="relative bg-black py-24 text-white md:py-32">
@@ -380,12 +361,7 @@ function BryanSection() {
           </div>
         </SectionReveal>
 
-        <SectionReveal>
-          <div className="mx-auto mt-16 max-w-4xl space-y-8 text-center">
-            <TextGroup paragraphs={closingParagraphs.slice(13)} />
-            <GalleryButton images={bryanGallery} label="Ver fotos de Bryan" modalVariant="feature" />
-          </div>
-        </SectionReveal>
+     
       </div>
     </section>
   );
@@ -403,6 +379,7 @@ export function Cronica4Section() {
       </SectionReveal>
 
       <VerticalSection items={introPanels} />
+     
       <HorizontalScrollytelling sections={horizontalPanels} />
       <LuisSection />
       <BryanSection />

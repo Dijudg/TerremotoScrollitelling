@@ -10,8 +10,7 @@ import johnPortrait from "../../assets/img/Cronica3/JohnVera-Historia2-manta.jpe
 import bettyPortrait from "../../assets/img/Cronica3/BettyCedeno-Historia1-manta.jpeg";
 import lauraPortrait from "../../assets/img/Cronica3/LauraPeralta-Historia3-manta.jpeg";
 import chronicle4Portrait from "../../assets/img/Cronica4/IMG_1708.jpg";
-import chronicle4Video from "../../assets/img/Cronica4/terremoto-testimonia-milagritos-ectv-movil.mp4";
-import milagritosVideo from "../../assets/img/Cronica1/terremoto-testimonia-milagritos-ectv-movil.mp4";
+import chronicle4Video from "../../assets/img/Cronica4/terremoto-testimonia-milagritos-ectv-phone3.mp4";
 import milagritosPhoneVideo from "../../assets/img/Cronica1/terremoto-testimonia-milagritos-ectv-phone.mp4";
 
 export const featuredPortraits = {
@@ -62,7 +61,7 @@ export const siteVideos = {
   chronicle1LeadDesktop: earthquakeVideoDesktop,
   chronicle1LeadMobile: earthquakeVideoMobile,
   chronicle1Rescue: heroVideo,
-  chronicle2Lead: milagritosVideo,
+  chronicle2Lead: milagritosPhoneVideo,
   chronicle2LeadMobile: milagritosPhoneVideo,
   chronicle3Lead: heroVideo,
   chronicle4Lead: chronicle4Video,

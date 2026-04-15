@@ -1,16 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { SectionReveal } from "../SectionReveal";
 import { GalleryButton } from "../GalleryButton";
+import { AudioStoryPlayer } from "../AudioStoryPlayer";
 import { rescueGallery } from "../../content/rescueGallery";
-import { bindVideoTracking } from "../../../../analytics";
-import milagritosFinalVideo from "../../../assets/img/Cronica1/terremoto-testimonia-milagritos-ectv-movil.mp4";
+import milagritosRescueAudio from "../../../assets/img/Cronica1/Video-rescate-milagritos-audio.mp3?url";
 import pabloPosterImage from "../../../assets/img/Cronica1/PabloCordoba-portoviejo-milagritos.jpeg";
 import rescueUnderHotelImage from "../../../assets/img/Cronica1/rescate-bajohotel-Foto-ElDiariodeEcuador.jpg";
 
 export function RescueSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const finalVideoRef = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -19,16 +18,6 @@ export function RescueSection() {
   const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
   const rescueImage = rescueUnderHotelImage;
-
-  useEffect(() => {
-    if (!finalVideoRef.current) return;
-
-    return bindVideoTracking(finalVideoRef.current, {
-      videoId: "cronica_1_video_milagritos_testimonio",
-      videoName: "Cronica 1 video Milagritos testimonio",
-      placement: "rescue_final_video",
-    });
-  }, []);
 
   return (
     <section
@@ -102,6 +91,15 @@ Pese a que un leve temblor aún recorre su cuerpo, Pablo cuenta su historia desd
 
               <p className="text-xl">
 Ya lo superó, reconoce con orgullo. ¿Y ahora qué sigue? La respuesta es fácil: seguir viviendo con fe y agradecimiento a Dios. </p>
+
+              <div className="pt-4">
+                <AudioStoryPlayer
+                  src={milagritosRescueAudio}
+                  image={pabloPosterImage}
+                  imageAlt="Pablo Córdoba, sobreviviente del terremoto"
+                  label="audio de rescate de Milagritos"
+                />
+              </div>
             </div>
           </SectionReveal>
         </div>
