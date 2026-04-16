@@ -283,31 +283,30 @@ function LuisSection({
   leadMobileVideoSource?: ResolvedVideoSource | null;
   hideLeadVideo?: boolean;
 }) {
-  const heroImage = {
-  src: pickImage(chronicle4LuisImages, 0),
-  alt: "Luis Zambrano en Pedernales",
-  
-};
+  const heroImage: { src: string; alt: string; caption?: string } = {
+    src: pickImage(chronicle4LuisImages, 0),
+    alt: "Luis Zambrano en Pedernales",
+  };
 
-const supportImages = [
-  {
-    src: pickImage(chronicle4LuisImages, 1),
-    alt: "Una esquina del centro de Pedernales, epicentro del terremoto de 7,8 en la escala de Richter.",
-    caption: "Una esquina del centro de Pedernales, epicentro del terremoto de 7,8 en la escala de Richter. ",
-  },
-  {
-    src: pickImage(chronicle4LuisImages, 2),
-    alt: "Luis Zambrano, salvavidas pedernalino.",
-    caption: "Luis Zambrano, salvavidas pedernalino. ",
-  },
-  {
-    src: pickImage(chronicle4LuisImages, 3),
-    alt: "Vista de la iglesia central en Pedernales que también resultó afectada por el terremoto. ",
-    caption: "Vista de la iglesia central en Pedernales que también resultó afectada por el terremoto. ",
-  },
-];
+  const supportImages = [
+    {
+      src: pickImage(chronicle4LuisImages, 1),
+      alt: "Una esquina del centro de Pedernales, epicentro del terremoto de 7,8 en la escala de Richter.",
+      caption: "Una esquina del centro de Pedernales, epicentro del terremoto de 7,8 en la escala de Richter.",
+    },
+    {
+      src: pickImage(chronicle4LuisImages, 2),
+      alt: "Luis Zambrano, salvavidas pedernalino.",
+      caption: "Luis Zambrano, salvavidas pedernalino.",
+    },
+    {
+      src: pickImage(chronicle4LuisImages, 3),
+      alt: "Vista de la iglesia central en Pedernales que también resultó afectada por el terremoto.",
+      caption: "Vista de la iglesia central en Pedernales que también resultó afectada por el terremoto.",
+    },
+  ];
 
-const wideImage = {
+  const wideImage = {
   src: pickImage(chronicle4LuisImages, 4),
   alt: "Luis Zambrano, salvavidas, ayudó a su comunidad tras el terremoto.",
   caption: "Luis Zambrano, salvavidas, ayudó a su comunidad tras el terremoto.",
@@ -374,7 +373,7 @@ const wideImage = {
         )}
 
         <SectionReveal>
-          <div className="-mx-6 mt-16 flex snap-x gap-5 overflow-x-auto px-6 pb-4 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0">
+          <div className="-mx-6 mt-16 flex snap-x gap-5 overflow-x-auto px-6 pb-4 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
   {supportImages.map((image, index) => (
   <MediaCard
     key={`${image.src}-${index}`}
@@ -395,7 +394,7 @@ const wideImage = {
   src={wideImage.src}
   alt={wideImage.alt}
   caption={wideImage.caption}
-  className="h-[520px]"
+  className="md:h-[520px]"
 />           
  <TextGroup paragraphs={[...luisOpeningParagraphs.slice(6), ...revealParagraphs.slice(0, 2)]} />
           </div>
@@ -478,7 +477,7 @@ const collageImages = [
         </SectionReveal>
 
         <SectionReveal>
-          <div className="mt-14 flex snap-x gap-3 overflow-x-auto pb-3 md:grid md:grid-cols-3 md:gap-4 md:overflow-visible md:pb-0">
+          <div className="mt-14 flex snap-x gap-3 overflow-x-auto pb-3 md:grid md:grid-cols-3 md:gap-4 md:overflow-visible md:pb-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <div className="min-w-[42vw] snap-start rounded-[1.5rem] border border-white/10 bg-white/[0.06] p-4 md:min-w-0 md:p-6">
               <p className="text-3xl text-cyan-300 md:text-5xl">672</p>
               <p className="mt-2 text-[10px] uppercase leading-snug tracking-[0.14em] text-white/60 md:mt-3 md:text-sm md:tracking-[0.18em]">nombres en el memorial</p>
@@ -501,7 +500,7 @@ const collageImages = [
   src={portraitImage.src}
   alt={portraitImage.alt}
   caption={portraitImage.caption}
-  className="h-[520px]"
+  className="md:h-[520px]"
 />
 
              <AudioStoryPlayer
@@ -519,7 +518,7 @@ const collageImages = [
         </SectionReveal>
 
         <SectionReveal>
-          <div className="-mx-6 mt-16 flex snap-x gap-4 overflow-x-auto px-6 pb-4 md:mx-0 md:grid md:grid-cols-[1.15fr_0.85fr] md:grid-rows-[230px_230px] md:overflow-visible md:px-0 md:pb-0">
+          <div className="-mx-6 mt-16 flex snap-x gap-4 overflow-x-auto px-6 pb-4 md:mx-0 md:grid md:grid-cols-[1.15fr_0.85fr] md:grid-rows-[230px_230px] md:overflow-visible md:px-0 md:pb-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <MediaCard
   src={collageImages[0].src}
   alt={collageImages[0].alt}

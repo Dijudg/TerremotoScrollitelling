@@ -1,11 +1,31 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUp, Menu, Share2, X } from "lucide-react";
+import { ArrowUp, ChevronDown, Menu, Share2, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import logoIcon from "../../../assets/fav-et.svg";
 import logoHorizontal from "../../../assets/Logo-et-horizontal-blanco.svg";
 import { chronicleMenu } from "../../content/siteMedia";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "../ui/dropdown-menu";
 
 const watchedSections = ["hero", "cronica-1", "cronica-2", "cronica-3", "cronica-4", "nota-complemento-1"];
+
+const elTelegrafoLinks = [
+  { label: "Portada", href: "https://www.eltelegrafo.com.ec/" },
+  { label: "Nacionales", href: "https://www.eltelegrafo.com.ec/nacionales" },
+  { label: "Internacionales", href: "https://www.eltelegrafo.com.ec/internacionales" },
+  { label: "Última hora", href: "https://www.eltelegrafo.com.ec/ultima-hora" },
+  { label: "Deportes", href: "https://www.eltelegrafo.com.ec/deportes" },
+  { label: "Tendencias", href: "https://www.eltelegrafo.com.ec/tendencias" },
+  { label: "Especiales", href: "https://www.eltelegrafo.com.ec/especiales-et" },
+  { label: "Opinión", href: "https://www.eltelegrafo.com.ec/opinion" },
+  { label: "Clasificados", href: "https://www.eltelegrafo.com.ec/clasificados" },
+  { label: "Empresariales", href: "https://www.eltelegrafo.com.ec/empresariales" },
+];
 
 const scrollToSection = (id: string) => {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -106,17 +126,31 @@ export function StickyChronicleNav() {
       transition={{ duration: 0.8, delay: 0.2 }}
     >
       <div className="mx-auto grid max-w-7xl grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-4 px-4 py-4 md:grid-cols-[13rem_minmax(0,1fr)_18rem] md:px-6">
-        <div className="flex justify-start">
-          <a
-            href="https://www.eltelegrafo.com.ec"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Ir a El Telegrafo"
-            className="opacity-80 transition hover:opacity-100"
-          >
-            <img src={logoIcon} alt="El Telegrafo" className="h-6 w-6 md:hidden" />
-            <img src={logoHorizontal} alt="El Telegrafo" className="hidden w-36 max-w-full md:block lg:w-30" />
-          </a>
+        <div className="flex items-center gap-3">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label="Abrir menú El Telegrafo"
+                className="inline-flex items-center gap-2 rounded-full  bg-white/5  text-white transition "
+              >
+                <img src={logoIcon} alt="El Telegrafo" className="h-6 w-6 md:hidden" />
+                <img src={logoHorizontal} alt="El Telegrafo" className="hidden h-6 w-auto max-w-full md:block lg:h-8" />
+                <ChevronDown className="h-4 w-4 text-white" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="min-w-[14rem] bg-black/95 border-white/10">
+              
+              <DropdownMenuSeparator className="my-1 " />
+              {elTelegrafoLinks.map((item) => (
+                <DropdownMenuItem asChild key={item.href} className="text-white hover:bg-white/5">
+                  <a href={item.href} target="_blank" rel="noreferrer" className="w-full block text-left">
+                    {item.label}
+                  </a>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="hidden overflow-x-auto md:block">
@@ -232,7 +266,7 @@ export function StickyChronicleNav() {
                 <p className="text-xs uppercase tracking-[0.28em] text-sky-300/80">Menú</p>
                 <p className="mt-3 text-4xl leading-none text-white">Crónicas y notas</p>
                 <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/55">
-                  Navega por las historias y los los datos 10 años despues del Terremoto.
+                  Navega por las historias y los los datos 10 años después del Terremoto.
                 </p>
               </div>
 
@@ -246,7 +280,7 @@ export function StickyChronicleNav() {
                       key={item.id}
                       href={`#${item.id}`}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={`group w-full rounded-[1.4rem] border p-2.5 text-left transition ${
+                      className={`group w-full rounded-[1.4rem]  p-2.5 text-left transition ${
                         isNoteItem
                           ? "border-amber-300/50 bg-gradient-to-br from-amber-200/20 via-white/[0.06] to-rose-300/10 text-white shadow-[0_0_0_1px_rgba(252,211,77,0.18),0_18px_50px_rgba(0,0,0,0.35)]"
                           : isActive
