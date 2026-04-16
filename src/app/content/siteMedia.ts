@@ -53,7 +53,7 @@ export const chronicleMenu = [
   },
   {
     id: "nota-complemento-1",
-    label: "Nota complemento 1",
+    label: "Manabí 2026",
     title: "Manab\u00ed, entre la necesidad y la corrupci\u00f3n",
     image: cronica4MenuImage,
   },

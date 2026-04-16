@@ -343,8 +343,9 @@ export function MobileStoryPager({
     <section
       ref={sectionRef}
       className={getClassName(
-        "relative h-[100svh] overflow-hidden bg-black text-white opacity-0 transition-opacity duration-500 ease-out",
-        isLocked ? "touch-none opacity-100" : "touch-pan-y opacity-0",
+        "relative h-[100svh] overflow-hidden bg-black text-white transition-opacity duration-500 ease-out",
+        isLocked || activeIndex === 0 ? "opacity-100" : "opacity-0",
+        isLocked ? "touch-none" : "touch-pan-y",
         className,
       )}
     >
@@ -354,18 +355,17 @@ export function MobileStoryPager({
       >
         <div
           className={getClassName(
-            "flex h-full ease-[cubic-bezier(0.22,1,0.36,1)]",
-            isDragging ? "transition-none" : "transition-transform",
+            "flex h-full",
+            isDragging ? "transition-none" : "transition-transform duration-500 ease-in-out",
           )}
           style={{
             transform: `translate3d(calc(-${activeIndex * 100}vw + ${dragOffset}px), 0, 0)`,
-            transitionDuration: `${SLIDE_TRANSITION_MS}ms`,
-            width: `${sections.length * 100}%`,
+            width: `${sections.length * 100}vw`,
             willChange: "transform",
           }}
         >
           {sections.map((section, index) => (
-            <article key={index} className="relative flex h-full w-screen shrink-0 flex-col">
+            <article key={index} className="relative flex h-full w-screen flex-col shrink-0">
               <div className="relative aspect-square w-full shrink-0 bg-black">
                 <img src={section.mobileImg ?? section.img} alt="" loading="lazy" decoding="async" className="h-full w-full object-contain opacity-100" />
                 <div className={getClassName("absolute inset-0", imageOverlayClassName)} />

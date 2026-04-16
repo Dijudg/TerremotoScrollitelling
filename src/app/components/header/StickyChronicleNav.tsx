@@ -125,10 +125,9 @@ export function StickyChronicleNav() {
               const isActive = activeSection === item.id;
 
               return (
-                <button
+                <a
                   key={item.id}
-                  type="button"
-                  onClick={() => handleNavigate(item.id)}
+                  href={`#${item.id}`}
                   className={`relative pb-1 text-[11px] uppercase tracking-[0.24em] transition ${
                     isActive
                       ? "text-white"
@@ -142,7 +141,7 @@ export function StickyChronicleNav() {
                     }`}
                     aria-hidden="true"
                   />
-                </button>
+                </a>
               );
             })}
           </div>
@@ -233,7 +232,7 @@ export function StickyChronicleNav() {
                 <p className="text-xs uppercase tracking-[0.28em] text-sky-300/80">Menú</p>
                 <p className="mt-3 text-4xl leading-none text-white">Crónicas y notas</p>
                 <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/55">
-                  Navega por las historias y la nota complementaria.
+                  Navega por las historias y los los datos 10 años despues del Terremoto.
                 </p>
               </div>
 
@@ -243,10 +242,10 @@ export function StickyChronicleNav() {
                   const isNoteItem = item.id === "nota-complemento-1";
 
                   return (
-                    <motion.button
+                    <motion.a
                       key={item.id}
-                      type="button"
-                      onClick={() => handleNavigate(item.id)}
+                      href={`#${item.id}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
                       className={`group w-full rounded-[1.4rem] border p-2.5 text-left transition ${
                         isNoteItem
                           ? "border-amber-300/50 bg-gradient-to-br from-amber-200/20 via-white/[0.06] to-rose-300/10 text-white shadow-[0_0_0_1px_rgba(252,211,77,0.18),0_18px_50px_rgba(0,0,0,0.35)]"
@@ -268,8 +267,7 @@ export function StickyChronicleNav() {
                             {item.label}
                           </span>
                           <span className="block text-2xl leading-tight text-white md:text-xl">
-                            {item.title}
-                          </span>
+                            {item.title}</span>
                           <span className="block text-sm leading-relaxed text-white/70">
                             Abre la lectura complementaria con otra voz y otro enfoque.
                           </span>
@@ -287,7 +285,7 @@ export function StickyChronicleNav() {
                           </span>
                         </span>
                       )}
-                    </motion.button>
+                    </motion.a>
                   );
                 })}
               </div>

@@ -108,6 +108,63 @@ export default function App() {
   const hasChronicle3Video = remoteManifestChecked && Boolean(chronicle3LeadDesktopSource?.url || chronicle3LeadMobileSource?.url);
   const hasChronicle4Video = remoteManifestChecked && Boolean(chronicle4LeadDesktopSource?.url || chronicle4LeadMobileSource?.url);
 
+  const normalizeHash = (hash: string) =>
+    hash
+      .toLowerCase()
+      .replace(/^#/, "")
+      .replace(/á/g, "a")
+      .replace(/é/g, "e")
+      .replace(/í/g, "i")
+      .replace(/ó/g, "o")
+      .replace(/ú/g, "u")
+      .replace(/ñ/g, "n")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+  const mapHashToSectionId = (hash: string) => {
+    const key = normalizeHash(hash);
+    switch (key) {
+      case "hero":
+        return "hero";
+      case "cronica1":
+      case "cronica-1":
+        return "cronica-1";
+      case "cronica2":
+      case "cronica-2":
+        return "cronica-2";
+      case "cronica3":
+      case "cronica-3":
+        return "cronica-3";
+      case "cronica4":
+      case "cronica-4":
+        return "cronica-4";
+      case "nota-complemento1":
+      case "nota-complemento-1":
+      case "notacomplemento1":
+      case "nota-complemento":
+        return "nota-complemento-1";
+      default:
+        return "";
+    }
+  };
+
+  useEffect(() => {
+    const scrollToHashTarget = (hash: string) => {
+      const targetId = mapHashToSectionId(hash);
+      if (!targetId) return;
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+
+    scrollToHashTarget(window.location.hash);
+    const handleHashChange = () => scrollToHashTarget(window.location.hash);
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
   return (
     <div
       ref={containerRef}

@@ -462,6 +462,10 @@ export function HeroSection() {
             <p className="max-w-2xl text-sm leading-relaxed text-balance text-white/72 md:ml-auto md:text-2xl">
               Crónicas sobre la memoria, la pérdida y la reconstrucción de Manabí a 10 años del terremoto del 16 de abril de 2016.
             </p>
+
+            <p className="text-sm uppercase tracking-[0.24em] text-white/70 md:text-base">
+              POR: VALERIA HEREDIA TORRES
+            </p>
           </div>
         </div>
       </motion.div>
