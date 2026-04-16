@@ -36,7 +36,7 @@ export const chronicleMenu = [
   {
     id: "cronica-2",
     label: "Cr\u00f3nica 2",
-    title: "Javier",
+    title: "No llorar sino hacer pañuelos para los que sufren",
     image: cronica2MenuImage,
   },
   {
@@ -48,7 +48,7 @@ export const chronicleMenu = [
   {
     id: "cronica-4",
     label: "Cr\u00f3nica 4",
-    title: "Cr\u00f3nica 4",
+    title: "Los rescatistas \"quebrados\"",
     image: cronica4MenuImage,
   },
   {
